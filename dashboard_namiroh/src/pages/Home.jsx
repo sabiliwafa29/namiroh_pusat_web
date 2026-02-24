@@ -327,6 +327,43 @@ export default function Home() {
         </div>
       </section>
 
+      {/* GALERI */}
+      <section className="py-16 px-4 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-bold text-green-900">Galeri Kegiatan Jamaah</h2>
+            <p className="text-gray-600 mt-2 text-base">Momen berharga perjalanan ibadah bersama An-Namiroh Travelindo</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {[
+              { src: '/galeri/keberangkatan1.webp', alt: 'Pemberangkatan jamaah' },
+              { src: '/galeri/keberangkatan2.webp', alt: 'Keberangkatan umroh' },
+              { src: '/galeri/hotel.webp',          alt: 'Hotel di Mekkah' },
+              { src: '/galeri/keberangkatan3.webp', alt: 'Keberangkatan bersama' },
+              { src: '/galeri/keberangkatan4.webp', alt: 'Persiapan keberangkatan' },
+              { src: '/galeri/fasilitas_kopi.webp', alt: 'Fasilitas jamaah' },
+              { src: '/galeri/keberangkatan5.webp', alt: 'Jamaah siap berangkat' },
+              { src: '/galeri/keberangkatan6.webp', alt: 'Momen keberangkatan' },
+            ].map((item, i) => (
+              <div key={i} className="overflow-hidden rounded-xl aspect-square group">
+                <img
+                  src={item.src}
+                  alt={item.alt}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  loading="lazy"
+                />
+              </div>
+            ))}
+          </div>
+          <div className="text-center mt-8">
+            <Link to="/galeri"
+              className="inline-block bg-green-900 text-white font-semibold px-8 py-3 rounded-xl hover:bg-green-800 transition text-base">
+              Lihat Semua Foto &rarr;
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-16 px-4 bg-yellow-400">
         <div className="max-w-2xl mx-auto text-center">

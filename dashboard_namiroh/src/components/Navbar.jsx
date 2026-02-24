@@ -8,6 +8,7 @@ export default function Navbar() {
   const links = [
     { to: '/',       label: 'Beranda' },
     { to: '/paket',  label: 'Paket' },
+    { to: '/galeri', label: 'Galeri' },
     { to: '/daftar', label: 'Daftar Sekarang' },
   ]
 

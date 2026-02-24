@@ -3,6 +3,7 @@ import Home from './pages/Home'
 import Paket from './pages/Paket'
 import PaketDetail from './pages/PaketDetail'
 import Daftar from './pages/Daftar'
+import Galeri from './pages/Galeri'
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Route path="/paket"      element={<Paket />} />
         <Route path="/paket/:id"  element={<PaketDetail />} />
         <Route path="/daftar"     element={<Daftar />} />
+        <Route path="/galeri"     element={<Galeri />} />
       </Routes>
     </BrowserRouter>
   )
