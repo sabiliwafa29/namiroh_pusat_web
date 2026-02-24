@@ -3,3 +3,6 @@ startCommand = "php artisan config:cache && php artisan route:cache && php artis
 healthcheckPath = "/up"
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
+
+[variables]
+RAILPACK_PHP_VERSION = "8.4"
