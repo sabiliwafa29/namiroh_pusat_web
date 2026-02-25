@@ -72,10 +72,16 @@ export default function Paket() {
       <Navbar />
 
       {/* Header */}
-      <section className="bg-green-900 text-white py-12 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-3xl font-bold mb-2">Paket Umroh & Haji</h1>
-          <p className="text-green-100 text-base">Temukan paket ibadah yang sesuai dengan kebutuhan Anda</p>
+      <section className="bg-green-900 text-white py-12 px-4 bg-islamic-pattern relative overflow-hidden">
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <div className="font-arabic text-2xl text-orange-300/70 mb-2">طلب العلم فريضة</div>
+          <h1 className="font-heading text-4xl font-bold mb-2">Paket Umroh &amp; Haji</h1>
+          <div className="flex items-center justify-center gap-3 mt-2">
+            <div className="h-px w-12 bg-orange-400/40" />
+            <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
+            <div className="h-px w-12 bg-orange-400/40" />
+          </div>
+          <p className="text-green-100 text-base mt-3">Temukan paket ibadah yang sesuai dengan kebutuhan Anda</p>
         </div>
       </section>
 

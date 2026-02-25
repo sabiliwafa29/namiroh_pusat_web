@@ -17,12 +17,13 @@ export default function Navbar() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link to="/">
+          <Link to="/" className="flex flex-col items-center leading-none">
             <img
               src="/logo-namiroh.webp"
               alt="An Namiroh Travelindo"
               className="h-12 w-auto"
             />
+            <span className="font-arabic text-[11px] text-green-700 tracking-wide -mt-0.5">النَّمِيرَة تِرَافِيل</span>
           </Link>
 
           {/* Desktop Links */}

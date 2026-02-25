@@ -79,39 +79,70 @@ export default function Home() {
       <Navbar />
 
       {/* HERO */}
-      <section className="bg-gradient-to-br from-green-900 via-green-800 to-green-900 text-white py-20 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 text-center text-[200px] leading-none select-none pointer-events-none">☪</div>
+      <section className="bg-gradient-to-br from-green-950 via-green-900 to-green-950 text-white py-20 px-4 relative overflow-hidden">
+        {/* Islamic geometric star pattern overlay */}
+        <div className="absolute inset-0 bg-islamic-pattern" />
+
+        {/* Arch frame — Islamic mihrab arch */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <svg viewBox="0 0 440 540" className="h-full max-h-[540px] opacity-[0.08] w-auto" preserveAspectRatio="xMidYMid meet">
+            <path d="M60,530 L60,230 Q60,60 220,60 Q380,60 380,230 L380,530" fill="none" stroke="white" strokeWidth="2.5"/>
+            <path d="M90,530 L90,240 Q90,100 220,100 Q350,100 350,240 L350,530" fill="none" stroke="white" strokeWidth="1.2"/>
+            <path d="M38,530 L38,225 Q38,30 220,30 Q402,30 402,225 L402,530" fill="none" stroke="white" strokeWidth="1" strokeDasharray="6,4"/>
+            {/* Arch keystone ornament */}
+            <polygon points="220,52 228,68 220,64 212,68" fill="white" opacity="0.6"/>
+            <circle cx="220" cy="42" r="5" fill="none" stroke="white" strokeWidth="1.5"/>
+          </svg>
+        </div>
+
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-block bg-orange-500 text-white text-sm font-bold px-3 py-1 rounded-full mb-4">
-            🌟 Terakreditasi A — Kementerian Agama RI
+          {/* Basmalah */}
+          <div className="font-arabic text-3xl sm:text-4xl text-orange-200/80 mb-3 leading-loose">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+
+          <div className="inline-block bg-orange-500 text-white text-sm font-semibold px-4 py-1.5 mb-5" style={{clipPath:'polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)'}}>
+            ✦ Terakreditasi A — Kementerian Agama RI
           </div>
-          <h1 className="text-3xl sm:text-5xl font-bold leading-tight mb-4">
+
+          <h1 className="font-heading text-4xl sm:text-6xl font-bold leading-tight mb-4">
             Perjalanan Umroh <br/>
-            <span className="text-orange-400">Aman, Nyaman & Membahagiakan</span>
+            <span className="text-orange-400 italic">Aman, Nyaman & Membahagiakan</span>
           </h1>
           <p className="text-green-100 text-lg mb-8 max-w-2xl mx-auto">
             Lebih dari 24 tahun melayani jamaah Indonesia menuju Tanah Suci. Bergabunglah dengan 60.000+ jamaah yang telah mempercayakan ibadahnya bersama kami.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/paket"
-              className="bg-orange-500 text-white font-bold px-8 py-3 rounded-xl hover:bg-orange-400 transition text-sm">
+              className="bg-orange-500 text-white font-semibold px-8 py-3 rounded-none hover:bg-orange-400 transition text-sm" style={{clipPath:'polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)'}}>
               Lihat Paket Umroh
             </Link>
             <Link to="/daftar"
-              className="border border-white text-white px-8 py-3 rounded-xl hover:bg-white hover:text-green-900 transition text-sm font-medium">
+              className="border border-white/60 text-white px-8 py-3 rounded-none hover:bg-white hover:text-green-900 transition text-sm font-medium" style={{clipPath:'polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)'}}>
               Daftar Sekarang
             </Link>
           </div>
         </div>
+
+        {/* bottom arch wave */}
+        <div className="absolute bottom-0 left-0 w-full">
+          <svg viewBox="0 0 1440 48" preserveAspectRatio="none" className="w-full block">
+            <path d="M0,48 L0,28 Q120,0 240,24 Q360,48 480,28 Q600,8 720,24 Q840,40 960,24 Q1080,8 1200,24 Q1320,40 1440,28 L1440,48 Z" fill="rgba(255,255,255,0.05)"/>
+          </svg>
+        </div>
       </section>
 
       {/* STATS */}
-      <section className="bg-green-800 py-8 relative overflow-hidden" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
-        <div className="max-w-4xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-4 gap-4 relative z-10">
+      <section className="bg-green-800 py-10 relative overflow-hidden bg-islamic-pattern">
+        <div className="max-w-4xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-4 gap-6 relative z-10">
           {stats.map((s, i) => (
             <div key={i} className="text-center">
-              <div className="text-3xl font-bold text-white">{s.value}</div>
-              <div className="text-sm text-orange-300 font-semibold">{s.label}</div>
+              {/* Diamond wrapper */}
+              <div className="w-16 h-16 mx-auto mb-3 relative">
+                <div className="absolute inset-0 bg-orange-500/20 rotate-45 rounded-sm" />
+                <div className="relative z-10 h-full flex items-center justify-center">
+                  <div className="text-2xl font-heading font-bold text-white">{s.value}</div>
+                </div>
+              </div>
+              <div className="text-sm text-orange-300 font-medium">{s.label}</div>
             </div>
           ))}
         </div>
@@ -121,8 +152,13 @@ export default function Home() {
       <section className="py-10 px-4 bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-6">
-            <h2 className="text-2xl sm:text-3xl font-bold text-green-900">🔍 Cari Jadwal Keberangkatan</h2>
-            <p className="text-gray-600 mt-2 text-base">Temukan jadwal umroh sesuai waktu dan pilihan maskapai Anda</p>
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-green-900">Cari Jadwal Keberangkatan</h2>
+            <div className="flex items-center justify-center gap-3 mt-2 mb-3">
+              <div className="h-px w-12 bg-orange-400/50" />
+              <span className="text-orange-400 text-sm">✦</span>
+              <div className="h-px w-12 bg-orange-400/50" />
+            </div>
+            <p className="text-gray-600 text-base">Temukan jadwal umroh sesuai waktu dan pilihan maskapai Anda</p>
           </div>
 
           <div className="bg-gray-50 rounded-2xl p-5 sm:p-6 border border-gray-200 shadow-sm">
@@ -200,18 +236,28 @@ export default function Home() {
       </section>
 
       {/* LAYANAN */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-16 px-4 bg-gray-50 bg-islamic-pattern-dark">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-green-900">Layanan Terbaik Kami</h2>
-            <p className="text-gray-600 mt-2 text-base">Pilih paket ibadah sesuai kebutuhan dan kemampuan Anda</p>
+            <div className="text-orange-400 text-2xl mb-1">✦</div>
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-green-900">Layanan Terbaik Kami</h2>
+            <div className="flex items-center justify-center gap-3 mt-2">
+              <div className="h-px w-16 bg-orange-400/40" />
+              <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
+              <div className="h-px w-16 bg-orange-400/40" />
+            </div>
+            <p className="text-gray-600 mt-3 text-base">Pilih paket ibadah sesuai kebutuhan dan kemampuan Anda</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {layanan.map((l, i) => (
-              <div key={i} className="bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition border border-gray-100">
-                <div className="text-3xl mb-3">{l.icon}</div>
-                <h3 className="font-semibold text-green-900 mb-2">{l.title}</h3>
-                <p className="text-base text-gray-600 leading-relaxed">{l.desc}</p>
+              <div key={i} className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition border border-gray-100 group">
+                {/* Diamond icon */}
+                <div className="w-14 h-14 mx-auto mb-4 relative">
+                  <div className="absolute inset-0 bg-green-700 rotate-45 rounded-sm group-hover:bg-orange-500 transition-colors" />
+                  <div className="relative z-10 h-full flex items-center justify-center text-2xl">{l.icon}</div>
+                </div>
+                <h3 className="font-heading text-xl font-semibold text-green-900 mb-2 text-center">{l.title}</h3>
+                <p className="text-base text-gray-600 leading-relaxed text-center">{l.desc}</p>
               </div>
             ))}
           </div>
@@ -223,8 +269,14 @@ export default function Home() {
         <section className="py-16 px-4 bg-white">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-10">
-              <h2 className="text-2xl sm:text-3xl font-bold text-green-900">Paket Pilihan</h2>
-              <p className="text-gray-600 mt-2 text-base">Paket umroh terpopuler pilihan jamaah kami</p>
+              <div className="text-orange-400 text-2xl mb-1">✦</div>
+              <h2 className="font-heading text-3xl sm:text-4xl font-bold text-green-900">Paket Pilihan</h2>
+              <div className="flex items-center justify-center gap-3 mt-2">
+                <div className="h-px w-16 bg-orange-400/40" />
+                <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
+                <div className="h-px w-16 bg-orange-400/40" />
+              </div>
+              <p className="text-gray-600 mt-3 text-base">Paket umroh terpopuler pilihan jamaah kami</p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {paketUnggulan.map((p) => (
@@ -285,9 +337,15 @@ export default function Home() {
       )}
 
       {/* KENAPA KAMI */}
-      <section className="py-16 px-4 bg-green-900 text-white">
+      <section className="py-16 px-4 bg-green-900 text-white bg-islamic-pattern">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-10">Mengapa Memilih An Namiroh?</h2>
+          <div className="text-orange-400 text-2xl mb-1">✦</div>
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2">Mengapa Memilih An Namiroh?</h2>
+          <div className="flex items-center justify-center gap-3 mb-10">
+            <div className="h-px w-16 bg-orange-400/40" />
+            <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
+            <div className="h-px w-16 bg-orange-400/40" />
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { icon: '✅', title: 'Izin Resmi', desc: 'PPIU, PIHK & KBIH resmi dari Kemenag RI' },
@@ -296,8 +354,12 @@ export default function Home() {
               { icon: '💰', title: 'Harga Terjangkau', desc: 'Mulai 23 juta dengan fasilitas lengkap' },
             ].map((item, i) => (
               <div key={i} className="text-center">
-                <div className="text-4xl mb-3">{item.icon}</div>
-                <h3 className="font-semibold mb-1">{item.title}</h3>
+                <div className="w-16 h-16 mx-auto mb-3 relative">
+                  <div className="absolute inset-0 border border-orange-400/50 rotate-45 rounded-sm" />
+                  <div className="absolute inset-2 bg-orange-500/15 rotate-45 rounded-sm" />
+                  <div className="relative z-10 h-full flex items-center justify-center text-3xl">{item.icon}</div>
+                </div>
+                <h3 className="font-heading text-xl font-semibold mb-1">{item.title}</h3>
                 <p className="text-base text-green-100">{item.desc}</p>
               </div>
             ))}
@@ -309,8 +371,14 @@ export default function Home() {
       <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-green-900">Kata Jamaah Kami</h2>
-            <p className="text-gray-600 mt-2 text-base">Pengalaman nyata dari jamaah yang telah berangkat bersama kami</p>
+            <div className="text-orange-400 text-2xl mb-1">✦</div>
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-green-900">Kata Jamaah Kami</h2>
+            <div className="flex items-center justify-center gap-3 mt-2">
+              <div className="h-px w-16 bg-orange-400/40" />
+              <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
+              <div className="h-px w-16 bg-orange-400/40" />
+            </div>
+            <p className="text-gray-600 mt-3 text-base">Pengalaman nyata dari jamaah yang telah berangkat bersama kami</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {testimonials.map((t, i) => (
@@ -331,8 +399,14 @@ export default function Home() {
       <section className="py-16 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-green-900">Galeri Kegiatan Jamaah</h2>
-            <p className="text-gray-600 mt-2 text-base">Momen berharga perjalanan ibadah bersama An-Namiroh Travelindo</p>
+            <div className="text-orange-400 text-2xl mb-1">✦</div>
+            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-green-900">Galeri Kegiatan Jamaah</h2>
+            <div className="flex items-center justify-center gap-3 mt-2">
+              <div className="h-px w-16 bg-orange-400/40" />
+              <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
+              <div className="h-px w-16 bg-orange-400/40" />
+            </div>
+            <p className="text-gray-600 mt-3 text-base">Momen berharga perjalanan ibadah bersama An-Namiroh Travelindo</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
@@ -365,23 +439,32 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4 bg-green-900 relative overflow-hidden" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)', backgroundSize: '28px 28px' }}>
-        <div className="absolute inset-0 flex items-center justify-center text-[280px] text-white/[0.04] select-none pointer-events-none leading-none">☪</div>
+      <section className="py-16 px-4 bg-green-950 bg-islamic-pattern relative overflow-hidden">
+        {/* Arabic calligraphy watermark */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+          <span className="font-arabic text-[160px] text-white/[0.03] leading-none">الله</span>
+        </div>
         <div className="max-w-2xl mx-auto text-center relative z-10">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+          <div className="font-arabic text-2xl text-orange-300/70 mb-3">لَبَّيْكَ اللّٰهُمَّ لَبَّيْكَ</div>
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold text-white mb-2">
             Jangan Tunda Niat Baikmu!
           </h2>
-          <p className="text-green-200 mb-6 text-base">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="h-px w-16 bg-orange-400/40" />
+            <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
+            <div className="h-px w-16 bg-orange-400/40" />
+          </div>
+          <p className="text-green-200 mb-8 text-base">
             Selagi masih sehat, masih ada kesempatan dan masih ada rezeki. Daftarkan dirimu sekarang.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/daftar"
-              className="bg-orange-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-orange-400 transition text-base">
+              className="bg-orange-500 text-white font-semibold px-8 py-4 hover:bg-orange-400 transition text-base" style={{clipPath:'polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)'}}>
               Daftar Umroh Sekarang
             </Link>
             <a href="https://wa.me/6282335611999?text=Assalamualaikum, saya ingin info paket umroh"
               target="_blank" rel="noreferrer"
-              className="border-2 border-orange-400 text-orange-400 font-bold px-8 py-4 rounded-xl hover:bg-orange-500 hover:text-white hover:border-orange-500 transition text-base">
+              className="border-2 border-orange-400 text-orange-400 font-semibold px-8 py-4 hover:bg-orange-500 hover:text-white hover:border-orange-500 transition text-base" style={{clipPath:'polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)'}}>
               💬 Chat WhatsApp
             </a>
           </div>

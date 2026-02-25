@@ -2,8 +2,17 @@ import { Link } from 'react-router-dom'
 
 export default function Footer() {
   return (
-    <footer className="bg-green-900 text-white">
+    <footer className="bg-green-900 text-white bg-islamic-pattern">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
+        {/* Basmalah header */}
+        <div className="text-center mb-10 pb-8 border-b border-green-700">
+          <p className="font-arabic text-3xl text-orange-300/90 leading-loose mb-1">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
+          <div className="flex items-center justify-center gap-3 mt-2">
+            <div className="h-px w-16 bg-orange-400/30" />
+            <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
+            <div className="h-px w-16 bg-orange-400/30" />
+          </div>
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
@@ -21,7 +30,7 @@ export default function Footer() {
 
           {/* Links */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Layanan</h3>
+            <h3 className="font-heading text-xl font-semibold mb-4">Layanan</h3>
             <ul className="space-y-2 text-base text-green-200">
               <li><Link to="/paket" className="hover:text-white transition">Paket Umroh Reguler</Link></li>
               <li><Link to="/paket" className="hover:text-white transition">Paket Umroh VIP</Link></li>
@@ -33,7 +42,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Kontak</h3>
+            <h3 className="font-heading text-xl font-semibold mb-4">Kontak</h3>
             <ul className="space-y-3 text-base text-green-200">
               <li className="flex items-start gap-2">
                 <span>📍</span>

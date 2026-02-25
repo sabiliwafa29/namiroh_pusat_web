@@ -29,9 +29,15 @@ export default function Galeri() {
       <Navbar />
 
       {/* HEADER */}
-      <section className="bg-green-900 py-14 px-4 text-white text-center">
-        <h1 className="text-3xl sm:text-4xl font-bold mb-2">Galeri Kegiatan Jamaah</h1>
-        <p className="text-green-200 text-base">Dokumentasi perjalanan ibadah bersama An-Namiroh Travelindo</p>
+      <section className="bg-green-900 py-14 px-4 text-white text-center bg-islamic-pattern relative overflow-hidden">
+        <div className="font-arabic text-2xl text-orange-300/70 mb-2">وجاهدوا في سبيله</div>
+        <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-2">Galeri Kegiatan Jamaah</h1>
+        <div className="flex items-center justify-center gap-3 mt-2">
+          <div className="h-px w-12 bg-orange-400/40" />
+          <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
+          <div className="h-px w-12 bg-orange-400/40" />
+        </div>
+        <p className="text-green-200 text-base mt-3">Dokumentasi perjalanan ibadah bersama An-Namiroh Travelindo</p>
       </section>
 
       {/* FILTER TABS */}

@@ -162,9 +162,9 @@ export default function Daftar() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      <section className="bg-green-900 text-white py-10 px-4">
-        <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-2xl font-bold mb-2">Formulir Pendaftaran Umroh</h1>
+      <section className="bg-green-900 text-white py-10 px-4 bg-islamic-pattern relative overflow-hidden">
+        <div className="max-w-2xl mx-auto text-center relative z-10">
+          <h1 className="font-heading text-3xl font-bold mb-2">Formulir Pendaftaran Umroh</h1>
           <p className="text-green-100 text-base">Isi data dengan lengkap dan benar</p>
 
           {/* Steps */}
@@ -193,7 +193,7 @@ export default function Daftar() {
             {/* STEP 0 — Data Paket */}
             {step === 0 && (
               <div className="space-y-4">
-                <h2 className="font-semibold text-gray-800 text-xl mb-5">Pilih Paket & Jadwal</h2>
+                <h2 className="font-heading font-semibold text-gray-800 text-xl mb-5">Pilih Paket & Jadwal</h2>
 
                 <div>
                   <label className="block text-base font-medium text-gray-700 mb-1">Pilih Paket *</label>
@@ -264,7 +264,7 @@ export default function Daftar() {
             {/* STEP 1 — Data Diri */}
             {step === 1 && (
               <div className="space-y-4">
-                <h2 className="font-semibold text-gray-800 text-xl mb-5">Data Diri Calon Jamaah</h2>
+                <h2 className="font-heading font-semibold text-gray-800 text-xl mb-5">Data Diri Calon Jamaah</h2>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="sm:col-span-2">
@@ -342,7 +342,7 @@ export default function Daftar() {
             {/* STEP 2 — Konfirmasi */}
             {step === 2 && (
               <div>
-                <h2 className="font-semibold text-gray-800 text-xl mb-5">Konfirmasi Pendaftaran</h2>
+                <h2 className="font-heading font-semibold text-gray-800 text-xl mb-5">Konfirmasi Pendaftaran</h2>
 
                 <div className="bg-green-50 rounded-xl p-5 mb-4 space-y-3">
                   <div className="flex justify-between text-base">
