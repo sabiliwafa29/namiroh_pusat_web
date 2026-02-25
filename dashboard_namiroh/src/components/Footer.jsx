@@ -46,7 +46,7 @@ export default function Footer() {
             <ul className="space-y-3 text-base text-green-200">
               <li className="flex items-start gap-2">
                 <span>📍</span>
-                <span>Jl. Gajah Mada No.10/03, Mojokerto, Jawa Timur</span>
+                <span>Jl. Gajah Mada No.10/03, Menanggal, Kec. Mojosari, Kabupaten Mojokerto, Jawa Timur 61382</span>
               </li>
               <li className="flex items-center gap-2">
                 <span>📞</span>
