@@ -122,7 +122,7 @@ export default function Paket() {
               {jadwalLoading ? (
                 <div className="text-center py-8 text-gray-500">Mencari jadwal...</div>
               ) : jadwalList.length === 0 ? (
-                  <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-5 text-center text-base text-yellow-800">
+                  <div className="bg-orange-50 border border-orange-200 rounded-xl p-5 text-center text-base text-orange-800">
                   <div className="text-2xl mb-2">📭</div>
                   Tidak ada jadwal tersedia untuk kriteria ini. Coba ubah filter atau
                   <Link to="/paket" className="text-green-700 font-medium ml-1 hover:underline">lihat semua paket</Link>.
@@ -165,7 +165,7 @@ export default function Paket() {
                             </span>
                           </div>
                           <div className="pt-1 border-t">
-                            <div className="text-yellow-600 font-bold text-lg">
+                            <div className="text-orange-500 font-bold text-lg">
                               Rp {Number(j.paket?.harga_dasar || 0).toLocaleString('id-ID')}
                             </div>
                             <div className="text-sm text-gray-500">per orang (quad)</div>
@@ -213,7 +213,7 @@ export default function Paket() {
                       />
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent px-4 py-4">
                         <div className="text-xs text-green-300 font-medium mb-0.5">{p.jenis_layanan?.nama}</div>
-                        <div className="text-yellow-300 font-extrabold text-xl leading-tight drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+                        <div className="text-orange-300 font-extrabold text-xl leading-tight drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
                           Rp {Number(p.harga_dasar).toLocaleString('id-ID')}
                         </div>
                         <div className="text-xs text-white/90">per orang (quad)</div>
@@ -225,7 +225,7 @@ export default function Paket() {
                       <h3 className="font-bold text-lg leading-snug">{p.nama_paket}</h3>
                       {p.deskripsi && <p className="text-sm text-green-200 mt-1 line-clamp-1">{p.deskripsi}</p>}
                       <div className="mt-3">
-                        <div className="text-yellow-400 font-bold text-2xl">
+                        <div className="text-orange-400 font-bold text-2xl">
                           Rp {Number(p.harga_dasar).toLocaleString('id-ID')}
                         </div>
                         <div className="text-sm text-green-200">per orang (quad)</div>

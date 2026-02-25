@@ -82,19 +82,19 @@ export default function Home() {
       <section className="bg-gradient-to-br from-green-900 via-green-800 to-green-900 text-white py-20 px-4 relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 text-center text-[200px] leading-none select-none pointer-events-none">☪</div>
         <div className="max-w-4xl mx-auto text-center relative z-10">
-          <div className="inline-block bg-yellow-400 text-green-900 text-sm font-bold px-3 py-1 rounded-full mb-4">
+          <div className="inline-block bg-orange-500 text-white text-sm font-bold px-3 py-1 rounded-full mb-4">
             🌟 Terakreditasi A — Kementerian Agama RI
           </div>
           <h1 className="text-3xl sm:text-5xl font-bold leading-tight mb-4">
             Perjalanan Umroh <br/>
-            <span className="text-yellow-400">Aman, Nyaman & Membahagiakan</span>
+            <span className="text-orange-400">Aman, Nyaman & Membahagiakan</span>
           </h1>
           <p className="text-green-100 text-lg mb-8 max-w-2xl mx-auto">
             Lebih dari 24 tahun melayani jamaah Indonesia menuju Tanah Suci. Bergabunglah dengan 60.000+ jamaah yang telah mempercayakan ibadahnya bersama kami.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/paket"
-              className="bg-yellow-400 text-green-900 font-bold px-8 py-3 rounded-xl hover:bg-yellow-300 transition text-sm">
+              className="bg-orange-500 text-white font-bold px-8 py-3 rounded-xl hover:bg-orange-400 transition text-sm">
               Lihat Paket Umroh
             </Link>
             <Link to="/daftar"
@@ -106,12 +106,12 @@ export default function Home() {
       </section>
 
       {/* STATS */}
-      <section className="bg-yellow-400 py-8">
-        <div className="max-w-4xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <section className="bg-green-800 py-8 relative overflow-hidden" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px)', backgroundSize: '20px 20px' }}>
+        <div className="max-w-4xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-4 gap-4 relative z-10">
           {stats.map((s, i) => (
             <div key={i} className="text-center">
-              <div className="text-3xl font-bold text-green-900">{s.value}</div>
-              <div className="text-sm text-green-800 font-semibold">{s.label}</div>
+              <div className="text-3xl font-bold text-white">{s.value}</div>
+              <div className="text-sm text-orange-300 font-semibold">{s.label}</div>
             </div>
           ))}
         </div>
@@ -238,7 +238,7 @@ export default function Home() {
                         loading="lazy"
                       />
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent px-4 py-4">
-                        <div className="text-yellow-300 font-extrabold text-base drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+                        <div className="text-orange-300 font-extrabold text-base drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
                           Rp {Number(p.harga_dasar).toLocaleString('id-ID')}
                         </div>
                         <div className="text-xs text-white/90">per orang</div>
@@ -248,7 +248,7 @@ export default function Home() {
                     <div className="bg-green-800 text-white p-4">
                       <div className="text-sm text-green-100 mb-1 font-medium">{p.jenis_layanan?.nama}</div>
                       <h3 className="font-bold text-base leading-tight">{p.nama_paket}</h3>
-                      <div className="text-yellow-400 font-bold text-lg mt-2">
+                      <div className="text-orange-400 font-bold text-lg mt-2">
                         Rp {Number(p.harga_dasar).toLocaleString('id-ID')}
                       </div>
                       <div className="text-sm text-green-100">per orang</div>
@@ -315,7 +315,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {testimonials.map((t, i) => (
               <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <div className="text-yellow-400 text-lg mb-2">{'★'.repeat(t.bintang)}</div>
+                <div className="text-orange-400 text-lg mb-2">{'★'.repeat(t.bintang)}</div>
                 <p className="text-base text-gray-700 leading-relaxed mb-4 italic">"{t.text}"</p>
                 <div>
                   <div className="font-semibold text-green-900 text-base">{t.name}</div>
@@ -365,22 +365,23 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4 bg-yellow-400">
-        <div className="max-w-2xl mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-green-900 mb-3">
+      <section className="py-16 px-4 bg-green-900 relative overflow-hidden" style={{ backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)', backgroundSize: '28px 28px' }}>
+        <div className="absolute inset-0 flex items-center justify-center text-[280px] text-white/[0.04] select-none pointer-events-none leading-none">☪</div>
+        <div className="max-w-2xl mx-auto text-center relative z-10">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
             Jangan Tunda Niat Baikmu!
           </h2>
-          <p className="text-green-800 mb-6 text-base">
+          <p className="text-green-200 mb-6 text-base">
             Selagi masih sehat, masih ada kesempatan dan masih ada rezeki. Daftarkan dirimu sekarang.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/daftar"
-              className="bg-green-900 text-white font-bold px-8 py-4 rounded-xl hover:bg-green-800 transition text-base">
+              className="bg-orange-500 text-white font-bold px-8 py-4 rounded-xl hover:bg-orange-400 transition text-base">
               Daftar Umroh Sekarang
             </Link>
-            <a href="https://wa.me/6285728945777?text=Assalamualaikum, saya ingin info paket umroh"
+            <a href="https://wa.me/6282335611999?text=Assalamualaikum, saya ingin info paket umroh"
               target="_blank" rel="noreferrer"
-              className="border-2 border-green-900 text-green-900 font-bold px-8 py-4 rounded-xl hover:bg-green-900 hover:text-white transition text-base">
+              className="border-2 border-orange-400 text-orange-400 font-bold px-8 py-4 rounded-xl hover:bg-orange-500 hover:text-white hover:border-orange-500 transition text-base">
               💬 Chat WhatsApp
             </a>
           </div>

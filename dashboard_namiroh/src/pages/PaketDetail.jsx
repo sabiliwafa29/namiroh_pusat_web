@@ -77,9 +77,9 @@ export default function PaketDetail() {
 
             {/* Syarat Khusus */}
             {paket.syarat_khusus && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-5">
-                <h2 className="font-semibold text-yellow-800 mb-2">⚠️ Syarat Khusus</h2>
-                <p className="text-sm text-yellow-700">{paket.syarat_khusus}</p>
+              <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
+                <h2 className="font-semibold text-orange-800 mb-2">⚠️ Syarat Khusus</h2>
+                <p className="text-sm text-orange-700">{paket.syarat_khusus}</p>
               </div>
             )}
 
@@ -165,7 +165,7 @@ export default function PaketDetail() {
                 className="block text-center bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition text-sm mb-3">
                 Daftar Sekarang
               </Link>
-              <a href="https://wa.me/6285728945777?text=Assalamualaikum, saya tertarik dengan paket umroh An Namiroh"
+              <a href="https://wa.me/6282335611999?text=Assalamualaikum, saya tertarik dengan paket umroh An Namiroh"
                 target="_blank" rel="noreferrer"
                 className="block text-center border border-green-700 text-green-700 py-2.5 rounded-xl text-sm font-medium hover:bg-green-50 transition">
                 💬 Tanya via WhatsApp

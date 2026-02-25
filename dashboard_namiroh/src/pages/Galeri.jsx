@@ -79,7 +79,7 @@ export default function Galeri() {
         >
           {/* Prev */}
           <button
-            className="absolute left-4 text-white text-4xl font-bold px-3 py-1 hover:text-yellow-300 transition"
+            className="absolute left-4 text-white text-4xl font-bold px-3 py-1 hover:text-orange-300 transition"
             onClick={e => { e.stopPropagation(); prev() }}
             aria-label="Sebelumnya"
           >&#8249;</button>
@@ -96,14 +96,14 @@ export default function Galeri() {
 
           {/* Next */}
           <button
-            className="absolute right-4 text-white text-4xl font-bold px-3 py-1 hover:text-yellow-300 transition"
+            className="absolute right-4 text-white text-4xl font-bold px-3 py-1 hover:text-orange-300 transition"
             onClick={e => { e.stopPropagation(); next() }}
             aria-label="Selanjutnya"
           >&#8250;</button>
 
           {/* Close */}
           <button
-            className="absolute top-4 right-5 text-white text-3xl font-bold hover:text-yellow-300 transition"
+            className="absolute top-4 right-5 text-white text-3xl font-bold hover:text-orange-300 transition"
             onClick={() => setLightbox(null)}
             aria-label="Tutup"
           >&times;</button>
