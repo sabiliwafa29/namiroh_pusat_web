@@ -79,7 +79,7 @@ export default function Home() {
       <Navbar />
 
       {/* HERO */}
-      <section className="bg-gradient-to-br from-green-950 via-green-900 to-green-950 text-white py-20 px-4 relative overflow-hidden">
+      <section className="bg-gradient-to-br from-green-950 via-green-900 to-green-950 text-white pt-40 pb-20 px-4 relative overflow-hidden">
         {/* Islamic geometric star pattern overlay */}
         <div className="absolute inset-0 bg-islamic-pattern" />
 

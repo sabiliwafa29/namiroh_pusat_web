@@ -91,8 +91,6 @@ export default function Navbar() {
           )}
         </div>
       </nav>
-      {/* Spacer so page content sits below the fixed navbar */}
-      <div className="h-20" />
     </>
   )
 }

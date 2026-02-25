@@ -162,7 +162,7 @@ export default function Daftar() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      <section className="bg-green-900 text-white py-10 px-4 bg-islamic-pattern relative overflow-hidden">
+      <section className="bg-green-900 text-white pt-[7.5rem] pb-10 px-4 bg-islamic-pattern relative overflow-hidden">
         <div className="max-w-2xl mx-auto text-center relative z-10">
           <h1 className="font-heading text-3xl font-bold mb-2">Formulir Pendaftaran Umroh</h1>
           <p className="text-green-100 text-base">Isi data dengan lengkap dan benar</p>

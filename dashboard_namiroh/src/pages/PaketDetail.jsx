@@ -41,7 +41,7 @@ export default function PaketDetail() {
       <Navbar />
 
       {/* Header — always gradient with name & info */}
-      <section className="bg-gradient-to-br from-green-800 to-green-900 text-white py-10 px-4">
+      <section className="bg-gradient-to-br from-green-800 to-green-900 text-white pt-[7.5rem] pb-10 px-4">
         <div className="max-w-5xl mx-auto">
           <div className="text-green-300 text-xs mb-2">{paket.jenis_layanan?.nama}</div>
           <h1 className="font-heading text-3xl sm:text-4xl font-bold mb-2">{paket.nama_paket}</h1>

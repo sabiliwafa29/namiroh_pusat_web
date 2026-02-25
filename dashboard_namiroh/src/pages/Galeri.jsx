@@ -29,7 +29,7 @@ export default function Galeri() {
       <Navbar />
 
       {/* HEADER */}
-      <section className="bg-green-900 py-14 px-4 text-white text-center bg-islamic-pattern relative overflow-hidden">
+      <section className="bg-green-900 pt-[8.5rem] pb-14 px-4 text-white text-center bg-islamic-pattern relative overflow-hidden">
         <div className="font-arabic text-2xl text-orange-300/70 mb-2">وجاهدوا في سبيله</div>
         <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-2">Galeri Kegiatan Jamaah</h1>
         <div className="flex items-center justify-center gap-3 mt-2">
