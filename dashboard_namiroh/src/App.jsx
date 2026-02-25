@@ -4,10 +4,12 @@ import Paket from './pages/Paket'
 import PaketDetail from './pages/PaketDetail'
 import Daftar from './pages/Daftar'
 import Galeri from './pages/Galeri'
+import FloatingWidgets from './components/FloatingWidgets'
 
 export default function App() {
   return (
     <BrowserRouter>
+      <FloatingWidgets />
       <Routes>
         <Route path="/"           element={<Home />} />
         <Route path="/paket"      element={<Paket />} />
