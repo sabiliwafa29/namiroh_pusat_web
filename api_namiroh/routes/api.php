@@ -7,6 +7,7 @@ use App\Http\Controllers\API\JadwalController;
 use App\Http\Controllers\API\JamaahController;
 use App\Http\Controllers\API\PendaftaranController;
 use App\Models\Maskapai;
+use App\Models\JenisLayanan;
 use Illuminate\Http\Request;
 
 // ============================================================
@@ -24,7 +25,8 @@ Route::get('paket',          [PaketController::class, 'index']);
 Route::get('paket/{paket}',  [PaketController::class, 'show']);
 Route::get('jadwal',         [JadwalController::class, 'index']);
 Route::get('jadwal/{jadwal}',[JadwalController::class, 'show']);
-Route::get('maskapai',       fn() => response()->json(['data' => Maskapai::where('is_active', 1)->get()]));
+Route::get('maskapai',          fn() => response()->json(['data' => Maskapai::where('is_active', 1)->get()]));
+Route::get('jenis-layanan',     fn() => response()->json(['data' => JenisLayanan::where('is_active', 1)->get()]));
 
 // Publik: pendaftaran tanpa login
 Route::post('daftar', [PendaftaranController::class, 'daftarPublik']);
