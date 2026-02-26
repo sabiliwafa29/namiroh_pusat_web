@@ -165,7 +165,7 @@ export default function PaketDetail() {
                 className="block text-center bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition text-sm mb-3">
                 Daftar Sekarang
               </Link>
-              <a href="https://wa.me/6282335611999?text=Assalamualaikum, saya tertarik dengan paket umroh An Namiroh"
+              <a href={`https://wa.me/6282335611999?text=Assalamualaikum, saya mau tanya-tanya soal paket "${paket.nama_paket}"?`}
                 target="_blank" rel="noreferrer"
                 className="block text-center border border-green-700 text-green-700 py-2.5 rounded-xl text-sm font-medium hover:bg-green-50 transition">
                 💬 Tanya via WhatsApp

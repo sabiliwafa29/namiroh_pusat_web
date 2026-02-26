@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import api from '../api/axios'
 
 export default function FloatingWidgets() {
+  const { pathname } = useLocation()
+  if (pathname.startsWith('/admin')) return null
   const [paketPromo, setPaketPromo] = useState([])
   const [currentPromo, setCurrentPromo] = useState(0)
   const [bannerVisible, setBannerVisible] = useState(true)
