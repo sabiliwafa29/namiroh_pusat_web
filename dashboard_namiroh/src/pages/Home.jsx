@@ -82,7 +82,7 @@ export default function Home() {
       <section className="text-white pt-24 pb-10 px-4 relative overflow-hidden"
         style={{ backgroundImage: "url('/galeri/Galeri-Jamaah-Umroh-An-Namiroh-1.webp')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
         {/* Dark overlay agar teks tetap terbaca */}
-        <div className="absolute inset-0 bg-green-950/65" />
+        <div className="absolute inset-0 bg-green-950/55" />
         {/* Islamic geometric star pattern overlay */}
         <div className="absolute inset-0 bg-islamic-pattern" />
 
