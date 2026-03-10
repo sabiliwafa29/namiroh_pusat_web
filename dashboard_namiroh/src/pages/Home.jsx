@@ -118,7 +118,7 @@ export default function Home() {
           </p>
           <div className="flex flex-row gap-4 justify-center">
             <Link to="/paket"
-                  className="bg-orange-500 text-white font-extrabold px-4 py-4 rounded-3xl hover:bg-orange-400 transition text-xl shadow-lg whitespace-nowrap">
+                  className="bg-orange-500 text-white font-extrabold px-4 py-4 rounded-3xl hover:bg-orange-400 transition text-xl shadow-lg whitespace">
               Lihat Paket Umroh
             </Link>
             <Link to="/daftar"
