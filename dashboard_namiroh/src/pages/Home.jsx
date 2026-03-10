@@ -79,10 +79,10 @@ export default function Home() {
       <Navbar />
 
       {/* HERO */}
-      <section className="text-white pt-24 pb-5 px-4 relative overflow-hidden"
-        style={{ backgroundImage: "url('/galeri/bg-jamaah.jpeg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <section className="text-white pt-24 pb-90 px-4 relative overflow-hidden"
+        style={{ backgroundImage: "url('/galeri/Galeri-Jamaah-Umroh-An-Namiroh-1.webp')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
         {/* Dark overlay agar teks tetap terbaca */}
-        <div className="absolute inset-0 bg-green-950/70" />
+        <div className="absolute inset-0 bg-green-950/75" />
         {/* Islamic geometric star pattern overlay */}
         <div className="absolute inset-0 bg-islamic-pattern" />
 
@@ -111,7 +111,7 @@ export default function Home() {
             <span className="text-orange-400 italic">Aman, Nyaman & Membahagiakan</span>
           </h1>
           <h2 className="font-heading text-4xl sm:text-6xl font-bold leading-tight mb-4">
-            Program Umroh dan Haji Terbaik Bersama An Namiroh Travelindo<br/>
+            Program Umroh dan Haji Terbaik Bersama ANNAMIROH TRAVELINDO<br/>
           </h2>
           <p className="text-green-100 text-lg mb-8 max-w-2xl mx-auto">
             Lebih dari 24 tahun melayani jamaah Indonesia menuju Tanah Suci. Bergabunglah dengan 60.000+ jamaah yang telah mempercayakan ibadahnya bersama kami.
