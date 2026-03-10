@@ -79,7 +79,7 @@ export default function Home() {
       <Navbar />
 
       {/* HERO */}
-      <section className="bg-gradient-to-br from-green-950 via-green-900 to-green-950 text-white pt-40 pb-20 px-4 relative overflow-hidden">
+      <section className="bg-gradient-to-br from-green-800 via-green-800 to-green-800 text-white pt-24 pb-20 px-4 relative overflow-hidden">
         {/* Islamic geometric star pattern overlay */}
         <div className="absolute inset-0 bg-islamic-pattern" />
 
@@ -99,7 +99,7 @@ export default function Home() {
           {/* Basmalah */}
           <div className="font-arabic text-3xl sm:text-4xl text-orange-200/80 mb-3 leading-loose">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
 
-          <div className="inline-block bg-orange-500 text-white text-sm font-semibold px-4 py-1.5 mb-5" style={{clipPath:'polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)'}}>
+          <div className="inline-block bg-orange-500 text-white text-base font-bold px-4 py-1.5 mb-5" style={{clipPath:'polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)'}}>
             ✦ Terakreditasi A — Kementerian Agama RI
           </div>
 
@@ -112,11 +112,11 @@ export default function Home() {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link to="/paket"
-              className="bg-orange-500 text-white font-semibold px-8 py-3 rounded-none hover:bg-orange-400 transition text-sm" style={{clipPath:'polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)'}}>
+              className="bg-orange-500 text-white font-bold px-8 py-3 rounded-none hover:bg-orange-400 transition text-base" style={{clipPath:'polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)'}}>
               Lihat Paket Umroh
             </Link>
             <Link to="/daftar"
-              className="border border-white/60 text-white px-8 py-3 rounded-none hover:bg-white hover:text-green-900 transition text-sm font-medium" style={{clipPath:'polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)'}}>
+              className="border border-white/60 text-white px-8 py-3 rounded-none hover:bg-white hover:text-green-900 transition text-base font-medium" style={{clipPath:'polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)'}}>
               Daftar Sekarang
             </Link>
           </div>
