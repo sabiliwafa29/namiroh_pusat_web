@@ -107,44 +107,22 @@ export default function Home() {
             Perjalanan Umroh <br/>
             <span className="text-orange-400 italic">Aman, Nyaman & Membahagiakan</span>
           </h1>
+          <h2 className="font-heading text-4xl sm:text-6xl font-bold leading-tight mb-4">
+            Program Umroh dan Haji Terbaik Bersama An Namiroh Travelindo<br/>
+          </h2>
           <p className="text-green-100 text-lg mb-8 max-w-2xl mx-auto">
             Lebih dari 24 tahun melayani jamaah Indonesia menuju Tanah Suci. Bergabunglah dengan 60.000+ jamaah yang telah mempercayakan ibadahnya bersama kami.
           </p>
           <div className="flex flex-row gap-4 justify-center">
             <Link to="/paket"
-                  className="bg-orange-500 text-white font-extrabold px-8 py-4 rounded-3xl hover:bg-orange-400 transition text-xl shadow-lg whitespace-nowrap">
+                  className="bg-orange-500 text-white font-extrabold px-4 py-4 rounded-3xl hover:bg-orange-400 transition text-xl shadow-lg whitespace-nowrap">
               Lihat Paket Umroh
             </Link>
             <Link to="/daftar"
-              className="bg-white text-green-900 px-8 py-4 rounded-3xl hover:bg-gray-100 transition text-xl font-extrabold shadow-lg whitespace-nowrap">
+              className="bg-white text-green-900 px-4 py-4 rounded-3xl hover:bg-gray-100 transition text-xl font-extrabold shadow-lg whitespace">
               Daftar Sekarang
             </Link>
           </div>
-        </div>
-
-        {/* bottom arch wave */}
-        {/* <div className="absolute bottom-0 left-0 w-full">
-          <svg viewBox="0 0 1440 48" preserveAspectRatio="none" className="w-full block">
-            <path d="M0,48 L0,28 Q120,0 240,24 Q360,48 480,28 Q600,8 720,24 Q840,40 960,24 Q1080,8 1200,24 Q1320,40 1440,28 L1440,48 Z" fill="rgba(255,255,255,0.05)"/>
-          </svg>
-        </div> */}
-      </section>
-
-      {/* STATS */}
-      <section className="bg-green-800 py-4 relative overflow-hidden bg-islamic-pattern">
-        <div className="max-w-4xl mx-auto px-4 grid grid-cols-2 sm:grid-cols-4 gap-6 relative z-10">
-          {stats.map((s, i) => (
-            <div key={i} className="text-center">
-              {/* Diamond wrapper */}
-              <div className="w-20 h-20 mx-auto mb-3 relative">
-                <div className="absolute inset-0 bg-orange-500/20 rotate-45 rounded-sm" />
-                <div className="relative z-10 h-full flex items-center justify-center">
-                  <div className="text-3xl font-heading font-bold text-white">{s.value}</div>
-                </div>
-              </div>
-              <div className="text-base text-orange-300 font-semibold">{s.label}</div>
-            </div>
-          ))}
         </div>
       </section>
 
