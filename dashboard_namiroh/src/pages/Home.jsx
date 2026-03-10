@@ -116,13 +116,13 @@ export default function Home() {
           <p className="text-green-100 text-lg mb-8 max-w-2xl mx-auto">
             Lebih dari 24 tahun melayani jamaah Indonesia menuju Tanah Suci. Bergabunglah dengan 60.000+ jamaah yang telah mempercayakan ibadahnya bersama kami.
           </p>
-          <div className="flex flex-row gap-4 justify-center">
+          <div className="flex flex-row gap-3 justify-center">
             <Link to="/paket"
-                  className="bg-orange-500 text-white font-extrabold px-6 py-3 rounded-3xl hover:bg-orange-400 transition text-xl shadow-lg whitespace-nowrap">
+                  className="bg-orange-500 text-white font-extrabold px-4 py-3 rounded-3xl hover:bg-orange-400 transition text-base sm:text-xl shadow-lg whitespace-nowrap">
               Lihat Paket Umroh
             </Link>
             <Link to="/daftar"
-              className="bg-white text-green-900 px-6 py-3 rounded-3xl hover:bg-gray-100 transition text-xl font-extrabold shadow-lg whitespace-nowrap">
+              className="bg-white text-green-900 px-4 py-3 rounded-3xl hover:bg-gray-100 transition text-base sm:text-xl font-extrabold shadow-lg whitespace-nowrap">
               Daftar Sekarang
             </Link>
           </div>
