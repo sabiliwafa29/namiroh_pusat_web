@@ -47,12 +47,12 @@ export default function FloatingWidgets() {
     <>
       {/* ── Promo Banner — bottom left ── */}
       {!bannerDismissed && promo && (
-        <div className={`fixed bottom-4 left-3 z-50 w-28 sm:w-36 transition-all duration-500 ${
+        <div className={`fixed bottom-2 left-2 z-50 w-28 sm:w-32 landscape:w-20 transition-all duration-500 ${
           bannerVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 pointer-events-none'
         }`}>
           <div className="bg-white rounded-2xl shadow-2xl border border-orange-200 overflow-hidden">
             {/* Header */}
-            <div className="bg-gradient-to-r from-green-800 to-green-700 px-3 py-1.5 flex items-center justify-between">
+            <div className="bg-gradient-to-r from-green-800 to-green-700 px-2 py-1 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {/* Dots */}
                 <div className="flex gap-1">
@@ -77,33 +77,19 @@ export default function FloatingWidgets() {
             </div>
 
             {/* Content */}
-            <div className="p-2 sm:p-3 flex gap-2 sm:gap-3 items-center">
-              {promo.flyer_url ? (
-                <img
-                  src={promo.flyer_url}
-                  alt={promo.nama_paket}
-                  className="w-6 h-6 sm:w-8 sm:h-8 object-cover rounded-lg flex-shrink-0"
-                />
-              ) : (
-                <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0 text-sm">
-                  🕌
-                </div>
-              )}
-              <div className="flex-1 min-w-0">
-                <div className="text-[10px] sm:text-xs text-gray-500 mb-0.5">{promo.jenis_layanan?.nama}</div>
-                <div className="font-bold text-gray-800 text-xs sm:text-sm leading-tight line-clamp-2">{promo.nama_paket}</div>
-                <div className="text-orange-500 font-bold text-xs sm:text-sm mt-1">
-                  Rp {Number(promo.harga_dasar).toLocaleString('id-ID')}
-                </div>
+            <div className="px-1.5 py-1">
+              <div className="font-bold text-gray-800 text-[9px] leading-tight line-clamp-1">{promo.nama_paket}</div>
+              <div className="text-orange-500 font-bold text-[9px]">
+                Rp {Number(promo.harga_dasar).toLocaleString('id-ID')}
               </div>
             </div>
 
-            <div className="px-2 sm:px-3 pb-2 sm:pb-3">
+            <div className="px-1 pb-1">
               <Link
                 to={`/paket/${promo.id}`}
-                className="block text-center bg-green-700 text-white text-[10px] sm:text-xs font-bold py-1.5 sm:py-2 rounded-xl hover:bg-green-800 transition"
+                className="block text-center bg-green-700 text-white text-[9px] font-bold py-1 rounded-lg hover:bg-green-800 transition"
               >
-                Lihat Detail Paket →
+                Lihat Detail →
               </Link>
             </div>
           </div>
@@ -115,18 +101,18 @@ export default function FloatingWidgets() {
         href="https://wa.me/6282335611999?text=Assalamualaikum, saya ingin info paket umroh An Namiroh"
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-4 right-3 z-50 group"
+        className="fixed bottom-2 right-2 z-50 group landscape:bottom-2 landscape:right-2"
         aria-label="Chat WhatsApp"
       >
         {/* Pulse ring */}
         <span className="absolute inset-0 rounded-full bg-green-400 animate-ping opacity-40 group-hover:opacity-0" />
 
-        <div className="relative flex items-center gap-2.5 bg-green-500 hover:bg-green-600 text-white px-4 py-3 sm:px-5 sm:py-3.5 rounded-full shadow-2xl transition-all duration-300 group-hover:shadow-green-400/40">
+        <div className="relative flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white px-2.5 py-1.5 landscape:px-2 landscape:py-1 rounded-full shadow-2xl transition-all duration-300 group-hover:shadow-green-400/40">
           {/* WA icon */}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-6 h-6 sm:w-7 sm:h-7 flex-shrink-0 fill-white">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 landscape:w-4 landscape:h-4 flex-shrink-0 fill-white">
             <path d="M16 .5C7.44.5.5 7.44.5 16c0 2.82.74 5.47 2.03 7.77L.5 31.5l8-2c2.2 1.16 4.7 1.83 7.5 1.83 8.56 0 15.5-6.94 15.5-15.5S24.56.5 16 .5zm0 28.17c-2.57 0-4.97-.69-7.03-1.9l-.5-.29-5.2 1.36 1.39-5.07-.33-.52A12.4 12.4 0 0 1 3.33 16C3.33 9.37 8.87 3.83 16 3.83S28.67 9.37 28.67 16 23.13 28.67 16 28.67zm6.8-9.3c-.37-.19-2.2-1.08-2.54-1.2-.34-.13-.59-.19-.84.19-.25.37-.96 1.2-1.18 1.45-.22.25-.43.28-.8.09-.37-.19-1.56-.57-2.97-1.83-1.1-.98-1.84-2.19-2.05-2.56-.22-.37-.02-.57.16-.75.17-.17.37-.43.56-.65.19-.22.25-.37.37-.62.13-.25.06-.47-.03-.65-.09-.19-.84-2.02-1.15-2.77-.3-.72-.61-.62-.84-.63-.22-.01-.47-.01-.72-.01-.25 0-.65.09-.99.47-.34.37-1.3 1.27-1.3 3.1s1.33 3.6 1.52 3.85c.18.25 2.62 4 6.35 5.61.89.38 1.58.61 2.12.78.89.28 1.7.24 2.34.15.71-.1 2.2-.9 2.51-1.77.31-.87.31-1.61.22-1.77-.09-.16-.34-.25-.71-.44z"/>
           </svg>
-          <span className="text-sm sm:text-base font-bold leading-tight">Chat<br/>Admin</span>
+          <span className="text-xs landscape:text-[10px] font-bold leading-tight">Chat<br/>Admin</span>
         </div>
       </a>
     </>
