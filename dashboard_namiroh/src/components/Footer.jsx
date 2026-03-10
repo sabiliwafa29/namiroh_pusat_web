@@ -4,15 +4,6 @@ export default function Footer() {
   return (
     <footer className="bg-green-900 text-white bg-islamic-pattern">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-12">
-        {/* Basmalah header */}
-        <div className="text-center mb-10 pb-8 border-b border-green-700">
-          <p className="font-arabic text-3xl text-orange-300/90 leading-loose mb-1">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</p>
-          <div className="flex items-center justify-center gap-3 mt-2">
-            <div className="h-px w-16 bg-orange-400/30" />
-            <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
-            <div className="h-px w-16 bg-orange-400/30" />
-          </div>
-        </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Brand */}
           <div>
