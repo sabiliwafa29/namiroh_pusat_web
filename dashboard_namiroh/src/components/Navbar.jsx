@@ -13,10 +13,12 @@ export default function Navbar() {
   }, [])
 
   const links = [
-    { to: '/',       label: 'Beranda' },
-    { to: '/paket',  label: 'Paket' },
-    { to: '/galeri', label: 'Galeri' },
-    { to: '/daftar', label: 'Daftar Sekarang' },
+    { to: '/',          label: 'Beranda' },
+    { to: '/paket',     label: 'Program Pilihan' },
+    { to: '/profil',    label: 'Company Profile' },
+    { to: '/testimoni', label: 'Testimoni' },
+    { to: '/galeri',    label: 'Galeri' },
+    { to: '/daftar',    label: 'Daftar Sekarang' },
   ]
 
   const linkClass = (to) => {

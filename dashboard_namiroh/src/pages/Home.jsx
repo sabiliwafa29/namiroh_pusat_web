@@ -46,7 +46,7 @@ export default function Home() {
   const [maskapaiList, setMaskapaiList]   = useState([])
   const [search, setSearch] = useState({ bulan: '', jenis_layanan_id: '', maskapai_id: '', bandara: '' })
 
-  const bulanList = Array.from({ length: 12 }, (_, i) => {
+  const bulanList = Array.from({ length: 24 }, (_, i) => {
     const d = new Date(new Date().getFullYear(), new Date().getMonth() + i, 1)
     return {
       value: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
@@ -200,7 +200,7 @@ export default function Home() {
             {/* Shortcut Bulan Populer */}
             <div className="mt-4 flex flex-wrap gap-2 items-center">
               <span className="text-sm text-gray-500 font-medium">Populer:</span>
-              {bulanList.slice(0, 6).map(b => (
+              {bulanList.slice(0, 12).map(b => (
                 <button key={b.value}
                   onClick={() => { sf('bulan', b.value); }}
                   className={`text-sm font-bold px-4 py-1.5 rounded-full border transition ${

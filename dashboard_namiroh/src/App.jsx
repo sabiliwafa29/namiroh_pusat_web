@@ -4,6 +4,8 @@ import Paket from './pages/Paket'
 import PaketDetail from './pages/PaketDetail'
 import Daftar from './pages/Daftar'
 import Galeri from './pages/Galeri'
+import Profil from './pages/Profil'
+import Testimoni from './pages/Testimoni'
 import FloatingWidgets from './components/FloatingWidgets'
 import ProtectedRoute from './components/ProtectedRoute'
 
@@ -25,6 +27,8 @@ export default function App() {
         <Route path="/paket/:id"  element={<PaketDetail />} />
         <Route path="/daftar"     element={<Daftar />} />
         <Route path="/galeri"     element={<Galeri />} />
+        <Route path="/profil"     element={<Profil />} />
+        <Route path="/testimoni"  element={<Testimoni />} />
 
         {/* Admin auth */}
         <Route path="/admin/login" element={<AdminLogin />} />
