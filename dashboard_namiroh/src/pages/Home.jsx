@@ -100,7 +100,7 @@ export default function Home() {
           <div className="font-arabic text-3xl sm:text-4xl text-orange-200/80 mb-3 leading-loose">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
 
           <div className="inline-block bg-orange-500 text-white text-base font-bold px-4 py-1.5 mb-5" style={{clipPath:'polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)'}}>
-            ✦ Terakreditasi A — Kementerian Agama RI
+            Terakreditasi A — Kementerian Agama RI
           </div>
 
           <h1 className="font-heading text-4xl sm:text-6xl font-bold leading-tight mb-4">
