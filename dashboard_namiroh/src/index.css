@@ -14,6 +14,12 @@ body {
   font-family: var(--font-heading);
 }
 
+.font-heading-bold {
+  font-family: var(--font-heading);
+  -webkit-text-stroke: 0.6px currentColor;
+  paint-order: stroke fill;
+}
+
 .font-arabic {
   font-family: var(--font-arabic);
   direction: rtl;

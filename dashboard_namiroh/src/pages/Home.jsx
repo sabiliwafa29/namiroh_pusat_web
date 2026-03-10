@@ -79,7 +79,7 @@ export default function Home() {
       <Navbar />
 
       {/* HERO */}
-      <section className="text-white pt-24 pb-20 px-4 relative overflow-hidden"
+      <section className="text-white pt-24 pb-5 px-4 relative overflow-hidden"
         style={{ backgroundImage: "url('/galeri/bg-jamaah.jpeg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
         {/* Dark overlay agar teks tetap terbaca */}
         <div className="absolute inset-0 bg-green-950/70" />
@@ -102,7 +102,7 @@ export default function Home() {
           {/* Basmalah */}
           <div className="font-arabic text-3xl sm:text-4xl text-orange-200/80 mb-8 leading-loose">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
 
-          <div className="inline-block bg-orange-500 text-white text-base font-bold px-4 py-1.5 mb-5 rounded-3xl">
+          <div className="inline-block bg-orange-500 text-white text-base font-black px-4 py-1.5 mb-5 rounded-3xl">
             Terakreditasi A — Kementerian Agama RI
           </div>
 
@@ -133,7 +133,7 @@ export default function Home() {
       <section className="py-10 px-4 bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-6">
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-green-900">Cari Jadwal Keberangkatan</h2>
+            <h2 className="font-heading-bold text-3xl sm:text-4xl font-black text-green-900">Cari Jadwal Keberangkatan</h2>
             <div className="flex items-center justify-center gap-3 mt-2 mb-3">
               <div className="h-px w-12 bg-orange-400/50" />
               <span className="text-orange-400 text-sm">✦</span>
@@ -147,7 +147,7 @@ export default function Home() {
 
               {/* Bulan */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">📅 Bulan Keberangkatan</label>
+                <label className="block text-base font-bold text-gray-700 mb-2">📅 Bulan Keberangkatan</label>
                 <select value={search.bulan} onChange={e => sf('bulan', e.target.value)}
                   className="w-full border border-gray-300 rounded-xl px-3 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-green-500">
                   <option value="">Semua Bulan</option>
@@ -157,7 +157,7 @@ export default function Home() {
 
               {/* Jenis Paket */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">🕌 Jenis Paket</label>
+                <label className="block text-base font-bold text-gray-700 mb-2">🕌 Jenis Paket</label>
                 <select value={search.jenis_layanan_id} onChange={e => sf('jenis_layanan_id', e.target.value)}
                   className="w-full border border-gray-300 rounded-xl px-3 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-green-500">
                   <option value="">Semua Jenis</option>
@@ -167,7 +167,7 @@ export default function Home() {
 
               {/* Maskapai */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">✈️ Maskapai</label>
+                <label className="block text-base font-bold text-gray-700 mb-2">✈️ Maskapai</label>
                 <select value={search.maskapai_id} onChange={e => sf('maskapai_id', e.target.value)}
                   className="w-full border border-gray-300 rounded-xl px-3 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-green-500">
                   <option value="">Semua Maskapai</option>
@@ -177,7 +177,7 @@ export default function Home() {
 
               {/* Bandara */}
               <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">🛫 Bandara Keberangkatan</label>
+                <label className="block text-base font-bold text-gray-700 mb-2">🛫 Bandara Keberangkatan</label>
                 <select value={search.bandara} onChange={e => sf('bandara', e.target.value)}
                   className="w-full border border-gray-300 rounded-xl px-3 py-3 text-base bg-white focus:outline-none focus:ring-2 focus:ring-green-500">
                   <option value="">Semua Bandara</option>
@@ -188,11 +188,11 @@ export default function Home() {
 
             <div className="flex flex-col sm:flex-row gap-3">
               <button onClick={handleSearch}
-                className="flex-1 bg-green-700 text-white font-bold py-4 rounded-xl hover:bg-green-800 active:scale-95 transition text-base">
+                className="flex-1 bg-green-700 text-white font-extrabold py-4 rounded-xl hover:bg-green-800 active:scale-95 transition text-lg">
                 🔍 Cari Jadwal Sekarang
               </button>
               <Link to="/paket"
-                className="px-6 py-4 border border-gray-300 rounded-xl text-base text-gray-700 hover:bg-gray-100 transition text-center font-medium">
+                className="px-6 py-4 border border-gray-300 rounded-xl text-lg text-gray-700 hover:bg-gray-100 transition text-center font-bold">
                 Lihat Semua Paket
               </Link>
             </div>
@@ -200,10 +200,10 @@ export default function Home() {
             {/* Shortcut Bulan Populer */}
             <div className="mt-4 flex flex-wrap gap-2 items-center">
               <span className="text-sm text-gray-500 font-medium">Populer:</span>
-              {bulanList.slice(0, 4).map(b => (
+              {bulanList.slice(0, 6).map(b => (
                 <button key={b.value}
                   onClick={() => { sf('bulan', b.value); }}
-                  className={`text-sm px-4 py-1.5 rounded-full border transition ${
+                  className={`text-sm font-bold px-4 py-1.5 rounded-full border transition ${
                     search.bulan === b.value
                       ? 'bg-green-700 text-white border-green-700'
                       : 'border-gray-300 text-gray-600 hover:border-green-500 hover:text-green-700'
@@ -217,11 +217,11 @@ export default function Home() {
       </section>
 
       {/* LAYANAN */}
-      <section className="py-16 px-4 bg-gray-50 bg-islamic-pattern-dark">
+      <section className="px-4 bg-gray-50 bg-islamic-pattern-dark">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <div className="text-orange-400 text-2xl mb-1">✦</div>
-            <h2 className="font-heading text-3xl sm:text-4xl font-bold text-green-900">Layanan Terbaik Kami</h2>
+            <h2 className="font-heading-bold text-3xl sm:text-4xl font-bold text-green-900">Layanan Terbaik Kami</h2>
             <div className="flex items-center justify-center gap-3 mt-2">
               <div className="h-px w-16 bg-orange-400/40" />
               <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
@@ -318,7 +318,7 @@ export default function Home() {
       )}
 
       {/* KENAPA KAMI */}
-      <section className="py-16 px-4 bg-green-900 text-white bg-islamic-pattern">
+      <section className="py-3 px-4 bg-green-900 text-white bg-islamic-pattern">
         <div className="max-w-4xl mx-auto text-center">
           <div className="text-orange-400 text-2xl mb-1">✦</div>
           <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2">Mengapa Memilih An Namiroh?</h2>
@@ -349,7 +349,7 @@ export default function Home() {
       </section>
 
       {/* TESTIMONI */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="py-3 px-4 bg-gray-50">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <div className="text-orange-400 text-2xl mb-1">✦</div>
@@ -377,7 +377,7 @@ export default function Home() {
       </section>
 
       {/* GALERI */}
-      <section className="py-16 px-4 bg-white">
+      <section className="py-3 px-4 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
             <div className="text-orange-400 text-2xl mb-1">✦</div>
@@ -420,7 +420,7 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4 bg-green-950 bg-islamic-pattern relative overflow-hidden">
+      <section className="py-7 px-4 bg-green-950 bg-islamic-pattern relative overflow-hidden">
         {/* Arabic calligraphy watermark */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
           <span className="font-arabic text-[160px] text-white/[0.03] leading-none">الله</span>
