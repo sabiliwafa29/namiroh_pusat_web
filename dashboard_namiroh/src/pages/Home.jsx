@@ -97,9 +97,9 @@ export default function Home() {
 
         <div className="max-w-4xl mx-auto text-center relative z-10">
           {/* Basmalah */}
-          <div className="font-arabic text-3xl sm:text-4xl text-orange-200/80 mb-3 leading-loose">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+          <div className="font-arabic text-3xl sm:text-4xl text-orange-200/80 mb-8 leading-loose">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
 
-          <div className="inline-block bg-orange-500 text-white text-base font-bold px-4 py-1.5 mb-5" style={{clipPath:'polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%)'}}>
+          <div className="inline-block bg-orange-500 text-white text-base font-bold px-4 py-1.5 mb-5 rounded-3xl">
             Terakreditasi A — Kementerian Agama RI
           </div>
 
@@ -110,13 +110,13 @@ export default function Home() {
           <p className="text-green-100 text-lg mb-8 max-w-2xl mx-auto">
             Lebih dari 24 tahun melayani jamaah Indonesia menuju Tanah Suci. Bergabunglah dengan 60.000+ jamaah yang telah mempercayakan ibadahnya bersama kami.
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex flex-row gap-3 justify-center">
             <Link to="/paket"
-              className="bg-orange-500 text-white font-bold px-8 py-3 rounded-none hover:bg-orange-400 transition text-base" style={{clipPath:'polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)'}}>
+                  className="bg-orange-500 text-white font-bold px-5 py-2 rounded-3xl hover:bg-orange-400 transition text-sm whitespace-nowrap">
               Lihat Paket Umroh
             </Link>
             <Link to="/daftar"
-              className="border border-white/60 text-white px-8 py-3 rounded-none hover:bg-white hover:text-green-900 transition text-base font-medium" style={{clipPath:'polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)'}}>
+              className="border border-white/60 text-white px-5 py-2 rounded-3xl hover:bg-white hover:text-green-900 transition text-sm font-bold whitespace-nowrap">
               Daftar Sekarang
             </Link>
           </div>
