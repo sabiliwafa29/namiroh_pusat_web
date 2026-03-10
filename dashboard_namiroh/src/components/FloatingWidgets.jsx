@@ -2,6 +2,13 @@ import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import api from '../api/axios'
 
+const PROMO_LIST = [
+  { id: 1, label: 'Umroh Best Seller', desc: 'Mulai Rp 23.000.000', link: '/paket' },
+  { id: 2, label: 'Umroh Spesial Ramadhan', desc: 'Mulai Rp 34.000.000', link: '/paket' },
+  { id: 3, label: 'Program Badal Umroh dan Haji', desc: 'Mulai Rp 3.000.000', link: '/paket' },
+  { id: 4, label: 'Umroh Hanya 500rb', desc: 'Seat Terbatas!', link: '/paket' },
+]
+
 export default function FloatingWidgets() {
   const { pathname } = useLocation()
   if (pathname.startsWith('/admin')) return null
@@ -21,12 +28,12 @@ export default function FloatingWidgets() {
 
   // Auto-rotate promo every 4s
   useEffect(() => {
-    if (paketPromo.length <= 1) return
+    if (PROMO_LIST.length <= 1) return
     const timer = setInterval(() => {
-      setCurrentPromo(prev => (prev + 1) % paketPromo.length)
+      setCurrentPromo(prev => (prev + 1) % PROMO_LIST.length)
     }, 4000)
     return () => clearInterval(timer)
-  }, [paketPromo.length])
+  }, [])
 
   // Hide banner after scroll down, show again on scroll up
   useEffect(() => {
@@ -46,17 +53,17 @@ export default function FloatingWidgets() {
   return (
     <>
       {/* ── Promo Banner — bottom left ── */}
-      {!bannerDismissed && promo && (
-        <div className={`fixed bottom-2 left-2 z-50 w-28 sm:w-32 landscape:w-20 transition-all duration-500 ${
+      {!bannerDismissed && (
+        <div className={`fixed bottom-2 left-2 z-50 w-48 sm:w-32 landscape:w-20 transition-all duration-500 ${
           bannerVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 pointer-events-none'
         }`}>
           <div className="bg-white rounded-2xl shadow-2xl border border-orange-200 overflow-hidden">
             {/* Header */}
             <div className="bg-gradient-to-r from-green-800 to-green-700 px-2 py-1 flex items-center justify-between">
+              <span className="text-white text-[10px] font-bold tracking-wide uppercase">🔥 Promo Terbaru</span>
               <div className="flex items-center gap-2">
-                {/* Dots */}
                 <div className="flex gap-1">
-                  {paketPromo.map((_, i) => (
+                  {PROMO_LIST.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => setCurrentPromo(i)}
@@ -76,21 +83,26 @@ export default function FloatingWidgets() {
               </div>
             </div>
 
-            {/* Content */}
-            <div className="px-1.5 py-1">
-              <div className="font-bold text-gray-800 text-[9px] leading-tight line-clamp-1">{promo.nama_paket}</div>
-              <div className="text-orange-500 font-bold text-[9px]">
-                Rp {Number(promo.harga_dasar).toLocaleString('id-ID')}
+            {/* Content — satu promo aktif */}
+            <div className="px-2 py-1.5">
+              <div className="font-semibold text-gray-800 text-[11px] leading-tight line-clamp-2">
+                {PROMO_LIST[currentPromo].label}
+              </div>
+              <div className="text-orange-500 font-bold text-[10px] mt-0.5">
+                {PROMO_LIST[currentPromo].desc}
               </div>
             </div>
 
-            <div className="px-1 pb-1">
-              <Link
-                to={`/paket/${promo.id}`}
-                className="block text-center bg-green-700 text-white text-[9px] font-bold py-1 rounded-lg hover:bg-green-800 transition"
+            <div className="px-1.5 pb-1.5">
+              <a
+                href={`https://wa.me/6282335611999?text=Assalamualaikum, saya ingin info promo: ${encodeURIComponent(PROMO_LIST[currentPromo].label)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center justify-center gap-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-bold py-1 rounded-lg transition"
               >
-                Lihat Detail →
-              </Link>
+                <svg viewBox="0 0 32 32" className="w-3 h-3 fill-white flex-shrink-0"><path d="M16 .5C7.44.5.5 7.44.5 16c0 2.82.74 5.47 2.03 7.77L.5 31.5l8-2c2.2 1.16 4.7 1.83 7.5 1.83 8.56 0 15.5-6.94 15.5-15.5S24.56.5 16 .5zm0 28.17c-2.57 0-4.97-.69-7.03-1.9l-.5-.29-5.2 1.36 1.39-5.07-.33-.52A12.4 12.4 0 0 1 3.33 16C3.33 9.37 8.87 3.83 16 3.83S28.67 9.37 28.67 16 23.13 28.67 16 28.67zm6.8-9.3c-.37-.19-2.2-1.08-2.54-1.2-.34-.13-.59-.19-.84.19-.25.37-.96 1.2-1.18 1.45-.22.25-.43.28-.8.09-.37-.19-1.56-.57-2.97-1.83-1.1-.98-1.84-2.19-2.05-2.56-.22-.37-.02-.57.16-.75.17-.17.37-.43.56-.65.19-.22.25-.37.37-.62.13-.25.06-.47-.03-.65-.09-.19-.84-2.02-1.15-2.77-.3-.72-.61-.62-.84-.63-.22-.01-.47-.01-.72-.01-.25 0-.65.09-.99.47-.34.37-1.3 1.27-1.3 3.1s1.33 3.6 1.52 3.85c.18.25 2.62 4 6.35 5.61.89.38 1.58.61 2.12.78.89.28 1.7.24 2.34.15.71-.1 2.2-.9 2.51-1.77.31-.87.31-1.61.22-1.77-.09-.16-.34-.25-.71-.44z"/></svg>
+                Daftar Sekarang
+              </a>
             </div>
           </div>
         </div>
@@ -101,18 +113,18 @@ export default function FloatingWidgets() {
         href="https://wa.me/6282335611999?text=Assalamualaikum, saya ingin info paket umroh An Namiroh"
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-2 right-2 z-50 group landscape:bottom-2 landscape:right-2"
+        className="fixed bottom-4 right-4 z-50 group landscape:bottom-2 landscape:right-2"
         aria-label="Chat WhatsApp"
       >
         {/* Pulse ring */}
         <span className="absolute inset-0 rounded-full bg-green-400 animate-ping opacity-40 group-hover:opacity-0" />
 
-        <div className="relative flex items-center gap-1.5 bg-green-500 hover:bg-green-600 text-white px-2.5 py-1.5 landscape:px-2 landscape:py-1 rounded-full shadow-2xl transition-all duration-300 group-hover:shadow-green-400/40">
+        <div className="relative flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-3 landscape:px-3 landscape:py-2 rounded-full shadow-2xl transition-all duration-300 group-hover:shadow-green-400/40">
           {/* WA icon */}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-5 h-5 landscape:w-4 landscape:h-4 flex-shrink-0 fill-white">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-7 h-7 landscape:w-5 landscape:h-5 flex-shrink-0 fill-white">
             <path d="M16 .5C7.44.5.5 7.44.5 16c0 2.82.74 5.47 2.03 7.77L.5 31.5l8-2c2.2 1.16 4.7 1.83 7.5 1.83 8.56 0 15.5-6.94 15.5-15.5S24.56.5 16 .5zm0 28.17c-2.57 0-4.97-.69-7.03-1.9l-.5-.29-5.2 1.36 1.39-5.07-.33-.52A12.4 12.4 0 0 1 3.33 16C3.33 9.37 8.87 3.83 16 3.83S28.67 9.37 28.67 16 23.13 28.67 16 28.67zm6.8-9.3c-.37-.19-2.2-1.08-2.54-1.2-.34-.13-.59-.19-.84.19-.25.37-.96 1.2-1.18 1.45-.22.25-.43.28-.8.09-.37-.19-1.56-.57-2.97-1.83-1.1-.98-1.84-2.19-2.05-2.56-.22-.37-.02-.57.16-.75.17-.17.37-.43.56-.65.19-.22.25-.37.37-.62.13-.25.06-.47-.03-.65-.09-.19-.84-2.02-1.15-2.77-.3-.72-.61-.62-.84-.63-.22-.01-.47-.01-.72-.01-.25 0-.65.09-.99.47-.34.37-1.3 1.27-1.3 3.1s1.33 3.6 1.52 3.85c.18.25 2.62 4 6.35 5.61.89.38 1.58.61 2.12.78.89.28 1.7.24 2.34.15.71-.1 2.2-.9 2.51-1.77.31-.87.31-1.61.22-1.77-.09-.16-.34-.25-.71-.44z"/>
           </svg>
-          <span className="text-xs landscape:text-[10px] font-bold leading-tight">Chat<br/>Admin</span>
+          <span className="text-sm landscape:text-xs font-bold leading-tight">Chat<br/>Admin</span>
         </div>
       </a>
     </>
