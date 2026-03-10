@@ -118,12 +118,12 @@ export default function Home() {
           </p>
           <div className="flex flex-row gap-4 justify-center">
             <Link to="/paket"
-                  className="bg-orange-500 text-white font-extrabold px-4 py-4 rounded-3xl hover:bg-orange-400 transition text-xl shadow-lg whitespace">
-              Lihat Paket Umroh
+                  className="bg-orange-500 text-white font-extrabold px-4 py-3 rounded-3xl hover:bg-orange-400 transition text-xl shadow-lg text-center max-w-[140px] sm:max-w-none">
+              Lihat<br className="sm:hidden" /> Paket Umroh
             </Link>
             <Link to="/daftar"
-              className="bg-white text-green-900 px-4 py-4 rounded-3xl hover:bg-gray-100 transition text-xl font-extrabold shadow-lg whitespace">
-              Daftar Sekarang
+              className="bg-white text-green-900 px-4 py-3 rounded-3xl hover:bg-gray-100 transition text-xl font-extrabold shadow-lg text-center max-w-[140px] sm:max-w-none">
+              Daftar<br className="sm:hidden" /> Sekarang
             </Link>
           </div>
         </div>
