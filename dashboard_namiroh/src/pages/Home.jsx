@@ -79,7 +79,10 @@ export default function Home() {
       <Navbar />
 
       {/* HERO */}
-      <section className="bg-gradient-to-br from-green-800 via-green-800 to-green-800 text-white pt-24 pb-20 px-4 relative overflow-hidden">
+      <section className="text-white pt-24 pb-20 px-4 relative overflow-hidden"
+        style={{ backgroundImage: "url('/galeri/bg-jamaah.jpeg')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        {/* Dark overlay agar teks tetap terbaca */}
+        <div className="absolute inset-0 bg-green-950/70" />
         {/* Islamic geometric star pattern overlay */}
         <div className="absolute inset-0 bg-islamic-pattern" />
 
