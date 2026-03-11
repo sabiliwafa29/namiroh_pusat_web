@@ -49,7 +49,7 @@ export default function Galeri() {
 
       {/* VIDEO PLAYLIST */}
       <section className="max-w-6xl mx-auto w-full px-4 py-14">
-        <h2 className="font-heading text-2xl font-bold text-green-900 mb-6">An Namiroh in History</h2>
+        <h2 className="font-heading text-2xl font-bold text-green-900 mb-6 text-center">An Namiroh in History</h2>
         <div className="flex flex-col lg:flex-row gap-4">
 
           {/* Player utama */}
@@ -64,7 +64,7 @@ export default function Galeri() {
                 allowFullScreen
               />
             </div>
-            <p className="mt-3 font-semibold text-green-900 text-base">{VIDEOS[aktifVideo].judul}</p>
+            <p className="mt-3 font-semibold text-green-900 text-base text-center">{VIDEOS[aktifVideo].judul}</p>
           </div>
 
           {/* Playlist */}
@@ -112,8 +112,8 @@ export default function Galeri() {
 
       {/* FOTO GALLERY */}
       <section className="max-w-6xl mx-auto w-full px-4 pb-16">
-        <h2 className="font-heading text-2xl font-bold text-green-900 mb-2">Galeri Foto</h2>
-        <p className="text-gray-500 text-xl mb-6">Rasakan bagaimana ceria dan bahagianya para jamaah berangkat ibadah Umroh dan Haji bersama kami</p>
+        <h2 className="font-heading text-2xl font-bold text-green-900 mb-2 text-center">Galeri Foto</h2>
+        <p className="text-gray-500 text-xl mb-6 text-center">Rasakan bagaimana ceria dan bahagianya para jamaah berangkat ibadah Umroh dan Haji bersama kami</p>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
           {FOTOS.map((item, i) => (
