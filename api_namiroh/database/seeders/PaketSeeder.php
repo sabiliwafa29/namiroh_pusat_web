@@ -10,12 +10,11 @@ class PaketSeeder extends Seeder
     public function run(): void
     {
         // Idempotent — wipe & re-seed safely
-        DB::statement('PRAGMA foreign_keys = OFF');
-        DB::table('itinerary')->delete();
-        DB::table('paket_harga')->delete();
-        DB::table('paket')->delete();
-        try { DB::statement("DELETE FROM sqlite_sequence WHERE name IN ('paket','paket_harga','itinerary')"); } catch (\Throwable $e) {}
-        DB::statement('PRAGMA foreign_keys = ON');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        DB::table('itinerary')->truncate();
+        DB::table('paket_harga')->truncate();
+        DB::table('paket')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
 
         $inc = 'Tiket PP, Hotel Mekkah & Madinah, Makan 3x Sehari, Muthowwif, Tour Leader, Akomodasi selama di Saudi, Handling Indonesia & Saudi, Visa Umroh, Siskopatuh';
         $exc = 'Perlengkapan Umroh, Biaya Paspor, Vaksin Meningitis, Pengeluaran Pribadi';

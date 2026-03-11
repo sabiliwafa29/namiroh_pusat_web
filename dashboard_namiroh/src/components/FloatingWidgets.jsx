@@ -40,7 +40,7 @@ export default function FloatingWidgets() {
     <>
       {/* ── Promo Banner — bottom left ── */}
       {!bannerDismissed && (
-        <div className="fixed bottom-2 left-2 z-50 w-48 sm:w-32 landscape:w-20">
+        <div className="fixed bottom-2 left-2 z-50 w-48 sm:w-32 landscape:w-48">
           <div className="bg-white rounded-2xl shadow-2xl border border-orange-200 overflow-hidden">
             {/* Header */}
             <div className="bg-gradient-to-r from-green-800 to-green-700 px-2 py-1 flex items-center justify-between">
