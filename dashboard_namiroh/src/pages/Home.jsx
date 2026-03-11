@@ -201,8 +201,11 @@ export default function Home() {
       {/* VIDEO DRIVE */}
       <section className="py-14 px-4 bg-white border-b border-gray-100">
         <div className="max-w-3xl mx-auto text-center">
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold text-green-900 mb-2">
+            Video Ini Membuat Banyak Orang Rindu Ke Tanah Suci <br />
+          </h2>
           <h2 className="font-heading text-xl sm:text-3xl font-bold text-green-900 mb-2">
-            Video Ini Membuat Banyak Orang Rindi Ke Tanah Suci <br />Jangan Biarkan Panggilan itu Hanya Menjadi Keinginan <br />Bersama An Namiroh Travelindo, InsyaAllah Perjalanan Suci Anda Mudah, Aman, dan Penuh Keberkahan. Sekarang Giliran Anda Menjadi Tamu Allah
+            Jangan Biarkan Panggilan itu Hanya Menjadi Keinginan <br />Bersama An Namiroh Travelindo, InsyaAllah Perjalanan Suci Anda Mudah, Aman, dan Penuh Keberkahan <br />Sekarang Giliran Anda Menjadi Tamu Allah
           </h2>
           <div className="flex items-center justify-center gap-3 mt-2 mb-6">
             <div className="h-px w-12 bg-orange-400/50" />
@@ -457,9 +460,7 @@ export default function Home() {
             {testimonials.map((t, i) => (
               <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
                 {t.foto && (
-                  <div className="w-full bg-gray-100 flex items-center justify-center overflow-hidden" style={{ minHeight: '12rem' }}>
-                    <img src={t.foto} alt={t.name} className="w-full object-contain max-h-56" loading="lazy" />
-                  </div>
+                  <img src={t.foto} alt={t.name} className="w-full h-90 object-cover" loading="lazy" />
                 )}
                 <div className="p-5">
                   <div className="text-orange-400 text-lg mb-2">{'★'.repeat(t.bintang)}</div>
