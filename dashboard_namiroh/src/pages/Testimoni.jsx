@@ -4,76 +4,76 @@ import { Link } from 'react-router-dom'
 
 const TESTIMONI = [
   {
-    name: 'Ibu Siti Nurjanah',
-    kota: 'Surabaya',
-    paket: 'Umroh Reguler 13 Hari',
-    tahun: '2024',
+    name: 'Bu Ika K-Cunk Motor',
+    kota: 'Tulungagung',
+    tahun: '2025',
     bintang: 5,
-    text: 'Alhamdulillah, perjalanan Umroh bersama An Namiroh sangat lancar. Hotel dekat Masjidil Haram dan makanannya cocok di lidah. Terima kasih An Namiroh!',
-  },
-  {
-    name: 'Bapak H. Mulyadi',
-    kota: 'Bandung',
-    paket: 'Umroh VIP',
-    tahun: '2024',
-    bintang: 5,
-    text: 'Tour leader dan muthowwif selalu sigap menjawab pertanyaan kami. Semua fasilitas sesuai yang dijanjikan. InsyaAllah akan direkomendasikan ke keluarga.',
+    foto: '/testimoni/bu-ika-tulungagung.jpg',
+    text: 'Alhamdulillah, rasanya sungguh luar biasa dan sangat mengharukan umroh bersama An Namiroh Travelindo! Saya merasa sangat terbantu dan senantiasa didampingi dalam setiap proses ibadah. Kehadiran Ibu Hari juga sebagai pendamping jemaah perempuan sangat memudahkan kami, terutama karena beliau menguasai bahasa Arab. Pelayanan yang diberikan pun sangat memuaskan. Alhamdulillah, terima kasih banyak An Namiroh Travelindo!',
   },
   {
     name: 'Ning Umi Laila',
     kota: 'Surabaya',
-    paket: 'Umroh Reguler',
-    tahun: '2023',
-    bintang: 5,
-    text: 'Pelayanan sangat praktis, cepat, dan didampingi sejak awal. Para mutawif mengayomi jamaah muda maupun tua. An-Namiroh recommended!',
-  },
-  {
-    name: 'Bapak Hendra Kusuma',
-    kota: 'Malang',
-    paket: 'Umroh Plus Aqsa',
-    tahun: '2024',
-    bintang: 5,
-    text: 'Subhanallah, bisa sholat di Masjidil Haram, Masjid Nabawi, dan Masjid Al-Aqsa dalam satu perjalanan. Luar biasa! Terima kasih An Namiroh sudah mewujudkan impian kami.',
-  },
-  {
-    name: 'Ibu Fatimah Azzahra',
-    kota: 'Gresik',
-    paket: 'Umroh Full Ramadan',
     tahun: '2025',
     bintang: 5,
-    text: 'Ramadan di Tanah Suci adalah mimpi terbesar saya. Alhamdulillah terwujud bersama An Namiroh. Makan enak, hotel nyaman, mutawif sabar. Semoga bisa kembali lagi.',
+    foto: '/testimoni/ning-umi-laila-surabaya.jpg',
+    text: 'Proses pelayanannya sangat praktis dan cepat, dimulai dari pendampingan pembuatan paspor hingga keberangkatan. Kami selalu didampingi sehingga tidak merasa bingung. Para mutawif sangat mengayomi seluruh jemaah, baik yang berusia muda maupun yang sudah lanjut usia. Prinsip An-Namiroh, "Jemaah senang, ibadah pun tenang," benar-benar terasa nyata.',
   },
   {
-    name: 'Bapak Sugiarto & Keluarga',
+    name: 'Faridatus Sholichah',
+    kota: 'Kandangan, Kediri',
+    tahun: '2021',
+    bintang: 5,
+    foto: '/testimoni/faridatus-sholichah-kediri.jpeg',
+    text: 'Alhamdulillah saya dari jamaah An Namiroh merasakan suasana pada saat itu bagus sekali begitupun untuk pelayanannya. Mulai dari hotel, juga bisa sholat beribadah berjamaah tidak ada halangan apapun. Kami juga bisa melakukan ibadah towaf berkali kali dan bisa ke roudhoh, Alhamdulillah. Terimakasih banyak untuk PT An Namiroh Travelindo, Semoga semakin baik dan Jaya.',
+  },
+  {
+    name: 'Abah Sholeh',
+    kota: 'Blitar',
+    tahun: '2021',
+    bintang: 5,
+    foto: '/testimoni/abah-sholeh-blitar.jpeg',
+    text: 'Alhamdulillah kami rombongan dari Blitar diberi kesempatan untuk bisa umroh New Normal 25 Januari 2021. Kita dikasih fasilitas yang luar biasa, paket ekonomi dengan fasilitas bintang 5. Di Madinah kami di Hotel Nozol Royal Inn, di Makkah kami di Hotel Marriot. Ibadah thawaf dan sai kita diberi kemudahan yang luar biasa. Sekian pengalaman dari Abah Soleh-Blitar.',
+  },
+  {
+    name: 'Neng Kholifah',
+    kota: 'Pandaan, Pasuruan',
+    tahun: '2021',
+    bintang: 5,
+    foto: '/testimoni/neng-kholifah-pasuruan.jpeg',
+    text: 'Alhamdulillah saya beserta rombongan ditakdirkan oleh Allah SWT Umroh New Normal pada 25 Januari 2021. Kami dilayani, diperhatikan, dan hotel yang ditempati sangat bagus dan nyaman. Muthowifnya sangat baik, sabar mendampingi jamaah. Tamu tamu Allah istimewa sekali. Terimakasih PT An Namiroh Travelindo maju terus untuk melayani tamu-tamu Allah.',
+  },
+  {
+    name: 'Bpk Jayati & Ibu Yuliatin',
+    kota: '—',
+    tahun: '2021',
+    bintang: 5,
+    foto: '/testimoni/bpk-jayati-yuliatin.jpg',
+    text: 'Terimakasih sekali kepada TL Neng Ifah Badri, dari awal keberangkatan sampai Jeddah Madinah dan menuju Masjidil Haram benar benar ibadah yang tidak pernah saya bayangkan sebelumnya. Betul betul ibadah yang istimewa sekali dan sangat puas. Mudah mudahan semoga bisa berangkat lagi bersama keluarga besar An Namiroh.',
+  },
+  {
+    name: 'Bu Ilmi Fatmawati',
     kota: 'Sidoarjo',
-    paket: 'Umroh Keluarga',
-    tahun: '2023',
+    tahun: '2021',
     bintang: 5,
-    text: 'Kami berangkat berlima sekeluarga. Proses pendaftaran mudah, pembimbing ramah, dan semua anak-anak kami terlayani dengan baik. Terima kasih banyak!',
+    foto: '/testimoni/bu-ilmi-fatmawati-sidoarjo.jpeg',
+    text: 'Alhamdulillah saya sangat bersyukur, puas sekali dengan pelayanan yang diberikan dari An Namiroh selama kita di Indonesia, di Mekkah, juga di Madinah. Untuk hotel dan makanan yang telah disediakan sangat memuaskan sekali. Terimakasih banyak kepada travel An Namiroh yang memberikan fasilitas yang sebagus dan sebaik-baiknya.',
   },
   {
-    name: 'Hj. Rukmini',
-    kota: 'Surabaya',
-    paket: 'Haji Plus',
-    tahun: '2022',
+    name: 'Bu Endang',
+    kota: 'Tuban',
+    tahun: '2021',
     bintang: 5,
-    text: 'Sudah dua kali saya berangkat bersama An Namiroh, umroh dan haji plus. Dua-duanya memuaskan. Fasilitas sesuai janji, pembimbing amanah, saya rekomendasikan ke semua.',
+    foto: '/testimoni/bu-endang-tuban.jpeg',
+    text: 'Saya sangat puas dengan pelayanan PT An Namiroh, mulai dari transportasi nyaman, kamar hotel berbintang 5 yang membuat kita sangat nyaman, dan kita juga memilih makanan sendiri sesuai selera. Ingin lagi kembali ke rumah Baitullah bersama PT An Namiroh. Bagi teman teman yang ingin umroh, ikut PT An Namiroh saja, dijamin tidak mengecewakan.',
   },
   {
-    name: 'Ustadz Mahfudz',
-    kota: 'Lamongan',
-    paket: 'Wisata Halal Turki',
-    tahun: '2024',
+    name: 'Apiq',
+    kota: 'Tuban',
+    tahun: '2021',
     bintang: 5,
-    text: 'Istanbul dan Bursa luar biasa! Selain umroh kami juga city tour ke tempat-tempat bersejarah Islam. Program An Namiroh sangat thoughtful dan profesional.',
-  },
-  {
-    name: 'Ibu Dewi Rahayu',
-    kota: 'Mojokerto',
-    paket: 'Umroh Syawal',
-    tahun: '2025',
-    bintang: 5,
-    text: 'Ini pertama kali saya umroh dan sangat bersyukur memilih An Namiroh. Semuanya diurus dengan baik dari awal sampai pulang. Insya Allah tahun depan umroh lagi!',
+    foto: '/testimoni/apiq-tuban.jpeg',
+    text: 'Alhamdulillah Umroh New Normal keberangkatan tgl 25/01/2021 bersama PT. An Namiroh Travelindo sangat nyaman dan aman, ibadah lebih khusyuk, pelayanan memuaskan dan hotel sangat dekat dengan Masjid Nabawi maupun Masjidil Haram. Umroh New Normal bersama PT An Namiroh Travelindo jelas travelnya jelas harganya dan jelas pelayanannya.',
   },
 ]
 
@@ -127,20 +127,30 @@ export default function Testimoni() {
         <div className="max-w-6xl mx-auto">
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 space-y-5">
             {TESTIMONI.map((t, i) => (
-              <div key={i} className="break-inside-avoid bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                {/* Bintang */}
-                <div className="text-orange-400 text-base mb-3">{'★'.repeat(t.bintang)}</div>
-                {/* Quote */}
-                <p className="text-gray-700 text-base leading-relaxed mb-4 italic">"{t.text}"</p>
-                {/* Footer */}
-                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                  <div>
-                    <div className="font-semibold text-green-900 text-sm">{t.name}</div>
-                    <div className="text-xs text-gray-500">{t.kota}</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-xs text-orange-500 font-medium">{t.paket}</div>
-                    <div className="text-xs text-gray-400">{t.tahun}</div>
+              <div key={i} className="break-inside-avoid bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                {/* Foto */}
+                {t.foto && (
+                  <img
+                    src={t.foto}
+                    alt={t.name}
+                    className="w-full h-72 object-cover object-top"
+                    loading="lazy"
+                  />
+                )}
+                <div className="p-6">
+                  {/* Bintang */}
+                  <div className="text-orange-400 text-base mb-3">{'★'.repeat(t.bintang)}</div>
+                  {/* Quote */}
+                  <p className="text-gray-700 text-base leading-relaxed mb-4 italic">"{t.text}"</p>
+                  {/* Footer */}
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                    <div>
+                      <div className="font-semibold text-green-900 text-sm">{t.name}</div>
+                      <div className="text-xs text-gray-500">{t.kota}</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xs text-gray-400">{t.tahun}</div>
+                    </div>
                   </div>
                 </div>
               </div>

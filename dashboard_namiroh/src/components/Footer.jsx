@@ -45,7 +45,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span>✉️</span>
-                <span>info@namiroh.com</span>
+                <span>admin@annamirohtravelindo.com</span>
               </li>
               <li className="flex items-center gap-2">
                 <span>🕐</span>

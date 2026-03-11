@@ -186,6 +186,29 @@ export default function Home() {
         </div>
       </section>
 
+      {/* VIDEO DRIVE */}
+      <section className="py-14 px-4 bg-white border-b border-gray-100">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="font-heading text-2xl sm:text-3xl font-bold text-green-900 mb-2">
+            Video Ini Membuat Banyak Orang Rindu ke Tanah Suci
+          </h2>
+          <div className="flex items-center justify-center gap-3 mt-2 mb-6">
+            <div className="h-px w-12 bg-orange-400/50" />
+            <span className="text-orange-400 text-sm">✦</span>
+            <div className="h-px w-12 bg-orange-400/50" />
+          </div>
+          <div className="rounded-2xl overflow-hidden shadow-xl bg-black" style={{ aspectRatio: '16/9' }}>
+            <iframe
+              src="https://drive.google.com/file/d/1Cz6z1cCGSkbyMIOKTc3eHakTN6MdPj-O/preview"
+              title="Video Ini Membuat Banyak Orang Rindu ke Tanah Suci"
+              className="w-full h-full"
+              allow="autoplay"
+              allowFullScreen
+            />
+          </div>
+        </div>
+      </section>
+
       {/* SEARCH CTA */}
       <section className="py-10 px-4 bg-white border-b border-gray-100">
         <div className="max-w-5xl mx-auto">
@@ -378,7 +401,7 @@ export default function Home() {
       <section className="py-3 px-4 bg-green-900 text-white bg-islamic-pattern">
         <div className="max-w-4xl mx-auto text-center">
           <div className="text-orange-400 text-2xl mb-1">✦</div>
-          <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2">Mengapa Memilih An Namiroh?</h2>
+          <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2">Mengapa Memilih<br />An Namiroh Travelindo?</h2>
           <div className="flex items-center justify-center gap-3 mb-10">
             <div className="h-px w-16 bg-orange-400/40" />
             <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
