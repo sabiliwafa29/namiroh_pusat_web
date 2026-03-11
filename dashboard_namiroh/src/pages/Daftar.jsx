@@ -97,6 +97,7 @@ export default function Daftar() {
   const handleSubmit = async () => {
     setLoading(true)
     setError('')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
     try {
       const hargaPaket = paketDetail?.harga?.find(h => h.tipe_kamar === form.tipe_kamar)
       const harga = hargaPaket?.harga || paketDetail?.harga_dasar || 0
