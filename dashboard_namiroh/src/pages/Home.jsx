@@ -297,12 +297,17 @@ export default function Home() {
               <span className="text-sm text-gray-500 font-medium">Populer:</span>
               {bulanList.slice(0, 12).map(b => (
                 <button key={b.value}
-                  onClick={() => { sf('bulan', b.value); }}
-                  className={`text-sm font-bold px-4 py-1.5 rounded-full border transition ${
-                    search.bulan === b.value
-                      ? 'bg-green-700 text-white border-green-700'
-                      : 'border-gray-300 text-gray-600 hover:border-green-500 hover:text-green-700'
-                  }`}>
+                  onClick={() => {
+                    const [tahun, bulan] = b.value.split('-')
+                    const params = new URLSearchParams()
+                    params.set('bulan', bulan)
+                    params.set('tahun', tahun)
+                    if (search.jenis_layanan_id) params.set('jenis_layanan_id', search.jenis_layanan_id)
+                    if (search.maskapai_id) params.set('maskapai_id', search.maskapai_id)
+                    if (search.bandara) params.set('bandara', search.bandara)
+                    navigate(`/paket?${params.toString()}`)
+                  }}
+                  className="text-sm font-bold px-4 py-1.5 rounded-full border border-gray-300 text-gray-600 hover:border-green-500 hover:text-green-700 hover:bg-green-50 transition">
                   {b.label}
                 </button>
               ))}

@@ -139,13 +139,34 @@ export default function Paket() {
                     const sisa = j.kuota_total - j.kuota_terisi
                     return (
                       <div key={j.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition">
-                        {/* Header biru-hijau */}
-                        <div className="bg-gradient-to-r from-green-700 to-green-800 text-white px-4 py-3">
-                          <div className="text-sm text-green-100 mb-0.5">{j.paket?.jenis_layanan?.nama}</div>
-                          <div className="font-semibold text-base leading-snug">{j.paket?.nama_paket}</div>
-                        </div>
+                        {/* Flyer */}
+                        {j.paket?.flyer_url ? (
+                          <div className="relative">
+                            <img
+                              src={j.paket.flyer_url}
+                              alt={j.paket?.nama_paket}
+                              className="w-full"
+                              loading="lazy"
+                            />
+                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent px-4 py-3">
+                              <div className="text-orange-300 font-extrabold text-lg drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
+                                Rp {Number(j.paket?.harga_dasar || 0).toLocaleString('id-ID')}
+                              </div>
+                              <div className="text-xs text-white/90">per orang</div>
+                            </div>
+                          </div>
+                        ) : (
+                          /* Header biru-hijau fallback */
+                          <div className="bg-gradient-to-r from-green-700 to-green-800 text-white px-4 py-3">
+                            <div className="text-sm text-green-100 mb-0.5">{j.paket?.jenis_layanan?.nama}</div>
+                            <div className="font-semibold text-base leading-snug">{j.paket?.nama_paket}</div>
+                          </div>
+                        )}
                         {/* Body */}
                         <div className="px-4 py-3 space-y-2">
+                          {j.paket?.flyer_url && (
+                            <div className="font-semibold text-gray-800 text-sm leading-snug line-clamp-2">{j.paket?.nama_paket}</div>
+                          )}
                           <div className="flex items-center gap-2 text-sm">
                             <span>📅</span>
                             <span className="font-medium text-gray-800 text-base">
@@ -170,12 +191,14 @@ export default function Paket() {
                                 <span className="text-gray-500"> seat tersisa</span>
                             </span>
                           </div>
-                          <div className="pt-1 border-t">
-                            <div className="text-orange-500 font-bold text-lg">
-                              Rp {Number(j.paket?.harga_dasar || 0).toLocaleString('id-ID')}
+                          {!j.paket?.flyer_url && (
+                            <div className="pt-1 border-t">
+                              <div className="text-orange-500 font-bold text-lg">
+                                Rp {Number(j.paket?.harga_dasar || 0).toLocaleString('id-ID')}
+                              </div>
+                              <div className="text-sm text-gray-500">per orang (quad)</div>
                             </div>
-                            <div className="text-sm text-gray-500">per orang (quad)</div>
-                          </div>
+                          )}
                         </div>
                         {/* Footer */}
                         <div className="px-4 pb-4 flex gap-2">
@@ -194,10 +217,9 @@ export default function Paket() {
                 </div>
               )}
               <hr className="mt-8 border-gray-200" />
-              <p className="text-sm text-gray-500 mt-3">Atau pilih dari semua paket di bawah ini:</p>
             </div>
           )}
-          {loading ? (
+          {!hasJadwalFilter && (loading ? (
             <div className="text-center py-20 text-gray-600">Memuat paket...</div>
           ) : data.length === 0 ? (
             <div className="text-center py-20 text-gray-600">
@@ -286,10 +308,10 @@ export default function Paket() {
                 </div>
               ))}
             </div>
-          )}
+          ))}
 
           {/* Pagination */}
-          {meta.last_page > 1 && (
+          {!hasJadwalFilter && meta.last_page > 1 && (
             <div className="flex justify-center gap-2 mt-8">
               <button disabled={page === 1} onClick={() => setPage(p => p - 1)}
                 className="px-5 py-2.5 rounded-lg border text-base disabled:opacity-40 hover:bg-gray-100">← Prev</button>

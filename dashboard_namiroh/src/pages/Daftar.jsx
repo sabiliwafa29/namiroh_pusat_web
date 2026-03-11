@@ -91,6 +91,7 @@ export default function Daftar() {
     if (err) { setError(err); return }
     setError('')
     setStep(s => s + 1)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const handleSubmit = async () => {
