@@ -20,10 +20,11 @@ class PaketController extends Controller
                     $q->where('status', 'OPEN')->where('tanggal_berangkat', '>=', $today),
                 'jadwal as total_jadwal_count',
             ])
+            ->addSelect(\DB::raw("(SELECT MIN(tanggal_berangkat) FROM jadwal WHERE jadwal.paket_id = paket.id AND status = 'OPEN' AND tanggal_berangkat >= '{$today}') as nearest_jadwal"))
             ->when($request->jenis_layanan_id, fn($q) => $q->where('jenis_layanan_id', $request->jenis_layanan_id))
             ->when($request->search, fn($q) => $q->where('nama_paket', 'like', "%{$request->search}%"))
             ->when($request->published, fn($q) => $q->where('is_published', 1))
-            ->orderBy('created_at', 'desc');
+            ->orderByRaw('nearest_jadwal IS NULL ASC, nearest_jadwal ASC');
 
         return $this->paginated($query->paginate($request->per_page ?? 10));
     }

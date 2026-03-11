@@ -48,7 +48,7 @@ export default function Daftar() {
       .then(res => setPaketList(res.data.data || []))
   }, [])
 
-  const isNonSchedulable = (p) => p != null && [4, 5, 6].includes(Number(p.jenis_layanan_id))
+  const isNonSchedulable = (p) => p != null && [4, 5, 6, 7].includes(Number(p.jenis_layanan_id))
   const isPastPaket      = (p) => p != null && (p.upcoming_jadwal_count ?? 0) === 0 && (p.total_jadwal_count ?? 0) > 0
 
   useEffect(() => {
@@ -103,7 +103,6 @@ export default function Daftar() {
   const handleSubmit = async () => {
     setLoading(true)
     setError('')
-    window.scrollTo({ top: 0, behavior: 'smooth' })
     try {
       const hargaPaket = paketDetail?.harga?.find(h => h.tipe_kamar === form.tipe_kamar)
       const harga = hargaPaket?.harga || paketDetail?.harga_dasar || 0
@@ -131,6 +130,7 @@ export default function Daftar() {
 
       setNomorReg(res.data.data.nomor_registrasi)
       setSuccess(true)
+      window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch (err) {
       const errors = err.response?.data?.meta?.errors
       setError(errors ? Object.values(errors).flat().join(', ') : err.response?.data?.meta?.message || 'Terjadi kesalahan, coba lagi.')
@@ -143,7 +143,14 @@ export default function Daftar() {
   if (success) return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-1 flex items-center justify-center px-4 py-16 bg-gray-50">
+      <section className="bg-green-900 text-white pt-[5.5rem] pb-5 px-4 bg-islamic-pattern relative overflow-hidden">
+        <div className="max-w-2xl mx-auto text-center relative z-10">
+          <h1 className="font-heading text-3xl font-bold mb-2">Formulir Pendaftaran Umroh</h1>
+          <p className="text-green-100 text-base">Terimakasih Sudah Mempercayai An Namiroh Travelindo</p>
+        </div>
+      </section>
+
+      <div className="flex-1 flex items-center justify-center px-4 bg-gray-50">
         <div className="bg-white rounded-2xl p-8 shadow-sm text-center max-w-md w-full">
           <div className="text-5xl mb-4">✅</div>
           <h2 className="text-xl font-bold text-green-900 mb-2">Pendaftaran Berhasil!</h2>

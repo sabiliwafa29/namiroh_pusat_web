@@ -18,7 +18,6 @@ class DatabaseSeeder extends Seeder
             JenisDokumenSeeder::class,
             PaketSeeder::class,
             JadwalSeeder::class,
-            JamaahSeeder::class,
         ]);
     }
 }

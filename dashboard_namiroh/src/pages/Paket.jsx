@@ -20,7 +20,7 @@ function PaketStatusBadge({ p }) {
   if (k === 'B') return (
     <span className="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full mb-3 bg-gray-100 text-gray-500">🕐 Sudah Berangkat</span>
   )
-  return [4, 5, 6].includes(Number(p.jenis_layanan_id))
+  return [4, 5, 6, 7].includes(Number(p.jenis_layanan_id))
     ? <span className="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full mb-3 bg-yellow-100 text-yellow-700">📋 Daftar Kapan Saja</span>
     : <span className="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">🔔 Jadwal Segera Hadir</span>
 }
@@ -50,9 +50,10 @@ function PaketCTA({ p }) {
 const JENIS = [
   { id: '',  label: 'Semua' },
   { id: '1', label: 'Umroh Reguler' },
-  { id: '2', label: 'Umroh VIP' },
+  { id: '3', label: 'Umroh Plus' },
   { id: '4', label: 'Haji Plus' },
   { id: '5', label: 'Badal Umroh' },
+  { id: '6', label: 'Badal Haji' },
   { id: '7', label: 'Halal Tour' },
 ]
 
