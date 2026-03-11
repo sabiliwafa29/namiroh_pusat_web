@@ -111,13 +111,13 @@ export default function PaketDetail() {
                   {paket.jadwal.filter(j => j.status === 'OPEN').map((j) => (
                     <div key={j.id} className="flex items-center justify-between border rounded-lg px-4 py-3">
                       <div>
-                        <div className="text-sm font-medium text-gray-800">
+                        <div className="text-base font-medium text-gray-800">
                           {new Date(j.tanggal_berangkat).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' })}
                         </div>
-                        <div className="text-xs text-gray-500">{j.maskapai?.nama} · {j.kota_keberangkatan}</div>
+                        <div className="text-sm text-gray-500">{j.maskapai?.nama} · {j.kota_keberangkatan}</div>
                       </div>
                       <div className="text-right">
-                        <div className="text-xs text-gray-500">Sisa Seat</div>
+                        <div className="text-sm text-gray-500">Sisa Seat</div>
                         <div className="font-bold text-green-700">{j.kuota_total - j.kuota_terisi}</div>
                       </div>
                     </div>
@@ -148,8 +148,8 @@ export default function PaketDetail() {
                 <div className="space-y-2 mb-4">
                   {paket.harga.map(h => (
                     <div key={h.tipe_kamar} className="flex justify-between items-center py-2 border-b last:border-0">
-                      <span className="text-sm text-gray-600">Kamar {h.tipe_kamar}</span>
-                      <span className="font-semibold text-green-800 text-sm">
+                      <span className="text-base text-gray-600">Kamar {h.tipe_kamar}</span>
+                      <span className="font-semibold text-green-800 text-base">
                         Rp {Number(h.harga).toLocaleString('id-ID')}
                       </span>
                     </div>
@@ -162,12 +162,12 @@ export default function PaketDetail() {
               )}
 
               <Link to={`/daftar?paket_id=${paket.id}`}
-                className="block text-center bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition text-sm mb-3">
+                className="block text-center bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition text-base mb-3">
                 Daftar Sekarang
               </Link>
               <a href={`https://wa.me/6282335611999?text=Assalamualaikum, saya mau tanya-tanya soal paket "${paket.nama_paket}"?`}
                 target="_blank" rel="noreferrer"
-                className="block text-center border border-green-700 text-green-700 py-2.5 rounded-xl text-sm font-medium hover:bg-green-50 transition">
+                className="block text-center border border-green-700 text-green-700 py-2.5 rounded-xl text-base font-medium hover:bg-green-50 transition">
                 💬 Tanya via WhatsApp
               </a>
             </div>
