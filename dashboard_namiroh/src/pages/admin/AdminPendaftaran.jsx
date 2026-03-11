@@ -3,12 +3,37 @@ import { Link } from 'react-router-dom'
 import AdminLayout from '../../components/admin/AdminLayout'
 import api from '../../api/axios'
 
-const STATUS_OPTIONS = ['', 'PENDING', 'CONFIRMED', 'LUNAS', 'BATAL']
+const STATUS_OPTIONS = [
+  '', 'MENUNGGU_DP', 'DP_DIBAYAR', 'LUNAS',
+  'MENUNGGU_DOKUMEN', 'DOKUMEN_LENGKAP',
+  'VISA_DIPROSES', 'VISA_APPROVED',
+  'BERANGKAT', 'SELESAI', 'BATAL_JAMAAH', 'BATAL_TRAVEL',
+]
+const STATUS_LABEL = {
+  MENUNGGU_DP:       'Menunggu DP',
+  DP_DIBAYAR:        'DP Dibayar',
+  LUNAS:             'Lunas',
+  MENUNGGU_DOKUMEN:  'Menunggu Dokumen',
+  DOKUMEN_LENGKAP:   'Dokumen Lengkap',
+  VISA_DIPROSES:     'Visa Diproses',
+  VISA_APPROVED:     'Visa Approved',
+  BERANGKAT:         'Berangkat',
+  SELESAI:           'Selesai',
+  BATAL_JAMAAH:      'Batal (Jamaah)',
+  BATAL_TRAVEL:      'Batal (Travel)',
+}
 const statusBadge = (s) => ({
-  PENDING:   'bg-yellow-100 text-yellow-800',
-  CONFIRMED: 'bg-blue-100 text-blue-800',
-  LUNAS:     'bg-green-100 text-green-800',
-  BATAL:     'bg-red-100 text-red-800',
+  MENUNGGU_DP:      'bg-yellow-100 text-yellow-800',
+  DP_DIBAYAR:       'bg-blue-100 text-blue-800',
+  LUNAS:            'bg-green-100 text-green-800',
+  MENUNGGU_DOKUMEN: 'bg-orange-100 text-orange-800',
+  DOKUMEN_LENGKAP:  'bg-teal-100 text-teal-800',
+  VISA_DIPROSES:    'bg-purple-100 text-purple-800',
+  VISA_APPROVED:    'bg-indigo-100 text-indigo-800',
+  BERANGKAT:        'bg-cyan-100 text-cyan-800',
+  SELESAI:          'bg-green-200 text-green-900',
+  BATAL_JAMAAH:     'bg-red-100 text-red-800',
+  BATAL_TRAVEL:     'bg-red-200 text-red-900',
 }[s] || 'bg-gray-100 text-gray-600')
 
 export default function AdminPendaftaran() {
@@ -42,7 +67,7 @@ export default function AdminPendaftaran() {
       <div className="flex flex-col sm:flex-row gap-3 mb-5">
         <input
           type="text"
-          placeholder="Cari nama / nomor pendaftaran…"
+          placeholder="Cari nama, no. HP, atau no. reg…"
           value={search}
           onChange={e => { setSearch(e.target.value); setPage(1) }}
           className="border border-gray-200 rounded-lg px-4 py-2.5 text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-green-600"
@@ -53,7 +78,7 @@ export default function AdminPendaftaran() {
           className="border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
         >
           {STATUS_OPTIONS.map(s => (
-            <option key={s} value={s}>{s || 'Semua Status'}</option>
+            <option key={s} value={s}>{s ? (STATUS_LABEL[s] || s) : 'Semua Status'}</option>
           ))}
         </select>
         <button onClick={load} className="bg-green-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium hover:bg-green-800">
@@ -71,7 +96,7 @@ export default function AdminPendaftaran() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50 text-xs text-gray-500 uppercase border-b">
-                  <th className="px-5 py-3 text-left">#</th>
+                  <th className="px-5 py-3 text-left">No. Reg</th>
                   <th className="px-5 py-3 text-left">Nama Jamaah</th>
                   <th className="px-5 py-3 text-left">No. HP</th>
                   <th className="px-5 py-3 text-left">Paket</th>
@@ -84,7 +109,7 @@ export default function AdminPendaftaran() {
               <tbody className="divide-y divide-gray-100">
                 {data.map((r, i) => (
                   <tr key={r.id} className="hover:bg-gray-50">
-                    <td className="px-5 py-3 text-gray-400 text-xs">{((page - 1) * 15) + i + 1}</td>
+                    <td className="px-5 py-3 text-xs font-mono text-green-800 font-semibold whitespace-nowrap">{r.nomor_registrasi || '-'}</td>
                     <td className="px-5 py-3 font-medium text-gray-800">
                       {r.jamaah?.nama_lengkap || r.nama_lengkap || '-'}
                     </td>
@@ -99,11 +124,11 @@ export default function AdminPendaftaran() {
                     </td>
                     <td className="px-5 py-3">
                       <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${statusBadge(r.status)}`}>
-                        {r.status}
+                        {STATUS_LABEL[r.status] || r.status}
                       </span>
                     </td>
                     <td className="px-5 py-3 text-gray-400 text-xs whitespace-nowrap">
-                      {r.created_at ? new Date(r.created_at).toLocaleDateString('id-ID') : '-'}
+                      {r.tanggal_daftar ? new Date(r.tanggal_daftar).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-'}
                     </td>
                     <td className="px-5 py-3 text-right">
                       <Link to={`/admin/pendaftaran/${r.id}`}

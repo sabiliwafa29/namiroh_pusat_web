@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
             PaketSeeder::class,
             JadwalSeeder::class,
             JamaahSeeder::class,
-            PendaftaranSeeder::class,
         ]);
     }
 }

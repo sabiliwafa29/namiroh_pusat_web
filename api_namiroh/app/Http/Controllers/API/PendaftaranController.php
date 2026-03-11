@@ -19,10 +19,13 @@ class PendaftaranController extends Controller
         $query = Pendaftaran::with(['jamaah', 'jadwal.paket', 'jadwal.maskapai'])
             ->when($request->status, fn($q) => $q->where('status', $request->status))
             ->when($request->jadwal_id, fn($q) => $q->where('jadwal_id', $request->jadwal_id))
-            ->when($request->search, fn($q) => $q->whereHas('jamaah', fn($jq) =>
-                $jq->where('nama_lengkap', 'like', "%{$request->search}%")
-                   ->orWhere('no_hp', 'like', "%{$request->search}%")
-            ))
+            ->when($request->search, fn($q) => $q
+                ->where('nomor_registrasi', 'like', "%{$request->search}%")
+                ->orWhereHas('jamaah', fn($jq) =>
+                    $jq->where('nama_lengkap', 'like', "%{$request->search}%")
+                       ->orWhere('no_hp', 'like', "%{$request->search}%")
+                )
+            )
             ->orderBy('tanggal_daftar', 'desc');
 
         return $this->paginated($query->paginate($request->per_page ?? 15));
