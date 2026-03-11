@@ -3,10 +3,10 @@ import { Link, useLocation } from 'react-router-dom'
 import api from '../api/axios'
 
 const PROMO_LIST = [
-  { id: 1, label: 'Umroh Best Seller', desc: 'Mulai Rp 23.000.000', link: '/paket' },
-  { id: 2, label: 'Umroh Spesial Ramadhan', desc: 'Mulai Rp 34.000.000', link: '/paket' },
-  { id: 3, label: 'Program Badal Umroh dan Haji', desc: 'Mulai Rp 3.000.000', link: '/paket' },
-  { id: 4, label: 'Umroh Hanya 500rb', desc: 'Seat Terbatas!', link: '/paket' },
+  { id: 1, label: 'Umroh Best Seller', desc: 'Mulai Rp 23.000.000', link: '/paket', img: banner/umroh-gus-ferry.jpg },
+  { id: 2, label: 'Umroh Spesial Ramadhan', desc: 'Mulai Rp 34.000.000', link: '/paket', img: banner/umroh-spesial-ramadhan.jpg },
+  { id: 3, label: 'Program Badal Umroh dan Haji', desc: 'Mulai Rp 3.000.000', link: '/paket', img: banner/program-badal.jpeg },
+  { id: 4, label: 'Umroh Hanya 500rb', desc: 'Seat Terbatas!', link: '/paket', img: banner/haji_500rb.jpg },
 ]
 
 export default function FloatingWidgets() {
@@ -84,12 +84,21 @@ export default function FloatingWidgets() {
             </div>
 
             {/* Content — satu promo aktif */}
-            <div className="px-2 py-1.5">
-              <div className="font-semibold text-gray-800 text-[11px] leading-tight line-clamp-2">
-                {PROMO_LIST[currentPromo].label}
+            <div className="px-2 py-1.5 flex items-center gap-2">
+              {/* Circular image */}
+              <div className="w-9 h-9 flex-shrink-0 rounded-full overflow-hidden border-2 border-orange-300 bg-gray-100">
+                {PROMO_LIST[currentPromo].img
+                  ? <img src={PROMO_LIST[currentPromo].img} alt="" className="w-full h-full object-cover" />
+                  : <div className="w-full h-full flex items-center justify-center text-gray-300 text-lg">🕌</div>
+                }
               </div>
-              <div className="text-orange-500 font-bold text-[10px] mt-0.5">
-                {PROMO_LIST[currentPromo].desc}
+              <div className="min-w-0">
+                <div className="font-semibold text-gray-800 text-[11px] leading-tight line-clamp-2">
+                  {PROMO_LIST[currentPromo].label}
+                </div>
+                <div className="text-orange-500 font-bold text-[10px] mt-0.5">
+                  {PROMO_LIST[currentPromo].desc}
+                </div>
               </div>
             </div>
 
