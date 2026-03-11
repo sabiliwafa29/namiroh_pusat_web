@@ -345,7 +345,7 @@ export default function Home() {
                   )}
                   <div className="p-4">
                     {p.flyer_url && (
-                      <h3 className="font-bold text-sm text-gray-800 leading-tight mb-2 line-clamp-2">{p.nama_paket}</h3>
+                      <h3 className="font-bold text-base text-gray-800 leading-tight mb-2 line-clamp-2">{p.nama_paket}</h3>
                     )}
                     <div className="flex items-center gap-2 text-base text-gray-700 mb-1">
                       <span>⏱</span> {p.durasi_hari} Hari
@@ -354,7 +354,7 @@ export default function Home() {
                       <span>👥</span> Maks {p.kapasitas_maks} Orang
                     </div>
                     {p.include_detail && (
-                      <p className="text-sm text-gray-600 mb-3 line-clamp-2">{p.include_detail}</p>
+                      <p className="text-base text-gray-600 mb-3 line-clamp-2">{p.include_detail}</p>
                     )}
                     <Link to={`/paket/${p.id}`}
                       className="block text-center bg-green-700 text-white py-3 rounded-lg text-base font-semibold hover:bg-green-800 transition">

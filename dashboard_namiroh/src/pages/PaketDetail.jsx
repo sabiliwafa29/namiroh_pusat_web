@@ -64,13 +64,13 @@ export default function PaketDetail() {
               {paket.include_detail && (
                 <div className="bg-white rounded-xl p-5 shadow-sm">
                   <h2 className="font-heading font-semibold text-green-800 mb-3 flex items-center gap-2">✅ Sudah Termasuk</h2>
-                  <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{paket.include_detail}</p>
+                  <p className="text-base text-gray-600 leading-relaxed whitespace-pre-line">{paket.include_detail}</p>
                 </div>
               )}
               {paket.exclude_detail && (
                 <div className="bg-white rounded-xl p-5 shadow-sm">
                   <h2 className="font-heading font-semibold text-red-700 mb-3 flex items-center gap-2">❌ Tidak Termasuk</h2>
-                  <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">{paket.exclude_detail}</p>
+                  <p className="text-base text-gray-600 leading-relaxed whitespace-pre-line">{paket.exclude_detail}</p>
                 </div>
               )}
             </div>
