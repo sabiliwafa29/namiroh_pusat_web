@@ -87,14 +87,7 @@ export default function Paket() {
 
       {/* Filter */}
       <section className="bg-white border-b px-4 py-4 sticky top-20 z-40 shadow-sm">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row gap-3">
-          <input
-            type="text"
-            placeholder="Cari paket..."
-            value={search}
-            onChange={e => { setSearch(e.target.value); setPage(1) }}
-            className="border rounded-lg px-4 py-3 text-base flex-1 focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+        <div className="max-w-6xl mx-auto">
           <div className="flex gap-2 flex-wrap">
             {JENIS.map(j => (
               <button key={j.id} onClick={() => { setJenis(j.id); setPage(1) }}
