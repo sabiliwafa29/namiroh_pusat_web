@@ -9,7 +9,7 @@ class JenisDokumenSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('jenis_dokumen')->insert([
+        DB::table('jenis_dokumen')->insertOrIgnore([
             ['kode' => 'PASPOR',        'nama' => 'Paspor',                    'is_wajib' => 1, 'keterangan' => 'Berlaku minimal 6 bulan sebelum keberangkatan'],
             ['kode' => 'KTP',           'nama' => 'KTP',                       'is_wajib' => 1, 'keterangan' => 'Kartu Tanda Penduduk yang masih berlaku'],
             ['kode' => 'KK',            'nama' => 'Kartu Keluarga',            'is_wajib' => 1, 'keterangan' => 'Fotokopi Kartu Keluarga'],

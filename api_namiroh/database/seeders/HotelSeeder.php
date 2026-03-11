@@ -9,7 +9,7 @@ class HotelSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('hotel')->insert([
+        DB::table('hotel')->insertOrIgnore([
             // Mekkah — id 1-6 existing
             ['nama' => 'Grand Massa',          'kota' => 'MEKKAH',  'bintang' => 4, 'jarak_masjid_meter' => 200,  'is_active' => 1],
             ['nama' => 'Maysan Al Maqam',      'kota' => 'MEKKAH',  'bintang' => 4, 'jarak_masjid_meter' => 300,  'is_active' => 1],

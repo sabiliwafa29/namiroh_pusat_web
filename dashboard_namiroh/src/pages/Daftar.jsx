@@ -48,6 +48,9 @@ export default function Daftar() {
       .then(res => setPaketList(res.data.data || []))
   }, [])
 
+  const isNonSchedulable = (p) => p != null && [4, 5, 6].includes(Number(p.jenis_layanan_id))
+  const isPastPaket      = (p) => p != null && (p.upcoming_jadwal_count ?? 0) === 0 && (p.total_jadwal_count ?? 0) > 0
+
   useEffect(() => {
     if (form.paket_id) {
       setPaketDetail(null)
@@ -56,7 +59,8 @@ export default function Daftar() {
         .then(res => {
           const detail = res.data.data
           setPaketDetail(detail)
-          const jadwal = detail?.jadwal?.filter(j => j.status === 'OPEN') || []
+          const today = new Date().toISOString().split('T')[0]
+          const jadwal = detail?.jadwal?.filter(j => j.status === 'OPEN' && j.tanggal_berangkat >= today) || []
           setJadwalList(jadwal)
           // Reset jadwal_id jika jadwal berubah
           setForm(prev => ({ ...prev, jadwal_id: '' }))
@@ -76,6 +80,8 @@ export default function Daftar() {
   const validateStep = () => {
     if (step === 0) {
       if (!form.paket_id) return 'Pilih paket terlebih dahulu'
+      if (paketDetail && isNonSchedulable(paketDetail)) return 'Layanan ini tidak dapat didaftarkan online. Silakan hubungi kami via WhatsApp.'
+      if (paketDetail && isPastPaket(paketDetail)) return 'Jadwal paket ini sudah habis. Hubungi kami untuk info jadwal terbaru.'
       if (!form.jadwal_id) return 'Pilih jadwal keberangkatan'
     }
     if (step === 1) {
@@ -202,7 +208,15 @@ export default function Daftar() {
                   <select value={form.paket_id} onChange={e => f('paket_id', e.target.value)}
                     className="w-full border rounded-xl px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-green-500">
                     <option value="">-- Pilih Paket --</option>
-                    {paketList.map(p => <option key={p.id} value={p.id}>{p.nama_paket} — Rp {Number(p.harga_dasar).toLocaleString('id-ID')}</option>)}
+                    {paketList.map(p => (
+                      <option key={p.id} value={p.id} disabled={isNonSchedulable(p) || isPastPaket(p)}>
+                        {isNonSchedulable(p)
+                          ? `⛔ ${p.nama_paket} — Hubungi CS`
+                          : isPastPaket(p)
+                          ? `⏰ ${p.nama_paket} — Jadwal Sudah Habis`
+                          : `${p.nama_paket} — Rp ${Number(p.harga_dasar).toLocaleString('id-ID')}`}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -236,7 +250,31 @@ export default function Daftar() {
                   </div>
                 )}
 
-                {form.paket_id && jadwalList.length === 0 && (
+                {form.paket_id && isPastPaket(paketDetail) && (
+                  <div className="bg-gray-50 border border-gray-300 text-gray-700 px-4 py-4 rounded-xl text-sm">
+                    <div className="font-semibold mb-1">⏰ Jadwal untuk paket ini sudah habis.</div>
+                    <p className="mb-3">Kami akan segera membuka jadwal baru untuk <span className="font-medium">{paketDetail?.nama_paket}</span>. Hubungi kami untuk masuk daftar tunggu atau tanya jadwal terbaru.</p>
+                    <a href={`https://wa.me/6285711755881?text=${encodeURIComponent(`Assalamualaikum, saya ingin tahu jadwal terbaru paket "${paketDetail?.nama_paket}". Apakah ada jadwal baru?`)}`}
+                      target="_blank" rel="noreferrer"
+                      className="inline-block bg-orange-500 text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-orange-600 transition">
+                      🔔 Beritahu Saya via WhatsApp
+                    </a>
+                  </div>
+                )}
+
+                {form.paket_id && isNonSchedulable(paketDetail) && (
+                  <div className="bg-orange-50 border border-orange-300 text-orange-800 px-4 py-4 rounded-xl text-sm">
+                    <div className="font-semibold mb-1">⛔ Layanan ini tidak dapat didaftarkan secara online.</div>
+                    <p className="mb-3">Hubungi tim kami langsung via WhatsApp untuk proses pendaftaran {paketDetail?.nama_paket}.</p>
+                    <a href={`https://wa.me/6285711755881?text=${encodeURIComponent(`Assalamualaikum, saya ingin mendaftar layanan "${paketDetail?.nama_paket}". Mohon bantuannya.`)}`}
+                      target="_blank" rel="noreferrer"
+                      className="inline-block bg-green-700 text-white px-5 py-2.5 rounded-lg font-semibold text-sm hover:bg-green-800 transition">
+                      💬 Hubungi via WhatsApp
+                    </a>
+                  </div>
+                )}
+
+                {form.paket_id && jadwalList.length === 0 && !isNonSchedulable(paketDetail) && (
                   <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-xl text-sm">
                     Tidak ada jadwal tersedia untuk paket ini saat ini.
                   </div>

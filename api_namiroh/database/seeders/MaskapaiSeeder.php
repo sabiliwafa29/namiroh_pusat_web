@@ -9,7 +9,7 @@ class MaskapaiSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('maskapai')->insert([
+        DB::table('maskapai')->insertOrIgnore([
             ['kode_iata' => 'GA', 'nama' => 'Garuda Indonesia',  'is_active' => 1],
             ['kode_iata' => 'JT', 'nama' => 'Lion Air',          'is_active' => 1],
             ['kode_iata' => 'ID', 'nama' => 'Batik Air',         'is_active' => 1],

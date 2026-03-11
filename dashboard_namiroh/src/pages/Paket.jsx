@@ -4,6 +4,49 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import api from '../api/axios'
 
+const WA_NUM = '6285711755881'
+
+function getPaketKondisi(p) {
+  if ((p.upcoming_jadwal_count ?? 0) > 0) return 'A'
+  if ((p.total_jadwal_count ?? 0) > 0) return 'B'
+  return 'C'
+}
+
+function PaketStatusBadge({ p }) {
+  const k = getPaketKondisi(p)
+  if (k === 'A') return (
+    <span className="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full mb-3 bg-green-100 text-green-700">✅ Jadwal Tersedia</span>
+  )
+  if (k === 'B') return (
+    <span className="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full mb-3 bg-gray-100 text-gray-500">🕐 Sudah Berangkat</span>
+  )
+  return [4, 5, 6].includes(Number(p.jenis_layanan_id))
+    ? <span className="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full mb-3 bg-yellow-100 text-yellow-700">📋 Daftar Kapan Saja</span>
+    : <span className="inline-flex items-center text-xs font-semibold px-2.5 py-1 rounded-full mb-3 bg-blue-100 text-blue-700">🔔 Jadwal Segera Hadir</span>
+}
+
+function PaketCTA({ p }) {
+  const k = getPaketKondisi(p)
+  if (k === 'A') return (
+    <Link to={`/daftar?paket_id=${p.id}`}
+      className="flex-1 text-center bg-green-700 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-green-800 transition">
+      Daftar
+    </Link>
+  )
+  const msg = k === 'B'
+    ? `Assalamualaikum, saya ingin tahu jadwal terbaru paket "${p.nama_paket}". Apakah ada jadwal baru?`
+    : `Assalamualaikum, saya tertarik dengan paket "${p.nama_paket}". Mohon info lebih lanjut.`
+  return (
+    <a href={`https://wa.me/${WA_NUM}?text=${encodeURIComponent(msg)}`}
+      target="_blank" rel="noreferrer"
+      className={`flex-1 text-center py-2.5 rounded-lg text-sm font-semibold transition ${
+        k === 'B' ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-orange-500 text-white hover:bg-orange-600'
+      }`}>
+      {k === 'B' ? '🔔 Beritahu Saya' : '💬 Hubungi Kami'}
+    </a>
+  )
+}
+
 const JENIS = [
   { id: '',  label: 'Semua' },
   { id: '1', label: 'Umroh Reguler' },
@@ -276,15 +319,13 @@ export default function Paket() {
                       </div>
                     )}
 
+                    <PaketStatusBadge p={p} />
                     <div className="flex gap-2">
                       <Link to={`/paket/${p.id}`}
                         className="flex-1 text-center border border-green-700 text-green-700 py-2.5 rounded-lg text-sm font-medium hover:bg-green-50 transition">
                         Detail
                       </Link>
-                      <Link to={`/daftar?paket_id=${p.id}`}
-                        className="flex-1 text-center bg-green-700 text-white py-2.5 rounded-lg text-sm font-semibold hover:bg-green-800 transition">
-                        Daftar
-                      </Link>
+                      <PaketCTA p={p} />
                     </div>
                   </div>
                 </div>

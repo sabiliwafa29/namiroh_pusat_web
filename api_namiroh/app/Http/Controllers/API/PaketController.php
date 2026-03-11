@@ -13,7 +13,13 @@ class PaketController extends Controller
 
     public function index(Request $request)
     {
+        $today = now()->toDateString();
         $query = Paket::with(['jenisLayanan', 'harga'])
+            ->withCount([
+                'jadwal as upcoming_jadwal_count' => fn($q) =>
+                    $q->where('status', 'OPEN')->where('tanggal_berangkat', '>=', $today),
+                'jadwal as total_jadwal_count',
+            ])
             ->when($request->jenis_layanan_id, fn($q) => $q->where('jenis_layanan_id', $request->jenis_layanan_id))
             ->when($request->search, fn($q) => $q->where('nama_paket', 'like', "%{$request->search}%"))
             ->when($request->published, fn($q) => $q->where('is_published', 1))

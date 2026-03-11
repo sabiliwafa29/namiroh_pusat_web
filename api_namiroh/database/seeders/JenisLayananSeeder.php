@@ -9,7 +9,7 @@ class JenisLayananSeeder extends Seeder
 {
     public function run(): void
     {
-        DB::table('jenis_layanan')->insert([
+        DB::table('jenis_layanan')->insertOrIgnore([
             ['kode' => 'UMROH',        'nama' => 'Umroh Reguler',  'deskripsi' => 'Paket umroh standar reguler',               'is_active' => 1],
             ['kode' => 'UMROH_VIP',    'nama' => 'Umroh VIP',      'deskripsi' => 'Paket umroh eksklusif hotel bintang 5',      'is_active' => 1],
             ['kode' => 'UMROH_PLUS',   'nama' => 'Umroh Plus',     'deskripsi' => 'Paket umroh plus destinasi wisata tambahan', 'is_active' => 1],

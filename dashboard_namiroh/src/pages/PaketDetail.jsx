@@ -9,6 +9,10 @@ export default function PaketDetail() {
   const [paket, setPaket]   = useState(null)
   const [loading, setLoading] = useState(true)
 
+  const today = new Date().toISOString().split('T')[0]
+  const upcomingJadwal = (paket?.jadwal || []).filter(j => j.status === 'OPEN' && j.tanggal_berangkat >= today)
+  const kondisi = upcomingJadwal.length > 0 ? 'A' : (paket?.jadwal?.length ?? 0) > 0 ? 'B' : 'C'
+
   useEffect(() => {
     api.get(`/paket/${id}`)
       .then(res => setPaket(res.data.data))
@@ -104,11 +108,11 @@ export default function PaketDetail() {
             )}
 
             {/* Jadwal Tersedia */}
-            {paket.jadwal?.length > 0 && (
+            {upcomingJadwal.length > 0 && (
               <div className="bg-white rounded-xl p-5 shadow-sm">
                 <h2 className="font-heading font-semibold text-green-800 mb-4">✈️ Jadwal Keberangkatan</h2>
                 <div className="space-y-2">
-                  {paket.jadwal.filter(j => j.status === 'OPEN').map((j) => (
+                  {upcomingJadwal.map((j) => (
                     <div key={j.id} className="flex items-center justify-between border rounded-lg px-4 py-3">
                       <div>
                         <div className="text-base font-medium text-gray-800">
@@ -123,6 +127,24 @@ export default function PaketDetail() {
                     </div>
                   ))}
                 </div>
+              </div>
+            )}
+            {kondisi === 'B' && (
+              <div className="bg-orange-50 border border-orange-200 rounded-xl p-5">
+                <h2 className="font-heading font-semibold text-orange-800 mb-2">🕐 Tidak Ada Jadwal Aktif</h2>
+                <p className="text-sm text-orange-700">Paket ini saat ini tidak memiliki jadwal keberangkatan aktif. Hubungi kami untuk informasi jadwal terbaru atau untuk masuk daftar tunggu.</p>
+              </div>
+            )}
+            {kondisi === 'C' && [4, 5, 6].includes(Number(paket.jenis_layanan_id)) && (
+              <div className="bg-green-50 border border-green-200 rounded-xl p-5">
+                <h2 className="font-heading font-semibold text-green-800 mb-2">📋 Pendaftaran Terbuka</h2>
+                <p className="text-sm text-green-700">Layanan ini tersedia sepanjang tahun tanpa jadwal tetap. Daftar sekarang dan tim kami akan menghubungi Anda untuk proses selanjutnya.</p>
+              </div>
+            )}
+            {kondisi === 'C' && ![4, 5, 6].includes(Number(paket.jenis_layanan_id)) && (
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-5">
+                <h2 className="font-heading font-semibold text-blue-800 mb-2">🔔 Jadwal Segera Hadir</h2>
+                <p className="text-sm text-blue-700">Jadwal keberangkatan untuk paket ini sedang dalam persiapan. Hubungi kami untuk mendaftar waiting list.</p>
               </div>
             )}
           </div>
@@ -161,15 +183,59 @@ export default function PaketDetail() {
                 </div>
               )}
 
-              <Link to={`/daftar?paket_id=${paket.id}`}
-                className="block text-center bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition text-base mb-3">
-                Daftar Sekarang
-              </Link>
-              <a href={`https://wa.me/6285711755881?text=Assalamualaikum, saya mau tanya-tanya soal paket "${paket.nama_paket}"?`}
-                target="_blank" rel="noreferrer"
-                className="block text-center border border-green-700 text-green-700 py-2.5 rounded-xl text-base font-medium hover:bg-green-50 transition">
-                💬 Tanya via WhatsApp
-              </a>
+              {kondisi === 'A' && (
+                <>
+                  <Link to={`/daftar?paket_id=${paket.id}`}
+                    className="block text-center bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition text-base mb-3">
+                    Daftar Sekarang
+                  </Link>
+                  <a href={`https://wa.me/6285711755881?text=${encodeURIComponent(`Assalamualaikum, saya ingin mendaftar paket "${paket.nama_paket}". Mohon bantuannya.`)}`}
+                    target="_blank" rel="noreferrer"
+                    className="block text-center border border-green-700 text-green-700 py-2.5 rounded-xl text-base font-medium hover:bg-green-50 transition">
+                    💬 Tanya via WhatsApp
+                  </a>
+                </>
+              )}
+              {kondisi === 'B' && (
+                <>
+                  <div className="text-center bg-gray-100 text-gray-500 py-3 rounded-xl text-sm font-medium mb-3">
+                    🕐 Tidak ada jadwal aktif
+                  </div>
+                  <a href={`https://wa.me/6285711755881?text=${encodeURIComponent(`Assalamualaikum, saya ingin tahu jadwal terbaru paket "${paket.nama_paket}". Apakah ada jadwal baru?`)}`}
+                    target="_blank" rel="noreferrer"
+                    className="block text-center bg-orange-500 text-white py-3 rounded-xl font-bold hover:bg-orange-600 transition text-base mb-3">
+                    🔔 Beritahu Saya
+                  </a>
+                  <a href={`https://wa.me/6285711755881?text=${encodeURIComponent(`Assalamualaikum, saya mau tanya soal paket "${paket.nama_paket}".`)}`}
+                    target="_blank" rel="noreferrer"
+                    className="block text-center border border-gray-400 text-gray-600 py-2.5 rounded-xl text-base font-medium hover:bg-gray-50 transition">
+                    💬 Tanya via WhatsApp
+                  </a>
+                </>
+              )}
+              {kondisi === 'C' && [4, 5, 6].includes(Number(paket.jenis_layanan_id)) && (
+                <>
+                  <a href={`https://wa.me/6285711755881?text=${encodeURIComponent(`Assalamualaikum, saya tertarik dengan layanan "${paket.nama_paket}". Mohon info lebih lanjut.`)}`}
+                    target="_blank" rel="noreferrer"
+                    className="block text-center bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition text-base mb-0">
+                    💬 Tanya via WhatsApp
+                  </a>
+                </>
+              )}
+              {kondisi === 'C' && ![4, 5, 6].includes(Number(paket.jenis_layanan_id)) && (
+                <>
+                  <a href={`https://wa.me/6285711755881?text=${encodeURIComponent(`Assalamualaikum, saya tertarik dengan paket "${paket.nama_paket}". Kapan jadwal tersedia?`)}`}
+                    target="_blank" rel="noreferrer"
+                    className="block text-center bg-green-700 text-white py-3 rounded-xl font-bold hover:bg-green-800 transition text-base mb-3">
+                    💬 Hubungi Kami
+                  </a>
+                  <a href={`https://wa.me/6285711755881?text=${encodeURIComponent(`Assalamualaikum, tolong daftarkan saya ke waiting list paket "${paket.nama_paket}".`)}`}
+                    target="_blank" rel="noreferrer"
+                    className="block text-center border border-green-700 text-green-700 py-2.5 rounded-xl text-base font-medium hover:bg-green-50 transition">
+                    🔔 Daftar Waiting List
+                  </a>
+                </>
+              )}
             </div>
           </div>
 

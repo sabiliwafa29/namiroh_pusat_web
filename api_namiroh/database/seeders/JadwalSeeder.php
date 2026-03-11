@@ -9,6 +9,14 @@ class JadwalSeeder extends Seeder
 {
     public function run(): void
     {
+        // Idempotent — wipe & re-seed safely
+        DB::statement('PRAGMA foreign_keys = OFF');
+        DB::table('sesi_manasik')->delete();
+        DB::table('jadwal_hotel')->delete();
+        DB::table('jadwal')->delete();
+        try { DB::statement("DELETE FROM sqlite_sequence WHERE name IN ('jadwal','jadwal_hotel','sesi_manasik')"); } catch (\Throwable $e) {}
+        DB::statement('PRAGMA foreign_keys = ON');
+
         /*
          * Hotel ID reference:
          *  2=Maysan Al Maqam(Mek), 3=Tallah Ajyad(Mek), 4=Mather Jiwar(Mek),
@@ -31,11 +39,11 @@ class JadwalSeeder extends Seeder
             // Paket 1 — Flash Sale 13H (CLOSED / SOLD OUT)
             ['paket_id'=>1, 'maskapai_id'=>2,  'kode_jadwal'=>'JDW-JAN26-001','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-01-21','tanggal_kembali'=>'2026-02-02','kuota_total'=>40,'kuota_terisi'=>40,'status'=>'CLOSED','catatan_internal'=>'SOLD OUT — keberangkatan perdana 2026','created_at'=>now(),'updated_at'=>now()],
             // Paket 2 — Full Ramadan 1447
-            ['paket_id'=>2, 'maskapai_id'=>1,  'kode_jadwal'=>'JDW-FEB26-001','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-02-22','tanggal_kembali'=>'2026-03-23','kuota_total'=>40,'kuota_terisi'=>20,'status'=>'OPEN','catatan_internal'=>'Sisa 20 seat','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>2, 'maskapai_id'=>1,  'kode_jadwal'=>'JDW-FEB26-001','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-02-22','tanggal_kembali'=>'2026-03-23','kuota_total'=>40,'kuota_terisi'=>20,'status'=>'CLOSED','catatan_internal'=>'Sudah berangkat — Full Ramadan 1447','created_at'=>now(),'updated_at'=>now()],
             // Paket 3 — Ramadan Plus Cairo kloter 1 (17 Feb)
-            ['paket_id'=>3, 'maskapai_id'=>10, 'kode_jadwal'=>'JDW-FEB26-002','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-02-17','tanggal_kembali'=>'2026-02-25','kuota_total'=>40,'kuota_terisi'=>20,'status'=>'OPEN','catatan_internal'=>'Kloter 1 — via Cairo','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>3, 'maskapai_id'=>10, 'kode_jadwal'=>'JDW-FEB26-002','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-02-17','tanggal_kembali'=>'2026-02-25','kuota_total'=>40,'kuota_terisi'=>20,'status'=>'CLOSED','catatan_internal'=>'Sudah berangkat — Kloter 1 via Cairo','created_at'=>now(),'updated_at'=>now()],
             // Paket 3 — Ramadan Plus Cairo kloter 2 (24 Feb)
-            ['paket_id'=>3, 'maskapai_id'=>10, 'kode_jadwal'=>'JDW-FEB26-003','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-02-24','tanggal_kembali'=>'2026-03-04','kuota_total'=>40,'kuota_terisi'=>20,'status'=>'OPEN','catatan_internal'=>'Kloter 2 — via Cairo','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>3, 'maskapai_id'=>10, 'kode_jadwal'=>'JDW-FEB26-003','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-02-24','tanggal_kembali'=>'2026-03-04','kuota_total'=>40,'kuota_terisi'=>20,'status'=>'CLOSED','catatan_internal'=>'Sudah berangkat — Kloter 2 via Cairo','created_at'=>now(),'updated_at'=>now()],
             // Paket 4 — Umroh Plus AQSA
             ['paket_id'=>4, 'maskapai_id'=>7,  'kode_jadwal'=>'JDW-MAR26-001','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-03-23','tanggal_kembali'=>'2026-04-04','kuota_total'=>40,'kuota_terisi'=>2, 'status'=>'OPEN','catatan_internal'=>'Sisa 38 seat','created_at'=>now(),'updated_at'=>now()],
             // Paket 5 — Istiqomah Syawal
@@ -104,9 +112,22 @@ class JadwalSeeder extends Seeder
             ['paket_id'=>20,'maskapai_id'=>2,  'kode_jadwal'=>'JDW-SEP26-010','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-09-27','tanggal_kembali'=>'2026-10-12','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'16H — Rawabi Zam Zam 5N / Royal Madinah 9N','created_at'=>now(),'updated_at'=>now()],
             ['paket_id'=>20,'maskapai_id'=>1,  'kode_jadwal'=>'JDW-SEP26-011','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-09-28','tanggal_kembali'=>'2026-10-09','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'12H Garuda — Manazil Wisam 5N / Barakah Karem 5N','created_at'=>now(),'updated_at'=>now()],
             ['paket_id'=>20,'maskapai_id'=>2,  'kode_jadwal'=>'JDW-SEP26-012','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-09-01','tanggal_kembali'=>'2026-09-30','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'30H Full Month — Paradise Hotel 9N / Burj Mawaddah 19N','created_at'=>now(),'updated_at'=>now()],
+            // Paket 21 — November Hijrah 1448H (7 program)
+            ['paket_id'=>21,'maskapai_id'=>1,  'kode_jadwal'=>'JDW-NOV26-001','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-11-02','tanggal_kembali'=>'2026-11-13','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'12H Garuda SUB-JED — Tallah Ajyad 5N / Barakah Karem 5N','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>21,'maskapai_id'=>1,  'kode_jadwal'=>'JDW-NOV26-002','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-11-11','tanggal_kembali'=>'2026-11-24','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'14H Garuda SUB-MED — Arkan Golden 5N / Waha Dheafa 7N','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>21,'maskapai_id'=>1,  'kode_jadwal'=>'JDW-NOV26-003','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-11-21','tanggal_kembali'=>'2026-12-06','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'16H Garuda SUB-JED — Paradise Hotel 5N / Burj Mawaddah 9N','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>21,'maskapai_id'=>1,'kode_jadwal'=>'JDW-NOV26-004','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-11-21','tanggal_kembali'=>'2026-12-20','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'30H Transit SUB-JED — Paradise Hotel 19N / Burj Mawaddah 9N','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>21,'maskapai_id'=>2,  'kode_jadwal'=>'JDW-NOV26-005','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-11-23','tanggal_kembali'=>'2026-12-04','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'12H Lion Air SUB-JED — Maysan Al Maqam 5N / Amjad 5N','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>21,'maskapai_id'=>2,  'kode_jadwal'=>'JDW-NOV26-006','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-11-29','tanggal_kembali'=>'2026-12-14','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'16H Lion Air SUB-JED — Rawabi Zam Zam 5N / Amjad 9N','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>21,'maskapai_id'=>1,  'kode_jadwal'=>'JDW-NOV26-007','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-11-30','tanggal_kembali'=>'2026-12-11','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'12H Garuda SUB-JED — Mather Jiwar 5N / Amjad 5N','created_at'=>now(),'updated_at'=>now()],
+            // Paket 22 — Desember Akhir Tahun 2026 (4 program)
+            ['paket_id'=>22,'maskapai_id'=>1,  'kode_jadwal'=>'JDW-DES26-001','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-12-09','tanggal_kembali'=>'2026-12-22','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'14H Garuda SUB-MED — Burj Mawaddah 5N / Paradise Hotel 7N','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>22,'maskapai_id'=>1,  'kode_jadwal'=>'JDW-DES26-002','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-12-12','tanggal_kembali'=>'2026-12-27','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'16H Garuda SUB-JED — Manazil Wisam 5N / Barakah Karem 9N','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>22,'maskapai_id'=>2,  'kode_jadwal'=>'JDW-DES26-003','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-12-14','tanggal_kembali'=>'2026-12-25','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'12H Lion Air SUB-JED — Mather Jiwar 5N / Amjad 5N','created_at'=>now(),'updated_at'=>now()],
+            ['paket_id'=>22,'maskapai_id'=>2,  'kode_jadwal'=>'JDW-DES26-004','kota_keberangkatan'=>'Surabaya','bandara_keberangkatan'=>'SUB','tanggal_berangkat'=>'2026-12-20','tanggal_kembali'=>'2027-01-04','kuota_total'=>40,'kuota_terisi'=>0,'status'=>'OPEN','catatan_internal'=>'16H Lion Air SUB-JED — Manazil Wisam 9N / Amjad 5N','created_at'=>now(),'updated_at'=>now()],
         ];
 
-        DB::table('jadwal')->insertOrIgnore($jadwals);
+        DB::table('jadwal')->insert($jadwals);
 
         // Mapping jadwal_hotel — checkin/checkout per hotel per jadwal
         $jadwalHotels = [
@@ -287,9 +308,42 @@ class JadwalSeeder extends Seeder
             // jadwal 59: 30H Full Month Sep — Paradise Hotel(Mek=30) 9N, Burj Mawaddah(Mad=15) 19N
             ['jadwal_id'=>59,'hotel_id'=>30,'urutan'=>1,'checkin'=>'2026-09-02','checkout'=>'2026-09-11'],
             ['jadwal_id'=>59,'hotel_id'=>15,'urutan'=>2,'checkin'=>'2026-09-11','checkout'=>'2026-09-30'],
+            // jadwal 60: 12H 2-Nov Garuda SUB-JED — Tallah Ajyad(Mek=3) 5N, Barakah Karem(Mad=32) 5N
+            ['jadwal_id'=>60,'hotel_id'=>3, 'urutan'=>1,'checkin'=>'2026-11-03','checkout'=>'2026-11-08'],
+            ['jadwal_id'=>60,'hotel_id'=>32,'urutan'=>2,'checkin'=>'2026-11-08','checkout'=>'2026-11-13'],
+            // jadwal 61: 14H 11-Nov Garuda SUB-MED — Arkan Golden(Mad=24) 5N dulu, Waha Dheafa(Mek=23) 7N
+            ['jadwal_id'=>61,'hotel_id'=>24,'urutan'=>1,'checkin'=>'2026-11-12','checkout'=>'2026-11-17'],
+            ['jadwal_id'=>61,'hotel_id'=>23,'urutan'=>2,'checkin'=>'2026-11-17','checkout'=>'2026-11-24'],
+            // jadwal 62: 16H 21-Nov Garuda SUB-JED — Paradise Hotel(Mek=30) 5N, Burj Mawaddah(Mad=15) 9N
+            ['jadwal_id'=>62,'hotel_id'=>30,'urutan'=>1,'checkin'=>'2026-11-22','checkout'=>'2026-11-27'],
+            ['jadwal_id'=>62,'hotel_id'=>15,'urutan'=>2,'checkin'=>'2026-11-27','checkout'=>'2026-12-06'],
+            // jadwal 63: 30H 21-Nov Transit SUB-JED — Paradise Hotel(Mek=30) 19N, Burj Mawaddah(Mad=15) 9N
+            ['jadwal_id'=>63,'hotel_id'=>30,'urutan'=>1,'checkin'=>'2026-11-22','checkout'=>'2026-12-11'],
+            ['jadwal_id'=>63,'hotel_id'=>15,'urutan'=>2,'checkin'=>'2026-12-11','checkout'=>'2026-12-20'],
+            // jadwal 64: 12H 23-Nov Lion Air SUB-JED — Maysan Al Maqam(Mek=2) 5N, Amjad(Mad=7) 5N
+            ['jadwal_id'=>64,'hotel_id'=>2, 'urutan'=>1,'checkin'=>'2026-11-24','checkout'=>'2026-11-29'],
+            ['jadwal_id'=>64,'hotel_id'=>7, 'urutan'=>2,'checkin'=>'2026-11-29','checkout'=>'2026-12-04'],
+            // jadwal 65: 16H 29-Nov Lion Air SUB-JED — Rawabi Zam Zam(Mek=34) 5N, Amjad(Mad=7) 9N
+            ['jadwal_id'=>65,'hotel_id'=>34,'urutan'=>1,'checkin'=>'2026-11-30','checkout'=>'2026-12-05'],
+            ['jadwal_id'=>65,'hotel_id'=>7, 'urutan'=>2,'checkin'=>'2026-12-05','checkout'=>'2026-12-14'],
+            // jadwal 66: 12H 30-Nov Garuda SUB-JED — Mather Jiwar(Mek=4) 5N, Amjad(Mad=7) 5N
+            ['jadwal_id'=>66,'hotel_id'=>4, 'urutan'=>1,'checkin'=>'2026-12-01','checkout'=>'2026-12-06'],
+            ['jadwal_id'=>66,'hotel_id'=>7, 'urutan'=>2,'checkin'=>'2026-12-06','checkout'=>'2026-12-11'],
+            // jadwal 67: 14H 9-Des Garuda SUB-MED — Burj Mawaddah(Mad=15) 5N dulu, Paradise Hotel(Mek=30) 7N
+            ['jadwal_id'=>67,'hotel_id'=>15,'urutan'=>1,'checkin'=>'2026-12-10','checkout'=>'2026-12-15'],
+            ['jadwal_id'=>67,'hotel_id'=>30,'urutan'=>2,'checkin'=>'2026-12-15','checkout'=>'2026-12-22'],
+            // jadwal 68: 16H 12-Des Garuda SUB-JED — Manazil Wisam(Mek=18) 5N, Barakah Karem(Mad=32) 9N
+            ['jadwal_id'=>68,'hotel_id'=>18,'urutan'=>1,'checkin'=>'2026-12-13','checkout'=>'2026-12-18'],
+            ['jadwal_id'=>68,'hotel_id'=>32,'urutan'=>2,'checkin'=>'2026-12-18','checkout'=>'2026-12-27'],
+            // jadwal 69: 12H 14-Des Lion Air SUB-JED — Mather Jiwar(Mek=4) 5N, Amjad(Mad=7) 5N
+            ['jadwal_id'=>69,'hotel_id'=>4, 'urutan'=>1,'checkin'=>'2026-12-15','checkout'=>'2026-12-20'],
+            ['jadwal_id'=>69,'hotel_id'=>7, 'urutan'=>2,'checkin'=>'2026-12-20','checkout'=>'2026-12-25'],
+            // jadwal 70: 16H 20-Des Lion Air SUB-JED — Manazil Wisam(Mek=18) 9N, Amjad(Mad=7) 5N
+            ['jadwal_id'=>70,'hotel_id'=>18,'urutan'=>1,'checkin'=>'2026-12-21','checkout'=>'2026-12-30'],
+            ['jadwal_id'=>70,'hotel_id'=>7, 'urutan'=>2,'checkin'=>'2026-12-30','checkout'=>'2027-01-04'],
         ];
 
-        DB::table('jadwal_hotel')->insertOrIgnore($jadwalHotels);
+        DB::table('jadwal_hotel')->insert($jadwalHotels);
 
         // Sesi Manasik
         $sesiManasik = [
@@ -299,7 +353,7 @@ class JadwalSeeder extends Seeder
             ['jadwal_id'=>7, 'tanggal'=>'2026-06-27','jam_mulai'=>'08:00:00','jam_selesai'=>'11:00:00','lokasi'=>'Kantor Namiroh, Jl. Gajah Mada No.10/03 Mojosari','materi'=>'Fiqih Umroh, Zikir & Doa di Tanah Suci','pembimbing'=>null],
         ];
 
-        DB::table('sesi_manasik')->insertOrIgnore($sesiManasik);
+        DB::table('sesi_manasik')->insert($sesiManasik);
 
         $this->command->info('✅ JadwalSeeder: '.count($jadwals).' jadwal, '.count($jadwalHotels).' jadwal_hotel, '.count($sesiManasik).' sesi_manasik berhasil ditambahkan.');
     }
