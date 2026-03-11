@@ -345,7 +345,7 @@ export default function Home() {
                   )}
                   <div className="p-4">
                     {p.flyer_url && (
-                      <h3 className="font-bold text-base text-gray-800 leading-tight mb-2 line-clamp-2">{p.nama_paket}</h3>
+                      <h3 className="font-bold text-lg text-gray-800 leading-tight mb-2 line-clamp-2">{p.nama_paket}</h3>
                     )}
                     <div className="flex items-center gap-2 text-base text-gray-700 mb-1">
                       <span>⏱</span> {p.durasi_hari} Hari

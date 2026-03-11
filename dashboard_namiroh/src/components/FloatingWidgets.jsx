@@ -3,10 +3,10 @@ import { Link, useLocation } from 'react-router-dom'
 import api from '../api/axios'
 
 const PROMO_LIST = [
-  { id: 1, label: 'Umroh Best Seller', desc: 'Mulai Rp 23.000.000', link: '/paket', img: banner/umroh-gus-ferry.jpg },
-  { id: 2, label: 'Umroh Spesial Ramadhan', desc: 'Mulai Rp 34.000.000', link: '/paket', img: banner/umroh-spesial-ramadhan.jpg },
-  { id: 3, label: 'Program Badal Umroh dan Haji', desc: 'Mulai Rp 3.000.000', link: '/paket', img: banner/program-badal.jpeg },
-  { id: 4, label: 'Umroh Hanya 500rb', desc: 'Seat Terbatas!', link: '/paket', img: banner/haji_500rb.jpg },
+  { id: 1, label: 'Umroh Best Seller', desc: 'Mulai Rp 23.000.000', link: '/paket', img: '/banner/umroh-gus-ferry.jpg' },
+  { id: 2, label: 'Umroh Spesial Ramadhan', desc: 'Mulai Rp 34.000.000', link: '/paket', img: '/banner/umroh-spesial-ramadhan.jpg' },
+  { id: 3, label: 'Program Badal Umroh dan Haji', desc: 'Mulai Rp 3.000.000', link: '/paket', img: '/banner/program-badal.jpeg' },
+  { id: 4, label: 'Umroh Hanya 500rb', desc: 'Seat Terbatas!', link: '/paket', img: '/banner/haji_500rb.jpg' },
 ]
 
 export default function FloatingWidgets() {
@@ -14,7 +14,6 @@ export default function FloatingWidgets() {
   if (pathname.startsWith('/admin')) return null
   const [paketPromo, setPaketPromo] = useState([])
   const [currentPromo, setCurrentPromo] = useState(0)
-  const [bannerVisible, setBannerVisible] = useState(true)
   const [bannerDismissed, setBannerDismissed] = useState(false)
 
   useEffect(() => {
@@ -35,28 +34,13 @@ export default function FloatingWidgets() {
     return () => clearInterval(timer)
   }, [])
 
-  // Hide banner after scroll down, show again on scroll up
-  useEffect(() => {
-    if (bannerDismissed) return
-    let lastY = window.scrollY
-    const onScroll = () => {
-      const y = window.scrollY
-      setBannerVisible(y < lastY || y < 100)
-      lastY = y
-    }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [bannerDismissed])
-
   const promo = paketPromo[currentPromo]
 
   return (
     <>
       {/* ── Promo Banner — bottom left ── */}
       {!bannerDismissed && (
-        <div className={`fixed bottom-2 left-2 z-50 w-48 sm:w-32 landscape:w-20 transition-all duration-500 ${
-          bannerVisible ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0 pointer-events-none'
-        }`}>
+        <div className="fixed bottom-2 left-2 z-50 w-48 sm:w-32 landscape:w-20">
           <div className="bg-white rounded-2xl shadow-2xl border border-orange-200 overflow-hidden">
             {/* Header */}
             <div className="bg-gradient-to-r from-green-800 to-green-700 px-2 py-1 flex items-center justify-between">
