@@ -197,7 +197,7 @@ export default function Home() {
             <span className="text-orange-400 text-sm">✦</span>
             <div className="h-px w-12 bg-orange-400/50" />
           </div>
-          <div className="rounded-2xl overflow-hidden shadow-xl bg-black" style={{ aspectRatio: '16/9' }}>
+          <div className="rounded-2xl overflow-hidden shadow-xl bg-black mx-auto" style={{ aspectRatio: '9/16', maxWidth: '360px' }}>
             <iframe
               src="https://drive.google.com/file/d/1Cz6z1cCGSkbyMIOKTc3eHakTN6MdPj-O/preview"
               title="Video Ini Membuat Banyak Orang Rindu ke Tanah Suci"
