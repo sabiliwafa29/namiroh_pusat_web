@@ -121,7 +121,7 @@ export default function Home() {
               </div>
               <div className="text-green-200 text-base mb-4">Respon cepat, siap membantu Anda memilih paket terbaik</div>
               <div className="flex gap-3 justify-center">
-                <a href="https://wa.me/6282335611999?text=Assalamualaikum, saya ingin info promo paket umroh terbaru"
+                <a href="https://wa.me/6285711755881?text=Assalamualaikum, saya ingin info promo paket umroh terbaru"
                   target="_blank" rel="noreferrer"
                   className="flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow whitespace-nowrap">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-4 h-4 fill-white flex-shrink-0">
@@ -129,7 +129,7 @@ export default function Home() {
                   </svg>
                   Admin 1
                 </a>
-                <a href="https://wa.me/6281234567890?text=Assalamualaikum, saya ingin info promo paket umroh terbaru"
+                <a href="https://wa.me/6282141932722?text=Assalamualaikum, saya ingin info promo paket umroh terbaru"
                   target="_blank" rel="noreferrer"
                   className="flex items-center gap-2 bg-orange-500 hover:bg-orange-400 text-white font-bold text-sm px-5 py-2.5 rounded-xl transition shadow whitespace-nowrap">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="w-4 h-4 fill-white flex-shrink-0">
@@ -543,7 +543,7 @@ export default function Home() {
               className="bg-orange-500 text-white font-black px-4 py-3 rounded-3xl hover:bg-orange-400 transition text-base sm:text-xl shadow-lg whitespace-nowrap tracking-wide">
               Daftar Umroh Sekarang
             </Link>
-            <a href="https://wa.me/6282335611999?text=Assalamualaikum, saya ingin info paket umroh"
+            <a href="https://wa.me/6285711755881?text=Assalamualaikum, saya ingin info paket umroh"
               target="_blank" rel="noreferrer"
               className="border-2 border-orange-400 text-orange-400 font-black px-4 py-3 rounded-3xl hover:bg-orange-400 transition text-base sm:text-xl shadow-lg whitespace-nowrap tracking-wide">
               💬 Chat WhatsApp

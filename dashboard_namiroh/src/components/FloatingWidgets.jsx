@@ -88,7 +88,7 @@ export default function FloatingWidgets() {
 
             <div className="px-1.5 pb-1.5">
               <a
-                href={`https://wa.me/6282335611999?text=Assalamualaikum, saya ingin info promo: ${encodeURIComponent(PROMO_LIST[currentPromo].label)}`}
+                href={`https://wa.me/6285711755881?text=Assalamualaikum, saya ingin info promo: ${encodeURIComponent(PROMO_LIST[currentPromo].label)}`}
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center justify-center gap-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-bold py-1 rounded-lg transition"
@@ -103,7 +103,7 @@ export default function FloatingWidgets() {
 
       {/* ── WhatsApp FAB — bottom right ── */}
       <a
-        href="https://wa.me/6282335611999?text=Assalamualaikum, saya ingin info paket umroh An Namiroh"
+        href="https://wa.me/6285711755881?text=Assalamualaikum, saya ingin info paket umroh An Namiroh"
         target="_blank"
         rel="noreferrer"
         className="fixed bottom-4 right-4 z-50 group landscape:bottom-2 landscape:right-2"

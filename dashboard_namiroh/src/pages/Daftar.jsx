@@ -146,7 +146,7 @@ export default function Daftar() {
           <p className="text-sm text-gray-600 mb-6">
             Simpan nomor registrasi ini. Tim kami akan menghubungi Anda dalam 1×24 jam untuk konfirmasi dan informasi pembayaran DP.
           </p>
-          <a href={`https://wa.me/6282335611999?text=Assalamualaikum, saya baru mendaftar umroh dengan nomor registrasi ${nomorReg}`}
+          <a href={`https://wa.me/6285711755881?text=Assalamualaikum, saya baru mendaftar umroh dengan nomor registrasi ${nomorReg}`}
             target="_blank" rel="noreferrer"
             className="block bg-green-700 text-white py-3.5 rounded-xl font-semibold text-base hover:bg-green-800 transition mb-3">
             💬 Konfirmasi via WhatsApp

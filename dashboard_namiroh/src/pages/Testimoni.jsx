@@ -169,7 +169,7 @@ export default function Testimoni() {
             <Link to="/paket" className="bg-orange-500 text-white font-semibold px-8 py-3 rounded-xl hover:bg-orange-400 transition text-base">
               Lihat Paket Umroh
             </Link>
-            <a href="https://wa.me/6282335611999?text=Assalamualaikum, saya ingin info paket umroh"
+            <a href="https://wa.me/6285711755881?text=Assalamualaikum, saya ingin info paket umroh"
               target="_blank" rel="noreferrer"
               className="border-2 border-orange-400 text-orange-400 font-semibold px-8 py-3 rounded-xl hover:bg-orange-500 hover:text-white hover:border-orange-500 transition text-base">
               💬 Chat WhatsApp

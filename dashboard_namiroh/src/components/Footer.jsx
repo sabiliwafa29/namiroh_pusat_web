@@ -41,7 +41,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span>📞</span>
-                <a href="https://wa.me/6282335611999" className="hover:text-white transition">0823-3561-1999</a>
+                <a href="https://wa.me/6285711755881" className="hover:text-white transition">0857-1175-5881</a>
               </li>
               <li className="flex items-center gap-2">
                 <span>✉️</span>
