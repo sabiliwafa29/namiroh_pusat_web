@@ -3,23 +3,27 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
 const GALERI = [
-  { src: '/galeri/keberangkatan1.webp', alt: 'Pemberangkatan jamaah',    kategori: 'Keberangkatan' },
-  { src: '/galeri/keberangkatan2.webp', alt: 'Keberangkatan umroh',      kategori: 'Keberangkatan' },
-  { src: '/galeri/keberangkatan3.webp', alt: 'Keberangkatan bersama',    kategori: 'Keberangkatan' },
-  { src: '/galeri/keberangkatan4.webp', alt: 'Persiapan keberangkatan',  kategori: 'Keberangkatan' },
-  { src: '/galeri/keberangkatan5.webp', alt: 'Jamaah siap berangkat',    kategori: 'Keberangkatan' },
-  { src: '/galeri/keberangkatan6.webp', alt: 'Momen keberangkatan',      kategori: 'Keberangkatan' },
-  { src: '/galeri/hotel.webp',          alt: 'Hotel di Mekkah',          kategori: 'Fasilitas' },
-  { src: '/galeri/fasilitas_kopi.webp', alt: 'Fasilitas jamaah',         kategori: 'Fasilitas' },
+  { src: '/galeri/keberangkatan1.webp', alt: 'Pemberangkatan jamaah',    kategori: 'Foto' },
+  { src: '/galeri/keberangkatan2.webp', alt: 'Keberangkatan umroh',      kategori: 'Foto' },
+  { src: '/galeri/keberangkatan3.webp', alt: 'Keberangkatan bersama',    kategori: 'Foto' },
+  { src: '/galeri/keberangkatan4.webp', alt: 'Persiapan keberangkatan',  kategori: 'Foto' },
+  { src: '/galeri/keberangkatan5.webp', alt: 'Jamaah siap berangkat',    kategori: 'Foto' },
+  { src: '/galeri/keberangkatan6.webp', alt: 'Momen keberangkatan',      kategori: 'Foto' },
+  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-1.webp', alt: 'Keberangkatan umroh',      kategori: 'Foto' },
+  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-2.webp', alt: 'Keberangkatan umroh',      kategori: 'Foto' },
+  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-3.webp', alt: 'Keberangkatan umroh',      kategori: 'Foto' },
+  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-4.webp', alt: 'Keberangkatan umroh',      kategori: 'Foto' },
+  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-5.webp', alt: 'Keberangkatan umroh',      kategori: 'Foto' },
+  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-6.webp', alt: 'Keberangkatan umroh',      kategori: 'Foto' },
 ]
 
-const KATEGORI = ['Semua', 'Keberangkatan', 'Fasilitas']
+const KATEGORI = ['Video', 'Foto']
 
 export default function Galeri() {
-  const [aktif, setAktif]       = useState('Semua')
+  const [aktif, setAktif]       = useState('Foto')
   const [lightbox, setLightbox] = useState(null) // index atau null
 
-  const filtered = aktif === 'Semua' ? GALERI : GALERI.filter(g => g.kategori === aktif)
+  const filtered = aktif === 'Foto' ? GALERI : GALERI.filter(g => g.kategori === aktif)
 
   const prev = () => setLightbox(i => (i - 1 + filtered.length) % filtered.length)
   const next = () => setLightbox(i => (i + 1) % filtered.length)

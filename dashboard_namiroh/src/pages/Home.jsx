@@ -29,6 +29,7 @@ const testimonials = [
 const JENIS_LIST = [
   { id: '1', label: 'Umroh Reguler', icon: '🕌' },
   { id: '2', label: 'Umroh VIP',     icon: '⭐' },
+  { id: '3', label: 'Badal Umroh',   icon: '💚' },
   { id: '4', label: 'Haji Plus',     icon: '🤲' },
   { id: '7', label: 'Halal Tour',    icon: '✈️' },
 ]
@@ -47,7 +48,7 @@ export default function Home() {
   const [search, setSearch] = useState({ bulan: '', jenis_layanan_id: '', maskapai_id: '', bandara: '' })
   const [promoPopup, setPromoPopup] = useState(true)
 
-  const bulanList = Array.from({ length: 24 }, (_, i) => {
+  const bulanList = Array.from({ length: 12 - new Date().getMonth() }, (_, i) => {
     const d = new Date(new Date().getFullYear(), new Date().getMonth() + i, 1)
     return {
       value: `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`,
@@ -449,10 +450,10 @@ export default function Home() {
             {[
               { src: '/galeri/keberangkatan1.webp', alt: 'Pemberangkatan jamaah' },
               { src: '/galeri/keberangkatan2.webp', alt: 'Keberangkatan umroh' },
-              { src: '/galeri/hotel.webp',          alt: 'Hotel di Mekkah' },
               { src: '/galeri/keberangkatan3.webp', alt: 'Keberangkatan bersama' },
               { src: '/galeri/keberangkatan4.webp', alt: 'Persiapan keberangkatan' },
-              { src: '/galeri/fasilitas_kopi.webp', alt: 'Fasilitas jamaah' },
+              { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-1.webp', alt: 'Keberangkatan umroh' },
+              { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-2.webp', alt: 'Keberangkatan umroh' },
               { src: '/galeri/keberangkatan5.webp', alt: 'Jamaah siap berangkat' },
               { src: '/galeri/keberangkatan6.webp', alt: 'Momen keberangkatan' },
             ].map((item, i) => (
