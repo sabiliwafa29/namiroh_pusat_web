@@ -130,12 +130,14 @@ export default function Testimoni() {
               <div key={i} className="break-inside-avoid bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                 {/* Foto */}
                 {t.foto && (
-                  <img
-                    src={t.foto}
-                    alt={t.name}
-                    className="w-full h-72 object-cover object-top"
-                    loading="lazy"
-                  />
+                  <div className="w-full bg-gray-100 flex items-center justify-center overflow-hidden" style={{ minHeight: '16rem' }}>
+                    <img
+                      src={t.foto}
+                      alt={t.name}
+                      className="w-full object-contain max-h-80"
+                      loading="lazy"
+                    />
+                  </div>
                 )}
                 <div className="p-6">
                   {/* Bintang */}

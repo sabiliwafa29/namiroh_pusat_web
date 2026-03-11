@@ -21,9 +21,21 @@ const layanan = [
 ]
 
 const testimonials = [
-  { name: 'Ibu Siti Nurjanah', kota: 'Surabaya', text: 'Alhamdulillah, perjalanan Umroh bersama An Namiroh sangat lancar. Hotel dekat Masjidil Haram dan makanannya cocok di lidah. Terima kasih!', bintang: 5 },
-  { name: 'Bapak H. Mulyadi', kota: 'Bandung', text: 'Tour leader dan muthowwif selalu sigap menjawab pertanyaan kami. Semua fasilitas sesuai yang dijanjikan. InsyaAllah akan direkomendasikan ke keluarga.', bintang: 5 },
-  { name: 'Ning Umi Laila', kota: 'Surabaya', text: 'Pelayanan sangat praktis, cepat, dan didampingi sejak awal. Para mutawif mengayomi jamaah muda maupun tua. An-Namiroh recommended!', bintang: 5 },
+  {
+    name: 'Bu Ika K-Cunk Motor', kota: 'Tulungagung', bintang: 5,
+    foto: '/testimoni/bu-ika-tulungagung.jpg',
+    text: 'Alhamdulillah, rasanya sungguh luar biasa dan sangat mengharukan umroh bersama An Namiroh Travelindo! Saya merasa sangat terbantu dan senantiasa didampingi dalam setiap proses ibadah. Pelayanan yang diberikan pun sangat memuaskan. Alhamdulillah, terima kasih banyak An Namiroh Travelindo!',
+  },
+  {
+    name: 'Ning Umi Laila', kota: 'Surabaya', bintang: 5,
+    foto: '/testimoni/ning-umi-laila-surabaya.jpg',
+    text: 'Proses pelayanannya sangat praktis dan cepat, dimulai dari pendampingan pembuatan paspor hingga keberangkatan. Kami selalu didampingi sehingga tidak merasa bingung. Prinsip An-Namiroh, "Jemaah senang, ibadah pun tenang," benar-benar terasa nyata.',
+  },
+  {
+    name: 'Neng Kholifah', kota: 'Pandaan, Pasuruan', bintang: 5,
+    foto: '/testimoni/neng-kholifah-pasuruan.jpeg',
+    text: 'Kami dilayani, diperhatikan, dan hotel yang ditempati sangat bagus dan nyaman. Muthowifnya sangat baik, sabar mendampingi jamaah. Tamu tamu Allah istimewa sekali. Terimakasih PT An Namiroh Travelindo maju terus untuk melayani tamu-tamu Allah.',
+  },
 ]
 
 const JENIS_LIST = [
@@ -189,8 +201,8 @@ export default function Home() {
       {/* VIDEO DRIVE */}
       <section className="py-14 px-4 bg-white border-b border-gray-100">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="font-heading text-2xl sm:text-3xl font-bold text-green-900 mb-2">
-            Video Ini Membuat Banyak Orang Rindu ke Tanah Suci
+          <h2 className="font-heading text-xl sm:text-3xl font-bold text-green-900 mb-2">
+            Video Ini Membuat Banyak Orang Rindi Ke Tanah Suci <br />Jangan Biarkan Panggilan itu Hanya Menjadi Keinginan <br />Bersama An Namiroh Travelindo, InsyaAllah Perjalanan Suci Anda Mudah, Aman, dan Penuh Keberkahan. Sekarang Giliran Anda Menjadi Tamu Allah
           </h2>
           <div className="flex items-center justify-center gap-3 mt-2 mb-6">
             <div className="h-px w-12 bg-orange-400/50" />
@@ -443,12 +455,19 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {testimonials.map((t, i) => (
-              <div key={i} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
-                <div className="text-orange-400 text-lg mb-2">{'★'.repeat(t.bintang)}</div>
-                <p className="text-base text-gray-700 leading-relaxed mb-4 italic">"{t.text}"</p>
-                <div>
-                  <div className="font-semibold text-green-900 text-base">{t.name}</div>
-                  <div className="text-sm text-gray-500">{t.kota}</div>
+              <div key={i} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+                {t.foto && (
+                  <div className="w-full bg-gray-100 flex items-center justify-center overflow-hidden" style={{ minHeight: '12rem' }}>
+                    <img src={t.foto} alt={t.name} className="w-full object-contain max-h-56" loading="lazy" />
+                  </div>
+                )}
+                <div className="p-5">
+                  <div className="text-orange-400 text-lg mb-2">{'★'.repeat(t.bintang)}</div>
+                  <p className="text-base text-gray-700 leading-relaxed mb-4 italic">"{t.text}"</p>
+                  <div>
+                    <div className="font-semibold text-green-900 text-base">{t.name}</div>
+                    <div className="text-sm text-gray-500">{t.kota}</div>
+                  </div>
                 </div>
               </div>
             ))}
