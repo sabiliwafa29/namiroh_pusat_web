@@ -91,7 +91,7 @@ export default function Home() {
             {/* Close button */}
             <button
               onClick={() => setPromoPopup(false)}
-              className="absolute top-3 right-3 z-10 w-8 h-8 bg-black/40 hover:bg-black/60 text-white rounded-full flex items-center justify-center text-lg leading-none transition"
+              className="absolute top-3 right-3 z-10 w-11 h-11 bg-black/40 hover:bg-black/60 text-white rounded-full flex items-center justify-center text-3xl leading-none transition"
               aria-label="Tutup"
             >×</button>
             {/* Banner image */}
@@ -126,7 +126,7 @@ export default function Home() {
                 </a>
               </div>
               <button onClick={() => setPromoPopup(false)}
-                className="mt-3 text-green-300 hover:text-white text-xs underline transition">
+                className="mt-3 text-green-300 hover:text-white text-sm underline transition">
                 Tutup & Lanjutkan
               </button>
             </div>
