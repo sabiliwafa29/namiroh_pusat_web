@@ -276,17 +276,6 @@ export default function Paket() {
                       </div>
                     )}
 
-                    {/* Harga varian */}
-                    {p.harga?.length > 0 && (
-                      <div className="flex gap-1 flex-wrap mb-3">
-                        {p.harga.map(h => (
-                          <span key={h.tipe_kamar} className="text-sm bg-green-50 text-green-700 px-2 py-0.5 rounded border border-green-200">
-                            {h.tipe_kamar}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
                     <div className="flex gap-2">
                       <Link to={`/paket/${p.id}`}
                         className="flex-1 text-center border border-green-700 text-green-700 py-2.5 rounded-lg text-sm font-medium hover:bg-green-50 transition">
