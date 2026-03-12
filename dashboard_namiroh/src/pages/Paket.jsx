@@ -74,7 +74,7 @@ export default function Paket() {
   const bandara    = urlParams.get('bandara')
   const hasJadwalFilter = bulan || maskapaiId || bandara
 
-  useEffect(() => { window.scrollTo(0, 0) }, [])
+  useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }) }, [])
 
   useEffect(() => { fetchData() }, [page, search, jenis])
 
