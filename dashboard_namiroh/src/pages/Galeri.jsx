@@ -8,6 +8,7 @@ const VIDEOS = [
   { videoId: 'IAer8rGX-HA', judul: '#EPS 2 Kenal Lebih Dekat dengan An Namiroh Travelindo', durasi: '04:07' },
   { videoId: 'JIpZDcSFA_I', judul: '#EPS 3 Kenal Lebih Dekat dengan An Namiroh Travelindo', durasi: '03:57' },
   { videoId: 'QN_B8kkR7Vc', judul: '#EPS 4 Kenal Lebih Dekat dengan An Namiroh Travelindo', durasi: '01:00' },
+  { videoId: '-madLZ8Bp0M', judul: 'An Namiroh Podcast - Dari Nada ke Makna | Kupas Tuntas Lahirnya Mars An Namiroh Travelindo', durasi: '16:26' },
 ]
 
 const FOTOS = [
