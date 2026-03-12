@@ -137,9 +137,8 @@ export default function Paket() {
           <div className="flex gap-2 flex-wrap">
             {JENIS.map(j => (
               <button key={j.id} onClick={() => {
-                const newParams = new URLSearchParams(urlParams)
+                const newParams = new URLSearchParams()
                 if (j.id) newParams.set('jenis_layanan_id', j.id)
-                else newParams.delete('jenis_layanan_id')
                 setUrlParams(newParams, { replace: true })
                 setPage(1)
               }}
