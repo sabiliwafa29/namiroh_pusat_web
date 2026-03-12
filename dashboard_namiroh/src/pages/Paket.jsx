@@ -180,7 +180,6 @@ export default function Paket() {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {jadwalList.map(j => {
-                    const sisa = j.kuota_total - j.kuota_terisi
                     return (
                       <div key={j.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition">
                         {/* Flyer */}
@@ -226,14 +225,6 @@ export default function Paket() {
                           </div>
                           <div className="flex items-center gap-2 text-sm text-gray-600">
                             <span>⏱</span> {j.paket?.durasi_hari} hari
-                            <span className="ml-auto">
-                                <span className={`font-semibold text-base ${
-                                  sisa <= 5 ? 'text-red-600' : 'text-green-700'
-                                }`}>
-                                  {sisa}
-                                </span>
-                                <span className="text-gray-500"> seat tersisa</span>
-                            </span>
                           </div>
                           {!j.paket?.flyer_url && (
                             <div className="pt-1 border-t">

@@ -148,7 +148,6 @@ export default function Dashboard() {
                   <th className="pb-2 font-medium">Paket</th>
                   <th className="pb-2 font-medium">Berangkat</th>
                   <th className="pb-2 font-medium">Maskapai</th>
-                  <th className="pb-2 font-medium">Kuota</th>
                   <th className="pb-2 font-medium">Status</th>
                 </tr>
               </thead>
@@ -159,7 +158,6 @@ export default function Dashboard() {
                     <td className="py-2">{j.paket?.nama_paket}</td>
                     <td className="py-2">{new Date(j.tanggal_berangkat).toLocaleDateString('id-ID')}</td>
                     <td className="py-2">{j.maskapai?.nama}</td>
-                    <td className="py-2">{j.kuota_terisi}/{j.kuota_total}</td>
                     <td className="py-2">
                       <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded-full text-xs font-medium">
                         {j.status}

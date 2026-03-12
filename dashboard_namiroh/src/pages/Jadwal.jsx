@@ -155,7 +155,7 @@ export default function Jadwal() {
                 <th className="px-4 py-3 font-medium">Berangkat</th>
                 <th className="px-4 py-3 font-medium">Kembali</th>
                 <th className="px-4 py-3 font-medium">Kota</th>
-                <th className="px-4 py-3 font-medium">Kuota</th>
+
                 <th className="px-4 py-3 font-medium">Status</th>
                 <th className="px-4 py-3 font-medium">Aksi</th>
               </tr>
@@ -175,18 +175,7 @@ export default function Jadwal() {
                   <td className="px-4 py-3">{new Date(j.tanggal_berangkat).toLocaleDateString('id-ID')}</td>
                   <td className="px-4 py-3">{new Date(j.tanggal_kembali).toLocaleDateString('id-ID')}</td>
                   <td className="px-4 py-3">{j.kota_keberangkatan}</td>
-                  <td className="px-4 py-3">
-                    <div className="text-xs">
-                      <span className="font-medium">{j.kuota_terisi}</span>
-                      <span className="text-gray-400">/{j.kuota_total}</span>
-                    </div>
-                    <div className="w-full bg-gray-200 rounded-full h-1 mt-1">
-                      <div
-                        className="bg-green-600 h-1 rounded-full"
-                        style={{ width: `${(j.kuota_terisi / j.kuota_total) * 100}%` }}
-                      />
-                    </div>
-                  </td>
+
                   <td className="px-4 py-3">
                     <select
                       value={j.status}

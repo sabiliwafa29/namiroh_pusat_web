@@ -119,7 +119,6 @@ class JadwalController extends Controller
 
         return $this->success($peserta, 'Daftar peserta', 200, [
             'total_peserta' => $peserta->count(),
-            'sisa_kuota'    => $jadwal->kuota_total - $jadwal->kuota_terisi,
         ]);
     }
 }

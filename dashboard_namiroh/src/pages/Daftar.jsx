@@ -247,10 +247,7 @@ export default function Daftar() {
                               <div className="text-sm text-gray-600">{j.maskapai?.nama} · {j.kota_keberangkatan}</div>
                             </div>
                           </div>
-                          <div className="text-right">
-                              <div className="text-sm text-gray-600">Sisa</div>
-                              <div className="font-bold text-green-700 text-base">{j.kuota_total - j.kuota_terisi} seat</div>
-                          </div>
+
                         </label>
                       ))}
                     </div>

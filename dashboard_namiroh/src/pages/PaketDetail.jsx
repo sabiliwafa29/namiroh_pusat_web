@@ -120,10 +120,7 @@ export default function PaketDetail() {
                         </div>
                         <div className="text-sm text-gray-500">{j.maskapai?.nama} · {j.kota_keberangkatan}</div>
                       </div>
-                      <div className="text-right">
-                        <div className="text-sm text-gray-500">Sisa Seat</div>
-                        <div className="font-bold text-green-700">{j.kuota_total - j.kuota_terisi}</div>
-                      </div>
+
                     </div>
                   ))}
                 </div>
