@@ -58,12 +58,12 @@ const JENIS = [
 ]
 
 export default function Paket() {
-  const [urlParams]               = useSearchParams()
+  const [urlParams, setUrlParams] = useSearchParams()
   const [data, setData]           = useState([])
   const [meta, setMeta]           = useState({})
   const [loading, setLoading]     = useState(true)
   const [search, setSearch]       = useState('')
-  const [jenis, setJenis]         = useState(urlParams.get('jenis_layanan_id') || '')
+  const jenis                     = urlParams.get('jenis_layanan_id') || ''
   const [page, setPage]           = useState(1)
   const [jadwalList, setJadwalList]     = useState([])
   const [jadwalLoading, setJadwalLoading] = useState(false)
@@ -73,6 +73,8 @@ export default function Paket() {
   const maskapaiId = urlParams.get('maskapai_id')
   const bandara    = urlParams.get('bandara')
   const hasJadwalFilter = bulan || maskapaiId || bandara
+
+  useEffect(() => { window.scrollTo(0, 0) }, [])
 
   useEffect(() => { fetchData() }, [page, search, jenis])
 
@@ -134,7 +136,13 @@ export default function Paket() {
         <div className="max-w-6xl mx-auto">
           <div className="flex gap-2 flex-wrap">
             {JENIS.map(j => (
-              <button key={j.id} onClick={() => { setJenis(j.id); setPage(1) }}
+              <button key={j.id} onClick={() => {
+                const newParams = new URLSearchParams(urlParams)
+                if (j.id) newParams.set('jenis_layanan_id', j.id)
+                else newParams.delete('jenis_layanan_id')
+                setUrlParams(newParams, { replace: true })
+                setPage(1)
+              }}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
                   jenis === j.id ? 'bg-green-700 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}>

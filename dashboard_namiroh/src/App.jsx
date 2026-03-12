@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, useNavigationType } from 'react-router-dom'
 import { useEffect } from 'react'
 import Home from './pages/Home'
 import Paket from './pages/Paket'
@@ -19,7 +19,10 @@ import AdminJamaah             from './pages/admin/AdminJamaah'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
-  useEffect(() => { window.scrollTo(0, 0) }, [pathname])
+  const navType = useNavigationType()
+  useEffect(() => {
+    if (navType !== 'POP') window.scrollTo(0, 0)
+  }, [pathname, navType])
   return null
 }
 

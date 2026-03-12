@@ -111,7 +111,7 @@ export default function Home() {
             <img
               src="/galeri/banner-umroh-baru.webp"
               alt="Promo Umroh Terbaru"
-              className="w-full object-cover max-h-48 sm:max-h-64"
+              className="w-full object-cover max-h-72 sm:max-h-64"
               loading="eager"
             />
             {/* Content */}
@@ -202,10 +202,10 @@ export default function Home() {
       <section className="py-14 px-4 bg-white border-b border-gray-100">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="font-heading text-2xl sm:text-3xl font-bold text-green-900 mb-2">
-            Video Ini Membuat Banyak Orang Rindu Ke Tanah Suci <br />
+            Video Ini Membuat Banyak Orang Rindu Ke Tanah Suci. <br />
           </h2>
           <h2 className="font-heading text-xl sm:text-3xl font-bold text-green-900 mb-2">
-            Jangan Biarkan Panggilan itu Hanya Menjadi Keinginan <br />Bersama An Namiroh Travelindo, InsyaAllah Perjalanan Suci Anda Mudah, Aman, dan Penuh Keberkahan <br />Sekarang Giliran Anda Menjadi Tamu Allah
+            Jangan Biarkan Panggilan itu Hanya Menjadi Keinginan. <br />Bersama An Namiroh Travelindo, InsyaAllah Perjalanan Suci Anda Mudah, Aman, dan Penuh Keberkahan <br />Sekarang Giliran Anda Menjadi Tamu Allah
           </h2>
           <div className="flex items-center justify-center gap-3 mt-2 mb-6">
             <div className="h-px w-12 bg-orange-400/50" />
