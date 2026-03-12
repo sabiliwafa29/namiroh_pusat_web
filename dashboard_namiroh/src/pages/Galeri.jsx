@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { storageUrl } from '../api/storage'
 
 const VIDEOS = [
   { videoId: 'EkZOn4fLoF0', judul: '#EPS 1 Kenal Lebih Dekat dengan An Namiroh Travelindo', durasi: '04:07' },
@@ -10,18 +11,18 @@ const VIDEOS = [
 ]
 
 const FOTOS = [
-  { src: '/galeri/keberangkatan1.webp',               alt: 'Pemberangkatan jamaah' },
-  { src: '/galeri/keberangkatan2.webp',               alt: 'Keberangkatan umroh' },
-  { src: '/galeri/keberangkatan3.webp',               alt: 'Keberangkatan bersama' },
-  { src: '/galeri/keberangkatan4.webp',               alt: 'Persiapan keberangkatan' },
-  { src: '/galeri/keberangkatan5.webp',               alt: 'Jamaah siap berangkat' },
-  { src: '/galeri/keberangkatan6.webp',               alt: 'Momen keberangkatan' },
-  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-1.webp', alt: 'Galeri jamaah umroh 1' },
-  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-2.webp', alt: 'Galeri jamaah umroh 2' },
-  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-3.webp', alt: 'Galeri jamaah umroh 3' },
-  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-4.webp', alt: 'Galeri jamaah umroh 4' },
-  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-5.webp', alt: 'Galeri jamaah umroh 5' },
-  { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-6.webp', alt: 'Galeri jamaah umroh 6' },
+  { src: storageUrl('galeri/keberangkatan1.webp'),               alt: 'Pemberangkatan jamaah' },
+  { src: storageUrl('galeri/keberangkatan2.webp'),               alt: 'Keberangkatan umroh' },
+  { src: storageUrl('galeri/keberangkatan3.webp'),               alt: 'Keberangkatan bersama' },
+  { src: storageUrl('galeri/keberangkatan4.webp'),               alt: 'Persiapan keberangkatan' },
+  { src: storageUrl('galeri/keberangkatan5.webp'),               alt: 'Jamaah siap berangkat' },
+  { src: storageUrl('galeri/keberangkatan6.webp'),               alt: 'Momen keberangkatan' },
+  { src: storageUrl('galeri/Galeri-Jamaah-Umroh-An-Namiroh-1.webp'), alt: 'Galeri jamaah umroh 1' },
+  { src: storageUrl('galeri/Galeri-Jamaah-Umroh-An-Namiroh-2.webp'), alt: 'Galeri jamaah umroh 2' },
+  { src: storageUrl('galeri/Galeri-Jamaah-Umroh-An-Namiroh-3.webp'), alt: 'Galeri jamaah umroh 3' },
+  { src: storageUrl('galeri/Galeri-Jamaah-Umroh-An-Namiroh-4.webp'), alt: 'Galeri jamaah umroh 4' },
+  { src: storageUrl('galeri/Galeri-Jamaah-Umroh-An-Namiroh-5.webp'), alt: 'Galeri jamaah umroh 5' },
+  { src: storageUrl('galeri/Galeri-Jamaah-Umroh-An-Namiroh-6.webp'), alt: 'Galeri jamaah umroh 6' },
 ]
 
 export default function Galeri() {

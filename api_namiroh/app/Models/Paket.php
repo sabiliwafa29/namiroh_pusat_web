@@ -5,6 +5,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Paket extends Model
 {
@@ -22,6 +23,16 @@ class Paket extends Model
         'is_published' => 'boolean',
         'is_active'    => 'boolean',
     ];
+
+    // Otomatis kembalikan full URL storage agar frontend tidak perlu tahu lokasinya
+    public function getFlyerUrlAttribute(?string $value): ?string
+    {
+        if (!$value) return null;
+        // Jika sudah berupa URL lengkap, kembalikan apa adanya
+        if (str_starts_with($value, 'http')) return $value;
+        // Strip leading slash jika ada, lalu buat storage URL
+        return Storage::disk('public')->url(ltrim($value, '/'));
+    }
 
     public function jenisLayanan()   { return $this->belongsTo(JenisLayanan::class, 'jenis_layanan_id'); }
     public function harga()          { return $this->hasMany(PaketHarga::class, 'paket_id'); }

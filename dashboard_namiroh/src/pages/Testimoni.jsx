@@ -1,6 +1,7 @@
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { Link } from 'react-router-dom'
+import { storageUrl } from '../api/storage'
 
 const TESTIMONI = [
   {
@@ -8,7 +9,7 @@ const TESTIMONI = [
     kota: 'Tulungagung',
     tahun: '2025',
     bintang: 5,
-    foto: '/testimoni/bu-ika-tulungagung.jpg',
+    foto: storageUrl('testimoni/bu-ika-tulungagung.webp'),
     text: 'Alhamdulillah, rasanya sungguh luar biasa dan sangat mengharukan umroh bersama An Namiroh Travelindo! Saya merasa sangat terbantu dan senantiasa didampingi dalam setiap proses ibadah. Kehadiran Ibu Hari juga sebagai pendamping jemaah perempuan sangat memudahkan kami, terutama karena beliau menguasai bahasa Arab. Pelayanan yang diberikan pun sangat memuaskan. Alhamdulillah, terima kasih banyak An Namiroh Travelindo!',
   },
   {
@@ -16,7 +17,7 @@ const TESTIMONI = [
     kota: 'Surabaya',
     tahun: '2025',
     bintang: 5,
-    foto: '/testimoni/ning-umi-laila-surabaya.jpg',
+    foto: storageUrl('testimoni/ning-umi-laila-surabaya.webp'),
     text: 'Proses pelayanannya sangat praktis dan cepat, dimulai dari pendampingan pembuatan paspor hingga keberangkatan. Kami selalu didampingi sehingga tidak merasa bingung. Para mutawif sangat mengayomi seluruh jemaah, baik yang berusia muda maupun yang sudah lanjut usia. Prinsip An-Namiroh, "Jemaah senang, ibadah pun tenang," benar-benar terasa nyata.',
   },
   {
@@ -24,7 +25,7 @@ const TESTIMONI = [
     kota: 'Kandangan, Kediri',
     tahun: '2021',
     bintang: 5,
-    foto: '/testimoni/faridatus-sholichah-kediri.jpeg',
+    foto: storageUrl('testimoni/faridatus-sholichah-kediri.webp'),
     text: 'Alhamdulillah saya dari jamaah An Namiroh merasakan suasana pada saat itu bagus sekali begitupun untuk pelayanannya. Mulai dari hotel, juga bisa sholat beribadah berjamaah tidak ada halangan apapun. Kami juga bisa melakukan ibadah towaf berkali kali dan bisa ke roudhoh, Alhamdulillah. Terimakasih banyak untuk PT An Namiroh Travelindo, Semoga semakin baik dan Jaya.',
   },
   {
@@ -32,7 +33,7 @@ const TESTIMONI = [
     kota: 'Blitar',
     tahun: '2021',
     bintang: 5,
-    foto: '/testimoni/abah-sholeh-blitar.jpeg',
+    foto: storageUrl('testimoni/abah-sholeh-blitar.webp'),
     text: 'Alhamdulillah kami rombongan dari Blitar diberi kesempatan untuk bisa umroh New Normal 25 Januari 2021. Kita dikasih fasilitas yang luar biasa, paket ekonomi dengan fasilitas bintang 5. Di Madinah kami di Hotel Nozol Royal Inn, di Makkah kami di Hotel Marriot. Ibadah thawaf dan sai kita diberi kemudahan yang luar biasa. Sekian pengalaman dari Abah Soleh-Blitar.',
   },
   {
@@ -40,7 +41,7 @@ const TESTIMONI = [
     kota: 'Pandaan, Pasuruan',
     tahun: '2021',
     bintang: 5,
-    foto: '/testimoni/neng-kholifah-pasuruan.jpeg',
+    foto: storageUrl('testimoni/neng-kholifah-pasuruan.webp'),
     text: 'Alhamdulillah saya beserta rombongan ditakdirkan oleh Allah SWT Umroh New Normal pada 25 Januari 2021. Kami dilayani, diperhatikan, dan hotel yang ditempati sangat bagus dan nyaman. Muthowifnya sangat baik, sabar mendampingi jamaah. Tamu tamu Allah istimewa sekali. Terimakasih PT An Namiroh Travelindo maju terus untuk melayani tamu-tamu Allah.',
   },
   {
@@ -48,7 +49,7 @@ const TESTIMONI = [
     kota: '—',
     tahun: '2021',
     bintang: 5,
-    foto: '/testimoni/bpk-jayati-yuliatin.jpg',
+    foto: storageUrl('testimoni/bpk-jayati-yuliatin.webp'),
     text: 'Terimakasih sekali kepada TL Neng Ifah Badri, dari awal keberangkatan sampai Jeddah Madinah dan menuju Masjidil Haram benar benar ibadah yang tidak pernah saya bayangkan sebelumnya. Betul betul ibadah yang istimewa sekali dan sangat puas. Mudah mudahan semoga bisa berangkat lagi bersama keluarga besar An Namiroh.',
   },
   {
@@ -56,7 +57,7 @@ const TESTIMONI = [
     kota: 'Sidoarjo',
     tahun: '2021',
     bintang: 5,
-    foto: '/testimoni/bu-ilmi-fatmawati-sidoarjo.jpeg',
+    foto: storageUrl('testimoni/bu-ilmi-fatmawati-sidoarjo.webp'),
     text: 'Alhamdulillah saya sangat bersyukur, puas sekali dengan pelayanan yang diberikan dari An Namiroh selama kita di Indonesia, di Mekkah, juga di Madinah. Untuk hotel dan makanan yang telah disediakan sangat memuaskan sekali. Terimakasih banyak kepada travel An Namiroh yang memberikan fasilitas yang sebagus dan sebaik-baiknya.',
   },
   {
@@ -64,7 +65,7 @@ const TESTIMONI = [
     kota: 'Tuban',
     tahun: '2021',
     bintang: 5,
-    foto: '/testimoni/bu-endang-tuban.jpeg',
+    foto: storageUrl('testimoni/bu-endang-tuban.webp'),
     text: 'Saya sangat puas dengan pelayanan PT An Namiroh, mulai dari transportasi nyaman, kamar hotel berbintang 5 yang membuat kita sangat nyaman, dan kita juga memilih makanan sendiri sesuai selera. Ingin lagi kembali ke rumah Baitullah bersama PT An Namiroh. Bagi teman teman yang ingin umroh, ikut PT An Namiroh saja, dijamin tidak mengecewakan.',
   },
   {
@@ -72,7 +73,7 @@ const TESTIMONI = [
     kota: 'Tuban',
     tahun: '2021',
     bintang: 5,
-    foto: '/testimoni/apiq-tuban.jpeg',
+    foto: storageUrl('testimoni/apiq-tuban.webp'),
     text: 'Alhamdulillah Umroh New Normal keberangkatan tgl 25/01/2021 bersama PT. An Namiroh Travelindo sangat nyaman dan aman, ibadah lebih khusyuk, pelayanan memuaskan dan hotel sangat dekat dengan Masjid Nabawi maupun Masjidil Haram. Umroh New Normal bersama PT An Namiroh Travelindo jelas travelnya jelas harganya dan jelas pelayanannya.',
   },
 ]

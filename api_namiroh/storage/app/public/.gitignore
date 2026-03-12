@@ -1,2 +1,19 @@
 *
 !.gitignore
+# Izinkan folder gambar static yang di-serve ke frontend
+!banner/
+banner/*
+!banner/*.webp
+!banner/*.png
+!flyer/
+flyer/*
+!flyer/*.webp
+!flyer/*.png
+!galeri/
+galeri/*
+!galeri/*.webp
+!galeri/*.png
+!testimoni/
+testimoni/*
+!testimoni/*.webp
+!testimoni/*.png

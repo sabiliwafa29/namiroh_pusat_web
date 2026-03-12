@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import api from '../api/axios'
+import { storageUrl } from '../api/storage'
 
 const PROMO_LIST = [
-  { id: 1, label: 'Umroh Best Seller', desc: 'Mulai Rp 23.000.000', link: '/paket', img: '/banner/umroh-gus-ferry.jpg' },
-  { id: 2, label: 'Umroh Spesial Ramadhan', desc: 'Mulai Rp 34.000.000', link: '/paket', img: '/banner/umroh-spesial-ramadhan.jpg' },
-  { id: 3, label: 'Program Badal Umroh dan Haji', desc: 'Mulai Rp 3.000.000', link: '/paket', img: '/banner/program-badal.jpeg' },
-  { id: 4, label: 'Umroh Hanya 500rb', desc: 'Seat Terbatas!', link: '/paket', img: '/banner/haji_500rb.jpg' },
+  { id: 1, label: 'Umroh Best Seller', desc: 'Mulai Rp 23.000.000', link: '/paket', img: storageUrl('banner/umroh-gus-ferry.webp') },
+  { id: 2, label: 'Umroh Spesial Ramadhan', desc: 'Mulai Rp 34.000.000', link: '/paket', img: storageUrl('banner/umroh-spesial-ramadhan.webp') },
+  { id: 3, label: 'Program Badal Umroh dan Haji', desc: 'Mulai Rp 3.000.000', link: '/paket', img: storageUrl('banner/program-badal.webp') },
+  { id: 4, label: 'Umroh Hanya 500rb', desc: 'Seat Terbatas!', link: '/paket', img: storageUrl('banner/haji_500rb.webp') },
 ]
 
 export default function FloatingWidgets() {

@@ -179,7 +179,7 @@ export default function Paket() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {jadwalList.map(j => {
+                  {jadwalList.map((j, idx) => {
                     return (
                       <div key={j.id} className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:shadow-md transition">
                         {/* Flyer */}
@@ -189,7 +189,7 @@ export default function Paket() {
                               src={j.paket.flyer_url}
                               alt={j.paket?.nama_paket}
                               className="w-full"
-                              loading="lazy"
+                              loading={idx < 3 ? 'eager' : 'lazy'}
                             />
                             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent px-4 py-3">
                               <div className="text-orange-300 font-extrabold text-lg drop-shadow-[0_1px_3px_rgba(0,0,0,0.9)]">
@@ -263,7 +263,7 @@ export default function Paket() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {data.map((p) => (
+              {data.map((p, idx) => (
                 <div key={p.id} className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition border border-gray-100">
                   {/* Flyer Image or Gradient Header */}
                   {p.flyer_url ? (
@@ -272,7 +272,7 @@ export default function Paket() {
                         src={p.flyer_url}
                         alt={p.nama_paket}
                         className="w-full"
-                        loading="lazy"
+                        loading={idx < 3 ? 'eager' : 'lazy'}
                       />
                       <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent px-4 py-4">
                         <div className="text-xs text-green-300 font-medium mb-0.5">{p.jenis_layanan?.nama}</div>

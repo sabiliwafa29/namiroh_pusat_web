@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import api from '../api/axios'
+import { storageUrl } from '../api/storage'
 
 const stats = [
   { value: '24+',    label: 'Tahun Pengalaman' },
@@ -23,17 +24,17 @@ const layanan = [
 const testimonials = [
   {
     name: 'Bu Ika K-Cunk Motor', kota: 'Tulungagung', bintang: 5,
-    foto: '/testimoni/bu-ika-tulungagung.jpg',
+    foto: storageUrl('testimoni/bu-ika-tulungagung.webp'),
     text: 'Alhamdulillah, rasanya sungguh luar biasa dan sangat mengharukan umroh bersama An Namiroh Travelindo! Saya merasa sangat terbantu dan senantiasa didampingi dalam setiap proses ibadah. Pelayanan yang diberikan pun sangat memuaskan. Alhamdulillah, terima kasih banyak An Namiroh Travelindo!',
   },
   {
     name: 'Ning Umi Laila', kota: 'Surabaya', bintang: 5,
-    foto: '/testimoni/ning-umi-laila-surabaya.jpg',
+    foto: storageUrl('testimoni/ning-umi-laila-surabaya.webp'),
     text: 'Proses pelayanannya sangat praktis dan cepat, dimulai dari pendampingan pembuatan paspor hingga keberangkatan. Kami selalu didampingi sehingga tidak merasa bingung. Prinsip An-Namiroh, "Jemaah senang, ibadah pun tenang," benar-benar terasa nyata.',
   },
   {
     name: 'Neng Kholifah', kota: 'Pandaan, Pasuruan', bintang: 5,
-    foto: '/testimoni/neng-kholifah-pasuruan.jpeg',
+    foto: storageUrl('testimoni/neng-kholifah-pasuruan.webp'),
     text: 'Kami dilayani, diperhatikan, dan hotel yang ditempati sangat bagus dan nyaman. Muthowifnya sangat baik, sabar mendampingi jamaah. Tamu tamu Allah istimewa sekali. Terimakasih PT An Namiroh Travelindo maju terus untuk melayani tamu-tamu Allah.',
   },
 ]
@@ -109,7 +110,7 @@ export default function Home() {
             >×</button>
             {/* Banner image */}
             <img
-              src="/galeri/banner-umroh-baru.webp"
+              src={storageUrl('galeri/banner-umroh-baru.webp')}
               alt="Promo Umroh Terbaru"
               className="w-full object-cover max-h-72 sm:max-h-64"
               loading="eager"
@@ -149,7 +150,7 @@ export default function Home() {
 
       {/* HERO */}
       <section className="text-white pt-24 pb-10 px-4 relative overflow-hidden"
-        style={{ backgroundImage: "url('/galeri/Galeri-Jamaah-Umroh-An-Namiroh-1.webp')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+        style={{ backgroundImage: `url('${storageUrl('galeri/Galeri-Jamaah-Umroh-An-Namiroh-1.webp')}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
         {/* Dark overlay agar teks tetap terbaca */}
         <div className="absolute inset-0 bg-green-950/55" />
         {/* Islamic geometric star pattern overlay */}
@@ -496,14 +497,14 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
-              { src: '/galeri/keberangkatan1.webp', alt: 'Pemberangkatan jamaah' },
-              { src: '/galeri/keberangkatan2.webp', alt: 'Keberangkatan umroh' },
-              { src: '/galeri/keberangkatan3.webp', alt: 'Keberangkatan bersama' },
-              { src: '/galeri/keberangkatan4.webp', alt: 'Persiapan keberangkatan' },
-              { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-1.webp', alt: 'Keberangkatan umroh' },
-              { src: '/galeri/Galeri-Jamaah-Umroh-An-Namiroh-2.webp', alt: 'Keberangkatan umroh' },
-              { src: '/galeri/keberangkatan5.webp', alt: 'Jamaah siap berangkat' },
-              { src: '/galeri/keberangkatan6.webp', alt: 'Momen keberangkatan' },
+              { src: storageUrl('galeri/keberangkatan1.webp'), alt: 'Pemberangkatan jamaah' },
+              { src: storageUrl('galeri/keberangkatan2.webp'), alt: 'Keberangkatan umroh' },
+              { src: storageUrl('galeri/keberangkatan3.webp'), alt: 'Keberangkatan bersama' },
+              { src: storageUrl('galeri/keberangkatan4.webp'), alt: 'Persiapan keberangkatan' },
+              { src: storageUrl('galeri/Galeri-Jamaah-Umroh-An-Namiroh-1.webp'), alt: 'Keberangkatan umroh' },
+              { src: storageUrl('galeri/Galeri-Jamaah-Umroh-An-Namiroh-2.webp'), alt: 'Keberangkatan umroh' },
+              { src: storageUrl('galeri/keberangkatan5.webp'), alt: 'Jamaah siap berangkat' },
+              { src: storageUrl('galeri/keberangkatan6.webp'), alt: 'Momen keberangkatan' },
             ].map((item, i) => (
               <div key={i} className="overflow-hidden rounded-xl aspect-square group">
                 <img

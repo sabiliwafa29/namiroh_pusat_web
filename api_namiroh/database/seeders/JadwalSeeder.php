@@ -10,11 +10,20 @@ class JadwalSeeder extends Seeder
     public function run(): void
     {
         // Idempotent — wipe & re-seed safely
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        $driver = DB::getDriverName();
+        if ($driver === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = OFF');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        }
         DB::table('sesi_manasik')->truncate();
         DB::table('jadwal_hotel')->truncate();
         DB::table('jadwal')->truncate();
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+        if ($driver === 'sqlite') {
+            DB::statement('PRAGMA foreign_keys = ON');
+        } else {
+            DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+        }
 
         /*
          * Hotel ID reference:
