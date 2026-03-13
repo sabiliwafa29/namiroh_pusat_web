@@ -16,6 +16,7 @@ MAIN_PUBLIC="${MAIN_PUBLIC:-$HOME/public_html}"
 API_DOMAIN="${API_DOMAIN:-api.example.com}"
 API_PUBLIC="${API_PUBLIC:-$HOME/domains/$API_DOMAIN/public_html}"
 BRANCH="${1:-main}"
+SKIP_FRONTEND="${SKIP_FRONTEND:-0}"
 
 sync_dir() {
   local src="$1"
@@ -33,7 +34,9 @@ sync_dir() {
 printf "[0/8] Checking runtime dependencies\n"
 command -v php >/dev/null 2>&1 || { echo "php is required"; exit 1; }
 command -v composer >/dev/null 2>&1 || { echo "composer is required"; exit 1; }
-command -v npm >/dev/null 2>&1 || { echo "npm is required"; exit 1; }
+if [ "$SKIP_FRONTEND" != "1" ]; then
+  command -v npm >/dev/null 2>&1 || { echo "npm is required (or set SKIP_FRONTEND=1)"; exit 1; }
+fi
 php -r 'exit(version_compare(PHP_VERSION, "8.3.0", ">=") ? 0 : 1);' || {
   echo "PHP 8.3+ is required";
   exit 1;
@@ -56,12 +59,25 @@ php artisan route:cache
 php artisan view:cache
 
 printf "[4/8] Building frontend\n"
-cd "$WEB_DIR"
-npm ci
-npm run build
+if [ "$SKIP_FRONTEND" = "1" ]; then
+  printf "Skipping frontend build because SKIP_FRONTEND=1\n"
+else
+  cd "$WEB_DIR"
+  npm ci
+  npm run build
+fi
 
 printf "[5/8] Publishing frontend to main domain\n"
-sync_dir "$WEB_DIR/dist/" "$MAIN_PUBLIC/"
+if [ "$SKIP_FRONTEND" = "1" ]; then
+  printf "Skipping frontend publish because SKIP_FRONTEND=1\n"
+else
+  if [ ! -d "$WEB_DIR/dist" ]; then
+    echo "Frontend dist not found at $WEB_DIR/dist"
+    echo "Run npm build first or set SKIP_FRONTEND=1 for backend-only deploy"
+    exit 1
+  fi
+  sync_dir "$WEB_DIR/dist/" "$MAIN_PUBLIC/"
+fi
 
 printf "[6/8] Publishing Laravel public files to API subdomain\n"
 sync_dir "$API_DIR/public/" "$API_PUBLIC/"
