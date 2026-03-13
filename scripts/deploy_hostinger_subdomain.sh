@@ -42,6 +42,13 @@ php -r 'exit(version_compare(PHP_VERSION, "8.3.0", ">=") ? 0 : 1);' || {
   exit 1;
 }
 
+if [ "$SKIP_FRONTEND" = "1" ] && [ ! -d "$MAIN_PUBLIC" ]; then
+  echo "MAIN_PUBLIC directory not found: $MAIN_PUBLIC"
+  echo "Set MAIN_PUBLIC to your main domain web root, for example:"
+  echo "MAIN_PUBLIC=$HOME/domains/annamirohtravelindo.com/public_html"
+  exit 1
+fi
+
 printf "[1/8] Updating repository branch %s\n" "$BRANCH"
 cd "$ROOT_DIR"
 git fetch origin "$BRANCH"
@@ -111,6 +118,7 @@ require '${API_DIR}/vendor/autoload.php';
 PHP
 
 printf "[8/8] Writing SPA rewrite for main domain\n"
+mkdir -p "$MAIN_PUBLIC"
 cat > "$MAIN_PUBLIC/.htaccess" <<'HTACCESS'
 <IfModule mod_rewrite.c>
   RewriteEngine On
