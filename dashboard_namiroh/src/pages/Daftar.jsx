@@ -60,7 +60,8 @@ export default function Daftar() {
           const detail = res.data.data
           setPaketDetail(detail)
           const today = new Date().toISOString().split('T')[0]
-          const jadwal = detail?.jadwal?.filter(j => j.status === 'OPEN' && j.tanggal_berangkat >= today) || []
+          const jadwal = detail?.jadwal?.filter(j => j.status === 'OPEN' && j.tanggal_berangkat >= today)
+            .sort((a, b) => a.tanggal_berangkat.localeCompare(b.tanggal_berangkat)) || []
           setJadwalList(jadwal)
           // Reset jadwal_id jika jadwal berubah
           setForm(prev => ({ ...prev, jadwal_id: '' }))

@@ -36,6 +36,6 @@ class Paket extends Model
 
     public function jenisLayanan()   { return $this->belongsTo(JenisLayanan::class, 'jenis_layanan_id'); }
     public function harga()          { return $this->hasMany(PaketHarga::class, 'paket_id'); }
-    public function jadwal()         { return $this->hasMany(Jadwal::class, 'paket_id'); }
+    public function jadwal()         { return $this->hasMany(Jadwal::class, 'paket_id')->orderBy('tanggal_berangkat', 'asc'); }
     public function itinerary()      { return $this->hasMany(Itinerary::class, 'paket_id')->orderBy('hari_ke'); }
 }

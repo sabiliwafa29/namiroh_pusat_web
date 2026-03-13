@@ -6,11 +6,13 @@ import api from '../api/axios'
 
 export default function PaketDetail() {
   const { id } = useParams()
-  const [paket, setPaket]   = useState(null)
+  const [paket, setPaket] = useState(null)
   const [loading, setLoading] = useState(true)
 
   const today = new Date().toISOString().split('T')[0]
-  const upcomingJadwal = (paket?.jadwal || []).filter(j => j.status === 'OPEN' && j.tanggal_berangkat >= today)
+  const upcomingJadwal = (paket?.jadwal || [])
+    .filter(j => j.status === 'OPEN' && j.tanggal_berangkat >= today)
+    .sort((a, b) => a.tanggal_berangkat.localeCompare(b.tanggal_berangkat))
   const kondisi = upcomingJadwal.length > 0 ? 'A' : (paket?.jadwal?.length ?? 0) > 0 ? 'B' : 'C'
 
   useEffect(() => {
@@ -116,7 +118,7 @@ export default function PaketDetail() {
                     <div key={j.id} className="flex items-center justify-between border rounded-lg px-4 py-3">
                       <div>
                         <div className="text-base font-medium text-gray-800">
-                          {new Date(j.tanggal_berangkat).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' })}
+                          {new Date(j.tanggal_berangkat).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                         </div>
                         <div className="text-sm text-gray-500">{j.maskapai?.nama} · {j.kota_keberangkatan}</div>
                       </div>
