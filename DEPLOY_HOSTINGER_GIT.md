@@ -79,7 +79,7 @@ Eksekusi (contoh):
 ```bash
 cd ~/namiroh_pusat_web
 chmod +x scripts/deploy_hostinger_subdomain.sh
-API_DOMAIN=api.annamirohtravelindo.com ./scripts/deploy_hostinger_subdomain.sh main
+MAIN_PUBLIC=$HOME/domains/annamirohtravelindo.com/public_html API_DOMAIN=api.annamirohtravelindo.com ./scripts/deploy_hostinger_subdomain.sh main
 ```
 
 Mode tanpa npm (deploy backend saja):
@@ -119,7 +119,7 @@ API_DOMAIN=api.annamirohtravelindo.com ./scripts/deploy_hostinger_subdomain.sh m
 Atau backend-only:
 
 ```bash
-SKIP_FRONTEND=1 API_DOMAIN=api.annamirohtravelindo.com ./scripts/deploy_hostinger_subdomain.sh main
+SKIP_FRONTEND=1 MAIN_PUBLIC=$HOME/domains/annamirohtravelindo.com/public_html API_DOMAIN=api.annamirohtravelindo.com ./scripts/deploy_hostinger_subdomain.sh main
 ```
 
 ## 7) Verifikasi

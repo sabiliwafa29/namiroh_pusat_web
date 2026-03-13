@@ -29,18 +29,18 @@ const emptyForm = {
 
 export default function Daftar() {
   const [searchParams] = useSearchParams()
-  const [step, setStep]         = useState(0)
-  const [form, setForm]         = useState({
+  const [step, setStep] = useState(0)
+  const [form, setForm] = useState({
     ...emptyForm,
-    paket_id:  searchParams.get('paket_id')  || '',
+    paket_id: searchParams.get('paket_id') || '',
     jadwal_id: searchParams.get('jadwal_id') || '',
   })
   const [paketList, setPaketList] = useState([])
   const [jadwalList, setJadwalList] = useState([])
   const [paketDetail, setPaketDetail] = useState(null)
-  const [loading, setLoading]   = useState(false)
-  const [success, setSuccess]   = useState(false)
-  const [error, setError]       = useState('')
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState('')
   const [nomorReg, setNomorReg] = useState('')
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function Daftar() {
   }, [])
 
   const isNonSchedulable = (p) => p != null && [4, 5, 6, 7].includes(Number(p.jenis_layanan_id))
-  const isPastPaket      = (p) => p != null && (p.upcoming_jadwal_count ?? 0) === 0 && (p.total_jadwal_count ?? 0) > 0
+  const isPastPaket = (p) => p != null && (p.upcoming_jadwal_count ?? 0) === 0 && (p.total_jadwal_count ?? 0) > 0
 
   useEffect(() => {
     if (form.paket_id) {
@@ -60,8 +60,8 @@ export default function Daftar() {
           const detail = res.data.data
           setPaketDetail(detail)
           const today = new Date().toISOString().split('T')[0]
-          const jadwal = detail?.jadwal?.filter(j => j.status === 'OPEN' && j.tanggal_berangkat >= today)
-            .sort((a, b) => a.tanggal_berangkat.localeCompare(b.tanggal_berangkat)) || []
+          const jadwal = (detail?.jadwal?.filter(j => j.status === 'OPEN' && j.tanggal_berangkat >= today) || [])
+            .sort((a, b) => a.tanggal_berangkat.localeCompare(b.tanggal_berangkat))
           setJadwalList(jadwal)
           // Reset jadwal_id jika jadwal berubah
           setForm(prev => ({ ...prev, jadwal_id: '' }))
@@ -110,23 +110,23 @@ export default function Daftar() {
 
       const res = await api.post('/daftar', {
         // Data jadwal
-        jadwal_id:           form.jadwal_id,
-        tipe_kamar:          form.tipe_kamar,
-        harga_disepakati:    harga,
+        jadwal_id: form.jadwal_id,
+        tipe_kamar: form.tipe_kamar,
+        harga_disepakati: harga,
         // Data jamaah
-        nama_lengkap:        form.nama_lengkap,
-        nama_latin:          form.nama_latin || undefined,
-        jenis_kelamin:       form.jenis_kelamin,
-        tempat_lahir:        form.tempat_lahir || undefined,
-        tanggal_lahir:       form.tanggal_lahir || undefined,
-        no_hp:               form.no_hp,
-        email:               form.email || undefined,
-        alamat_jalan:        form.alamat_jalan || undefined,
-        no_paspor:           form.no_paspor || undefined,
-        paspor_berlaku_sd:   form.paspor_berlaku_sd || undefined,
+        nama_lengkap: form.nama_lengkap,
+        nama_latin: form.nama_latin || undefined,
+        jenis_kelamin: form.jenis_kelamin,
+        tempat_lahir: form.tempat_lahir || undefined,
+        tanggal_lahir: form.tanggal_lahir || undefined,
+        no_hp: form.no_hp,
+        email: form.email || undefined,
+        alamat_jalan: form.alamat_jalan || undefined,
+        no_paspor: form.no_paspor || undefined,
+        paspor_berlaku_sd: form.paspor_berlaku_sd || undefined,
         nama_kontak_darurat: form.nama_kontak_darurat || undefined,
-        hp_kontak_darurat:   form.hp_kontak_darurat || undefined,
-        hubungan_darurat:    form.hubungan_darurat || undefined,
+        hp_kontak_darurat: form.hp_kontak_darurat || undefined,
+        hubungan_darurat: form.hubungan_darurat || undefined,
       })
 
       setNomorReg(res.data.data.nomor_registrasi)
@@ -187,9 +187,8 @@ export default function Daftar() {
           <div className="flex items-center justify-center gap-2 mt-6">
             {steps.map((s, i) => (
               <div key={i} className="flex items-center gap-2">
-                <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ${
-                  i <= step ? 'bg-yellow-400 text-green-900' : 'bg-green-700 text-green-200'
-                }`}>{i + 1}</div>
+                <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold ${i <= step ? 'bg-yellow-400 text-green-900' : 'bg-green-700 text-green-200'
+                  }`}>{i + 1}</div>
                 <span className={`text-sm hidden sm:block ${i <= step ? 'text-yellow-400' : 'text-green-400'}`}>{s}</span>
                 {i < steps.length - 1 && <div className={`w-10 h-px ${i < step ? 'bg-yellow-400' : 'bg-green-700'}`} />}
               </div>
@@ -221,8 +220,8 @@ export default function Daftar() {
                         {isNonSchedulable(p)
                           ? `⛔ ${p.nama_paket} — Hubungi CS`
                           : isPastPaket(p)
-                          ? `⏰ ${p.nama_paket} — Jadwal Sudah Habis`
-                          : `${p.nama_paket} — Rp ${Number(p.harga_dasar).toLocaleString('id-ID')}`}
+                            ? `⏰ ${p.nama_paket} — Jadwal Sudah Habis`
+                            : `${p.nama_paket} — Rp ${Number(p.harga_dasar).toLocaleString('id-ID')}`}
                       </option>
                     ))}
                   </select>
@@ -233,9 +232,8 @@ export default function Daftar() {
                     <label className="block text-base font-medium text-gray-700 mb-1">Pilih Jadwal *</label>
                     <div className="space-y-2">
                       {jadwalList.map(j => (
-                        <label key={j.id} className={`flex items-center justify-between border rounded-xl px-4 py-3 cursor-pointer transition ${
-                          form.jadwal_id == j.id ? 'border-green-500 bg-green-50' : 'hover:border-gray-400'
-                        }`}>
+                        <label key={j.id} className={`flex items-center justify-between border rounded-xl px-4 py-3 cursor-pointer transition ${form.jadwal_id == j.id ? 'border-green-500 bg-green-50' : 'hover:border-gray-400'
+                          }`}>
                           <div className="flex items-center gap-3">
                             <input type="radio" name="jadwal" value={j.id}
                               checked={form.jadwal_id == j.id}
@@ -243,7 +241,7 @@ export default function Daftar() {
                               className="accent-green-700" />
                             <div>
                               <div className="text-base font-semibold">
-                                {new Date(j.tanggal_berangkat).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' })}
+                                {new Date(j.tanggal_berangkat).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })}
                               </div>
                               <div className="text-sm text-gray-600">{j.maskapai?.nama} · {j.kota_keberangkatan}</div>
                             </div>
@@ -288,12 +286,11 @@ export default function Daftar() {
                 <div>
                   <label className="block text-base font-medium text-gray-700 mb-1">Tipe Kamar</label>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {['QUAD','TRIPLE','DOUBLE','SINGLE'].map(t => {
+                    {['QUAD', 'TRIPLE', 'DOUBLE', 'SINGLE'].map(t => {
                       const h = paketDetail?.harga?.find(h => h.tipe_kamar === t)
                       return (
-                        <label key={t} className={`border rounded-xl p-3 text-center cursor-pointer transition ${
-                          form.tipe_kamar === t ? 'border-green-500 bg-green-50' : 'hover:border-gray-400'
-                        }`}>
+                        <label key={t} className={`border rounded-xl p-3 text-center cursor-pointer transition ${form.tipe_kamar === t ? 'border-green-500 bg-green-50' : 'hover:border-gray-400'
+                          }`}>
                           <input type="radio" name="tipe" value={t} checked={form.tipe_kamar === t}
                             onChange={e => f('tipe_kamar', e.target.value)} className="hidden" />
                           <div className="text-sm font-bold text-gray-700">{t}</div>
