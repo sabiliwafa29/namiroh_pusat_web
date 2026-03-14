@@ -17,6 +17,35 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: '20.x'
+          cache: npm
+          cache-dependency-path: dashboard_namiroh/package-lock.json
+
+      - name: Install dependencies
+        working-directory: dashboard_namiroh
+        run: npm ci
+
+      - name: Build production
+        working-directory: dashboard_namiroh
+        run: npm run build
+
+      - name: Upload dist to Hostinger
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: 65002
+          source: dashboard_namiroh/dist/*
+          target: /home/u190975834/namiroh_dashboard_dist
+          overwrite: true
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -29,60 +58,29 @@ jobs:
             set -euo pipefail
 
             DOMAIN_ROOT="/home/u190975834/public_html"
-            REPO_DIR="$HOME/namiroh_pusat_web"
-            REPO_URL="https://github.com/sabiliwafa29/namiroh_pusat_web.git"
-            NVM_DIR="$HOME/.nvm"
-
-            ensure_node() {
-              if command -v npm >/dev/null 2>&1 && command -v node >/dev/null 2>&1; then
-                echo "Node/npm already available"
-                node -v
-                npm -v
-                return 0
-              fi
-
-              echo "Node/npm not found, installing Node 20 via nvm"
-              if [ ! -s "$NVM_DIR/nvm.sh" ]; then
-                curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-              fi
-
-              # shellcheck disable=SC1090
-              . "$NVM_DIR/nvm.sh"
-              nvm install 20
-              nvm use 20
-
-              node -v
-              npm -v
-            }
-
-            echo "=== Pull latest code ==="
-            echo "HOME=$HOME"
-            echo "REPO_DIR=$REPO_DIR"
-
-            if [ -d "$REPO_DIR/.git" ]; then
-              cd "$REPO_DIR"
-              git remote -v
-              git fetch origin main
-              git reset --hard origin/main
-            else
-              if [ -d "$REPO_DIR" ]; then
-                # Existing non-git directory breaks git clone; clean and re-clone.
-                rm -rf "$REPO_DIR"
-              fi
-              git clone "$REPO_URL" "$REPO_DIR"
-            fi
-
-            echo "=== Install & Build React ==="
-            ensure_node
-            cd "$REPO_DIR/dashboard_namiroh"
-            npm ci
-            npm run build
+            UPLOAD_BASE="/home/u190975834/namiroh_dashboard_dist"
+            UPLOAD_DIR=""
 
             echo "=== Deploy to public_html ==="
+            if [ -d "$UPLOAD_BASE/dashboard_namiroh/dist" ]; then
+              UPLOAD_DIR="$UPLOAD_BASE/dashboard_namiroh/dist"
+            elif [ -d "$UPLOAD_BASE/dist" ]; then
+              UPLOAD_DIR="$UPLOAD_BASE/dist"
+            else
+              UPLOAD_DIR="$UPLOAD_BASE"
+            fi
+
+            if [ ! -f "$UPLOAD_DIR/index.html" ]; then
+              echo "Uploaded build not found in expected locations"
+              ls -la "$UPLOAD_BASE" || true
+              exit 1
+            fi
+
             mkdir -p "$DOMAIN_ROOT"
             # Keep .well-known if present (SSL/challenge files) and clean the rest.
             find "$DOMAIN_ROOT" -mindepth 1 ! -path "$DOMAIN_ROOT/.well-known*" -exec rm -rf {} +
-            cp -r "$REPO_DIR/dashboard_namiroh/dist/." "$DOMAIN_ROOT/"
+            cp -r "$UPLOAD_DIR/." "$DOMAIN_ROOT/"
+            rm -rf "$UPLOAD_BASE"
 
             chmod 755 "$DOMAIN_ROOT"
             find "$DOMAIN_ROOT" -type f -exec chmod 644 {} \;
