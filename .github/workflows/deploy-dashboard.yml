@@ -128,8 +128,8 @@ jobs:
             echo "Selected DOMAIN_ROOT=$DOMAIN_ROOT"
 
             mkdir -p "$DOMAIN_ROOT"
-            # Keep .well-known if present (SSL/challenge files) and clean the rest.
-            find "$DOMAIN_ROOT" -mindepth 1 ! -path "$DOMAIN_ROOT/.well-known*" -exec rm -rf {} +
+            # Keep .well-known and /api when cleaning dashboard files.
+            find "$DOMAIN_ROOT" -mindepth 1 ! -path "$DOMAIN_ROOT/.well-known*" ! -path "$DOMAIN_ROOT/api*" -exec rm -rf {} +
             cp -r "$UPLOAD_DIR/." "$DOMAIN_ROOT/"
             rm -rf "$UPLOAD_BASE"
 
