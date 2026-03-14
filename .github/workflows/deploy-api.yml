@@ -38,9 +38,9 @@ jobs:
 
             API_PUBLIC_CANDIDATE_1="$HOME/domains/api.annamirohtravelindo.com/public_html"
             API_PUBLIC_CANDIDATE_2="$HOME/domains/annamirohtravelindo.com/public_html/api"
-            API_PUBLIC_CANDIDATE_3="$HOME/domains/api.annamirohtravelindo.com"
 
-            for CANDIDATE in "$API_PUBLIC_CANDIDATE_1" "$API_PUBLIC_CANDIDATE_2" "$API_PUBLIC_CANDIDATE_3"; do
+            # Only deploy to valid web roots. Never deploy to parent domain directory.
+            for CANDIDATE in "$API_PUBLIC_CANDIDATE_1" "$API_PUBLIC_CANDIDATE_2"; do
               if [ -d "$CANDIDATE" ]; then
                 API_TARGETS="$API_TARGETS $CANDIDATE"
                 if [ -z "$API_PUBLIC" ]; then
@@ -146,6 +146,10 @@ jobs:
 
             for TARGET in $API_TARGETS; do
               deploy_target "$TARGET"
+              if [ ! -f "$TARGET/index.php" ]; then
+                echo "Deploy failed: missing $TARGET/index.php"
+                exit 1
+              fi
             done
 
             echo "=== Post-deploy checks ==="
