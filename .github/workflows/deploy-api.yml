@@ -41,6 +41,7 @@ jobs:
           script_stop: true
           script: &deploy_api_script |
             set -euo pipefail
+            trap 'echo "ERROR at line $LINENO"' ERR
 
             REPO_DIR="$HOME/namiroh_pusat_web"
             REPO_URL="https://github.com/sabiliwafa29/namiroh_pusat_web.git"
@@ -80,6 +81,7 @@ jobs:
 
             mkdir -p "$API_PUBLIC"
             echo "API_PUBLIC=$API_PUBLIC"
+            echo "=== Prepare environment file ==="
 
             if [ ! -f "$API_DIR/.env" ]; then
               if [ -f "$API_DIR/.env.example" ]; then
@@ -90,6 +92,8 @@ jobs:
                 exit 1
               fi
             fi
+
+            echo "=== Inject environment values ==="
 
             escape_sed() {
               printf '%s' "$1" | sed -e 's/[\\/&]/\\&/g'
@@ -128,6 +132,7 @@ jobs:
             [ -n "${ENV_DB_DATABASE:-}" ] && upsert_env DB_DATABASE "$ENV_DB_DATABASE"
             [ -n "${ENV_DB_USERNAME:-}" ] && upsert_env DB_USERNAME "$ENV_DB_USERNAME"
             [ -n "${ENV_DB_PASSWORD:-}" ] && upsert_env DB_PASSWORD "\"$ENV_DB_PASSWORD\""
+            echo "Environment values updated"
 
             echo "=== Install Laravel dependencies ==="
             cd "$API_DIR"
