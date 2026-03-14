@@ -28,22 +28,15 @@ jobs:
         working-directory: dashboard_namiroh
         run: npm run build
 
-      - name: Create tar archive of dist
+      - name: Push dist to repo (commit dist)
         run: |
-          cd dashboard_namiroh
-          tar -czf dist.tar.gz dist/
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add -f dashboard_namiroh/dist/
+          git commit -m "chore: build dist for deployment" || true
+          git push origin main || true
 
-      - name: Upload dist archive via SCP
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.HOSTINGER_HOST }}
-          username: ${{ secrets.HOSTINGER_USER }}
-          key: ${{ secrets.HOSTINGER_SSH_KEY }}
-          port: 65002
-          source: "dashboard_namiroh/dist.tar.gz"
-          target: "~/"
-
-      - name: Extract and Deploy to Hostinger
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
@@ -54,15 +47,13 @@ jobs:
           script: |
             set -e
             
-            echo "📥 Extracting built files..."
-            cd ~
-            tar -xzf dist.tar.gz
+            echo "📥 Pull latest changes from git..."
+            cd ~/namiroh_pusat_web
+            git pull origin main
             
-            echo "🔄 Moving dist/* to public_html/"
+            echo "🔄 Copy dist to public_html..."
             rm -rf ~/public_html/*
-            mv ~/dist/* ~/public_html/
-            rmdir ~/dist
-            rm -f ~/dist.tar.gz
+            cp -r ./dashboard_namiroh/dist/* ~/public_html/
             
             echo "🔧 Fixing permissions..."
             chmod -R 755 ~/public_html/
@@ -84,9 +75,13 @@ jobs:
             
             echo "✅ Deployment complete!"
             echo ""
-            echo "📂 Checking public_html..."
+            echo "📂 Verifying deployment..."
             ls -la ~/public_html/ | head -15
             
             echo ""
-            echo "✔️ index.html location:"
-            ls -la ~/public_html/index.html
+            if [ -f ~/public_html/index.html ]; then
+              echo "✔️ index.html found - deployment successful!"
+            else
+              echo "❌ index.html NOT found - something went wrong"
+              exit 1
+            fi
