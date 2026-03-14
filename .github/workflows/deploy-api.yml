@@ -40,6 +40,7 @@ jobs:
 
             API_PUBLIC_CANDIDATE_1="$HOME/domains/api.annamirohtravelindo.com/public_html"
             API_PUBLIC_CANDIDATE_2="$HOME/domains/annamirohtravelindo.com/public_html/api"
+            API_PUBLIC_CANDIDATE_3="$HOME/domains/api.annamirohtravelindo.com"
 
             # Only deploy to valid web roots. Never deploy to parent domain directory.
             for CANDIDATE in "$API_PUBLIC_CANDIDATE_1" "$API_PUBLIC_CANDIDATE_2"; do
@@ -50,6 +51,14 @@ jobs:
                 fi
               fi
             done
+
+            # Some Hostinger setups use the domain folder itself as document root.
+            if [ -d "$API_PUBLIC_CANDIDATE_3" ] && [ ! -d "$API_PUBLIC_CANDIDATE_1" ]; then
+              API_TARGETS="$API_TARGETS $API_PUBLIC_CANDIDATE_3"
+              if [ -z "$API_PUBLIC" ]; then
+                API_PUBLIC="$API_PUBLIC_CANDIDATE_3"
+              fi
+            fi
 
             sync_dir() {
               local src="$1"
