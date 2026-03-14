@@ -36,7 +36,7 @@ jobs:
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           port: 65002
           source: "dashboard_namiroh/dist/*"
-          target: "~/domains/annamirohtravelindo.com/public_html/"
+          target: "~/public_html/"
           rm: true
 
       - name: Verify deployment
