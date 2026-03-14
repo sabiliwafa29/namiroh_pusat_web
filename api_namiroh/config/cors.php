@@ -19,13 +19,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    // Izinkan FRONTEND_URL yang didaftarkan di .env (tanpa www maupun dengan www)
-    'allowed_origins' => array_filter([
-        env('FRONTEND_URL'),
-    ]),
+    // Izinkan kedua domain (dengan dan tanpa www)
+    'allowed_origins' => [
+        'https://annamirohtravelindo.com',
+        'https://www.annamirohtravelindo.com',
+    ],
 
-    // Regex: izinkan domain utama dengan atau tanpa www, http maupun https
-    // Contoh: cocok untuk annamirohtravelindo.com dan www.annamirohtravelindo.com
+    // Regex: izinkan domain utama dengan atau tanpa www, http maupun https (fallback)
     'allowed_origins_patterns' => [
         '#^https?://(www\.)?annamirohtravelindo\.com$#',
     ],
