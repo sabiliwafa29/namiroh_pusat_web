@@ -1,9 +1,24 @@
+<IfModule mod_headers.c>
+    # Apply CORS headers only for the allowed frontend origins.
+    SetEnvIf Origin "^https?://(www\.)?annamirohtravelindo\.com$" CORS_ALLOW_ORIGIN=$0
+
+    Header always set Access-Control-Allow-Origin "%{CORS_ALLOW_ORIGIN}e" env=CORS_ALLOW_ORIGIN
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, PATCH, DELETE, OPTIONS" env=CORS_ALLOW_ORIGIN
+    Header always set Access-Control-Allow-Headers "Origin, Content-Type, Accept, Authorization, X-Requested-With, X-CSRF-TOKEN, X-XSRF-TOKEN" env=CORS_ALLOW_ORIGIN
+    Header always set Access-Control-Max-Age "86400" env=CORS_ALLOW_ORIGIN
+    Header always set Vary "Origin" env=CORS_ALLOW_ORIGIN
+</IfModule>
+
 <IfModule mod_rewrite.c>
     <IfModule mod_negotiation.c>
         Options -MultiViews -Indexes
     </IfModule>
 
     RewriteEngine On
+
+    # Let preflight requests pass through quickly.
+    RewriteCond %{REQUEST_METHOD} =OPTIONS
+    RewriteRule ^ - [R=200,L]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
