@@ -36,7 +36,7 @@ jobs:
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           port: 65002
           source: "dashboard_namiroh/dist/*"
-          target: "~/namiroh_pusat_web/dashboard_namiroh/dist/"
+          target: "~/domains/annamirohtravelindo.com/public_html/"
           rm: true
 
       - name: Verify deployment
@@ -48,5 +48,5 @@ jobs:
           port: 65002
           script: |
             echo "✅ Dashboard deployed successfully!"
-            echo "📂 Checking dist folder..."
-            ls -la ~/namiroh_pusat_web/dashboard_namiroh/dist/ | head -10
+            echo "📂 Checking public_html folder..."
+            ls -la ~/public_html/ | head -10
