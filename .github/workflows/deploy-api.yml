@@ -34,20 +34,20 @@ jobs:
             API_DIR="$REPO_DIR/api_namiroh"
             API_DOMAIN="api.annamirohtravelindo.com"
             API_PUBLIC=""
+            API_TARGETS=""
 
             API_PUBLIC_CANDIDATE_1="$HOME/domains/api.annamirohtravelindo.com/public_html"
             API_PUBLIC_CANDIDATE_2="$HOME/domains/annamirohtravelindo.com/public_html/api"
             API_PUBLIC_CANDIDATE_3="$HOME/domains/api.annamirohtravelindo.com"
 
-            if [ -d "$API_PUBLIC_CANDIDATE_1" ]; then
-              API_PUBLIC="$API_PUBLIC_CANDIDATE_1"
-            elif [ -d "$API_PUBLIC_CANDIDATE_2" ]; then
-              API_PUBLIC="$API_PUBLIC_CANDIDATE_2"
-            elif [ -d "$API_PUBLIC_CANDIDATE_3" ]; then
-              API_PUBLIC="$API_PUBLIC_CANDIDATE_3"
-            else
-              API_PUBLIC="$API_PUBLIC_CANDIDATE_1"
-            fi
+            for CANDIDATE in "$API_PUBLIC_CANDIDATE_1" "$API_PUBLIC_CANDIDATE_2" "$API_PUBLIC_CANDIDATE_3"; do
+              if [ -d "$CANDIDATE" ]; then
+                API_TARGETS="$API_TARGETS $CANDIDATE"
+                if [ -z "$API_PUBLIC" ]; then
+                  API_PUBLIC="$CANDIDATE"
+                fi
+              fi
+            done
 
             sync_dir() {
               local src="$1"
@@ -78,14 +78,16 @@ jobs:
             command -v php >/dev/null 2>&1 || { echo "php is required"; exit 1; }
             command -v composer >/dev/null 2>&1 || { echo "composer is required"; exit 1; }
 
-            echo "Selected API_PUBLIC=$API_PUBLIC"
-            if [ ! -d "$API_PUBLIC" ]; then
-              echo "API target directory not found: $API_PUBLIC"
+            if [ -z "$API_PUBLIC" ]; then
+              echo "No valid API target directory found"
               ls -la "$HOME/domains" || true
               ls -la "$HOME/domains/api.annamirohtravelindo.com" || true
               ls -la "$HOME/domains/annamirohtravelindo.com/public_html" || true
               exit 1
             fi
+
+            echo "Primary API_PUBLIC=$API_PUBLIC"
+            echo "API_TARGETS=$API_TARGETS"
 
             if [ ! -f "$API_DIR/.env" ]; then
               echo "Missing $API_DIR/.env"
@@ -103,41 +105,48 @@ jobs:
             php artisan route:cache
             php artisan view:cache
 
-            echo "=== Publish API public files ==="
-            sync_dir "$API_DIR/public/" "$API_PUBLIC/"
+            deploy_target() {
+              local target="$1"
 
-            echo "=== Patch API front controller ==="
-            cat > "$API_PUBLIC/index.php" <<PHP
-            <?php
+              echo "=== Publish API public files to $target ==="
+              sync_dir "$API_DIR/public/" "$target/"
 
-            use Illuminate\Contracts\Http\Kernel;
-            use Illuminate\Http\Request;
+              echo "=== Patch API front controller at $target ==="
+              cat > "$target/index.php" <<PHP
+              <?php
 
-            define('LARAVEL_START', microtime(true));
+              use Illuminate\Contracts\Http\Kernel;
+              use Illuminate\Http\Request;
 
-            if (file_exists(
-              \$maintenance = '${API_DIR}/storage/framework/maintenance.php'
-            )) {
-              require \$maintenance;
+              define('LARAVEL_START', microtime(true));
+
+              if (file_exists(
+                \$maintenance = '${API_DIR}/storage/framework/maintenance.php'
+              )) {
+                require \$maintenance;
+              }
+
+              require '${API_DIR}/vendor/autoload.php';
+
+              \$app = require_once '${API_DIR}/bootstrap/app.php';
+
+              \$kernel = \$app->make(Kernel::class);
+
+              \$response = \$kernel->handle(
+                \$request = Request::capture()
+              )->send();
+
+              \$kernel->terminate(\$request, \$response);
+              PHP
+
+              chmod 755 "$target"
+              find "$target" -type d -exec chmod 755 {} \;
+              find "$target" -type f -exec chmod 644 {} \;
             }
 
-            require '${API_DIR}/vendor/autoload.php';
-
-            \$app = require_once '${API_DIR}/bootstrap/app.php';
-
-            \$kernel = \$app->make(Kernel::class);
-
-            \$response = \$kernel->handle(
-              \$request = Request::capture()
-            )->send();
-
-            \$kernel->terminate(\$request, \$response);
-            PHP
-
-            echo "=== Set permissions ==="
-            chmod 755 "$API_PUBLIC"
-            find "$API_PUBLIC" -type d -exec chmod 755 {} \;
-            find "$API_PUBLIC" -type f -exec chmod 644 {} \;
+            for TARGET in $API_TARGETS; do
+              deploy_target "$TARGET"
+            done
 
             echo "=== Post-deploy checks ==="
             if command -v curl >/dev/null 2>&1; then
