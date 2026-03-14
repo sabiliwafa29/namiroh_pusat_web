@@ -46,41 +46,41 @@ jobs:
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           port: 65002
           script_stop: true
-script: |
-  DOMAIN_ROOT="/home/u190975834/public_html"
-  REPO_DIR="$HOME/namiroh_pusat_web"
+          script: |
+            DOMAIN_ROOT="/home/u190975834/public_html"
+            REPO_DIR="$HOME/namiroh_pusat_web"
 
-  echo "=== Pull latest code ==="
-  if [ ! -d "$REPO_DIR/.git" ]; then
-    git clone https://github.com/sabiliwafa29/namiroh_pusat_web.git $REPO_DIR
-  else
-    cd $REPO_DIR && git pull origin main
-  fi
+            echo "=== Pull latest code ==="
+            if [ ! -d "$REPO_DIR/.git" ]; then
+              git clone https://github.com/sabiliwafa29/namiroh_pusat_web.git $REPO_DIR
+            else
+              cd $REPO_DIR && git pull origin main
+            fi
 
-  echo "=== Install & Build React ==="
-  cd $REPO_DIR/dashboard_namiroh
-  npm install
-  npm run build
+            echo "=== Install & Build React ==="
+            cd $REPO_DIR/dashboard_namiroh
+            npm install
+            npm run build
 
-  echo "=== Deploy to public_html ==="
-  rm -rf $DOMAIN_ROOT/*
-  mkdir -p $DOMAIN_ROOT
-  cp -r $REPO_DIR/dashboard_namiroh/dist/dashboard_namiroh/* $DOMAIN_ROOT/
+            echo "=== Deploy to public_html ==="
+            rm -rf $DOMAIN_ROOT/*
+            mkdir -p $DOMAIN_ROOT
+            cp -r $REPO_DIR/dashboard_namiroh/dist/dashboard_namiroh/* $DOMAIN_ROOT/
 
-  chmod 755 $DOMAIN_ROOT
-  find $DOMAIN_ROOT -type f -exec chmod 644 {} \;
-  find $DOMAIN_ROOT -type d -exec chmod 755 {} \;
+            chmod 755 $DOMAIN_ROOT
+            find $DOMAIN_ROOT -type f -exec chmod 644 {} \;
+            find $DOMAIN_ROOT -type d -exec chmod 755 {} \;
 
-  cat > $DOMAIN_ROOT/.htaccess <<'HTACCESS'
-  <IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteBase /
-    RewriteRule ^index\.html$ - [L]
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteRule . /index.html [L]
-  </IfModule>
-  HTACCESS
+            cat > $DOMAIN_ROOT/.htaccess <<'HTACCESS'
+            <IfModule mod_rewrite.c>
+              RewriteEngine On
+              RewriteBase /
+              RewriteRule ^index\.html$ - [L]
+              RewriteCond %{REQUEST_FILENAME} !-f
+              RewriteCond %{REQUEST_FILENAME} !-d
+              RewriteRule . /index.html [L]
+            </IfModule>
+            HTACCESS
 
-  echo "=== SUCCESS ==="
-  ls -lh $DOMAIN_ROOT/index.html
+            echo "=== SUCCESS ==="
+            ls -lh $DOMAIN_ROOT/index.html
