@@ -38,6 +38,7 @@ export default function Daftar() {
   const [paketList, setPaketList] = useState([])
   const [jadwalList, setJadwalList] = useState([])
   const [paketDetail, setPaketDetail] = useState(null)
+  const [loadingPaket, setLoadingPaket] = useState(false)
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -55,6 +56,7 @@ export default function Daftar() {
     if (form.paket_id) {
       setPaketDetail(null)
       setJadwalList([])
+      setLoadingPaket(true)
       api.get(`/paket/${form.paket_id}`)
         .then(res => {
           const detail = res.data.data
@@ -70,6 +72,7 @@ export default function Daftar() {
           console.error('Gagal memuat detail paket:', err)
           setError('Gagal memuat data jadwal. Silakan coba lagi.')
         })
+        .finally(() => setLoadingPaket(false))
     } else {
       setPaketDetail(null)
       setJadwalList([])
@@ -277,29 +280,48 @@ export default function Daftar() {
                   </div>
                 )}
 
-                {form.paket_id && jadwalList.length === 0 && !isNonSchedulable(paketDetail) && (
+                {form.paket_id && !loadingPaket && jadwalList.length === 0 && !isNonSchedulable(paketDetail) && !isPastPaket(paketDetail) && (
                   <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded-xl text-sm">
                     Tidak ada jadwal tersedia untuk paket ini saat ini.
                   </div>
                 )}
 
-                <div>
-                  <label className="block text-base font-medium text-gray-700 mb-1">Tipe Kamar</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                    {['QUAD', 'TRIPLE', 'DOUBLE', 'SINGLE'].map(t => {
-                      const h = paketDetail?.harga?.find(h => h.tipe_kamar === t)
-                      return (
-                        <label key={t} className={`border rounded-xl p-3 text-center cursor-pointer transition ${form.tipe_kamar === t ? 'border-green-500 bg-green-50' : 'hover:border-gray-400'
-                          }`}>
-                          <input type="radio" name="tipe" value={t} checked={form.tipe_kamar === t}
-                            onChange={e => f('tipe_kamar', e.target.value)} className="hidden" />
-                          <div className="text-sm font-bold text-gray-700">{t}</div>
-                          {h && <div className="text-sm text-green-700 font-medium mt-0.5">Rp {Number(h.harga).toLocaleString('id-ID')}</div>}
-                        </label>
-                      )
-                    })}
+                {/* Skeleton saat loading detail paket */}
+                {loadingPaket && (
+                  <div className="space-y-2 animate-pulse">
+                    <div className="h-4 bg-gray-200 rounded w-1/3 mb-3" />
+                    {[1, 2].map(i => (
+                      <div key={i} className="border rounded-xl px-4 py-3 flex items-center gap-3">
+                        <div className="w-4 h-4 rounded-full bg-gray-200 flex-shrink-0" />
+                        <div className="flex-1 space-y-1">
+                          <div className="h-4 bg-gray-200 rounded w-2/3" />
+                          <div className="h-3 bg-gray-100 rounded w-1/3" />
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                </div>
+                )}
+
+                {/* Tipe Kamar — hanya tampil setelah paket dipilih & detail dimuat */}
+                {form.paket_id && !loadingPaket && paketDetail && (
+                  <div>
+                    <label className="block text-base font-medium text-gray-700 mb-1">Tipe Kamar</label>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                      {['QUAD', 'TRIPLE', 'DOUBLE', 'SINGLE'].map(t => {
+                        const h = paketDetail?.harga?.find(h => h.tipe_kamar === t)
+                        return (
+                          <label key={t} className={`border rounded-xl p-3 text-center cursor-pointer transition ${form.tipe_kamar === t ? 'border-green-500 bg-green-50' : 'hover:border-gray-400'
+                            }`}>
+                            <input type="radio" name="tipe" value={t} checked={form.tipe_kamar === t}
+                              onChange={e => f('tipe_kamar', e.target.value)} className="hidden" />
+                            <div className="text-sm font-bold text-gray-700">{t}</div>
+                            {h && <div className="text-sm text-green-700 font-medium mt-0.5">Rp {Number(h.harga).toLocaleString('id-ID')}</div>}
+                          </label>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 

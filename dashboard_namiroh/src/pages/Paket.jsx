@@ -39,16 +39,15 @@ function PaketCTA({ p }) {
   return (
     <a href={`https://wa.me/${WA_NUM}?text=${encodeURIComponent(msg)}`}
       target="_blank" rel="noreferrer"
-      className={`flex-1 text-center py-2.5 rounded-lg text-sm font-semibold transition ${
-        k === 'B' ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-orange-500 text-white hover:bg-orange-600'
-      }`}>
+      className={`flex-1 text-center py-2.5 rounded-lg text-sm font-semibold transition ${k === 'B' ? 'bg-gray-100 text-gray-700 hover:bg-gray-200' : 'bg-orange-500 text-white hover:bg-orange-600'
+        }`}>
       {k === 'B' ? '🔔 Beritahu Saya' : '💬 Hubungi Kami'}
     </a>
   )
 }
 
 const JENIS = [
-  { id: '',  label: 'Semua' },
+  { id: '', label: 'Semua' },
   { id: '1', label: 'Umroh Reguler' },
   { id: '3', label: 'Umroh Plus' },
   { id: '4', label: 'Haji Plus' },
@@ -59,19 +58,19 @@ const JENIS = [
 
 export default function Paket() {
   const [urlParams, setUrlParams] = useSearchParams()
-  const [data, setData]           = useState([])
-  const [meta, setMeta]           = useState({})
-  const [loading, setLoading]     = useState(true)
-  const [search, setSearch]       = useState('')
-  const jenis                     = urlParams.get('jenis_layanan_id') || ''
-  const [page, setPage]           = useState(1)
-  const [jadwalList, setJadwalList]     = useState([])
+  const [data, setData] = useState([])
+  const [meta, setMeta] = useState({})
+  const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState('')
+  const jenis = urlParams.get('jenis_layanan_id') || ''
+  const [page, setPage] = useState(1)
+  const [jadwalList, setJadwalList] = useState([])
   const [jadwalLoading, setJadwalLoading] = useState(false)
 
-  const bulan      = urlParams.get('bulan')
-  const tahun      = urlParams.get('tahun')
+  const bulan = urlParams.get('bulan')
+  const tahun = urlParams.get('tahun')
   const maskapaiId = urlParams.get('maskapai_id')
-  const bandara    = urlParams.get('bandara')
+  const bandara = urlParams.get('bandara')
   const hasJadwalFilter = bulan || maskapaiId || bandara
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }) }, [])
@@ -84,11 +83,11 @@ export default function Paket() {
     api.get('/jadwal', {
       params: {
         per_page: 50,
-        status:        'OPEN',
-        bulan:         bulan || undefined,
-        tahun:         tahun || undefined,
-        maskapai_id:   maskapaiId || undefined,
-        bandara:       bandara || undefined,
+        status: 'OPEN',
+        bulan: bulan || undefined,
+        tahun: tahun || undefined,
+        maskapai_id: maskapaiId || undefined,
+        bandara: bandara || undefined,
         jenis_layanan_id: urlParams.get('jenis_layanan_id') || undefined,
       }
     })
@@ -142,9 +141,8 @@ export default function Paket() {
                 setUrlParams(newParams, { replace: true })
                 setPage(1)
               }}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
-                  jenis === j.id ? 'bg-green-700 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}>
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition ${jenis === j.id ? 'bg-green-700 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}>
                 {j.label}
               </button>
             ))}
@@ -170,9 +168,24 @@ export default function Paket() {
               </div>
 
               {jadwalLoading ? (
-                <div className="text-center py-8 text-gray-500">Mencari jadwal...</div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {Array.from({ length: 3 }).map((_, i) => (
+                    <div key={i} className="bg-white rounded-xl border border-gray-200 overflow-hidden animate-pulse">
+                      <div className="bg-gray-200 h-48 w-full" />
+                      <div className="px-4 py-3 space-y-2">
+                        <div className="h-4 bg-gray-200 rounded w-3/4" />
+                        <div className="h-3 bg-gray-100 rounded w-1/2" />
+                        <div className="h-3 bg-gray-100 rounded w-2/3" />
+                      </div>
+                      <div className="px-4 pb-4 flex gap-2">
+                        <div className="flex-1 h-9 bg-gray-200 rounded-lg" />
+                        <div className="flex-1 h-9 bg-gray-200 rounded-lg" />
+                      </div>
+                    </div>
+                  ))}
+                </div>
               ) : jadwalList.length === 0 ? (
-                  <div className="bg-orange-50 border border-orange-200 rounded-xl p-5 text-center text-base text-orange-800">
+                <div className="bg-orange-50 border border-orange-200 rounded-xl p-5 text-center text-base text-orange-800">
                   <div className="text-2xl mb-2">📭</div>
                   Tidak ada jadwal tersedia untuk kriteria ini. Coba ubah filter atau
                   <Link to="/paket" className="text-green-700 font-medium ml-1 hover:underline">lihat semua paket</Link>.
@@ -255,7 +268,19 @@ export default function Paket() {
             </div>
           )}
           {!hasJadwalFilter && (loading ? (
-            <div className="text-center py-20 text-gray-600">Memuat paket...</div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              {Array.from({ length: 9 }).map((_, i) => (
+                <div key={i} className="bg-white rounded-xl overflow-hidden border border-gray-100 animate-pulse">
+                  <div className="bg-gray-200 h-52 w-full" />
+                  <div className="p-4 space-y-3">
+                    <div className="h-4 bg-gray-200 rounded w-4/5" />
+                    <div className="h-3 bg-gray-100 rounded w-1/2" />
+                    <div className="h-3 bg-gray-100 rounded w-2/3" />
+                    <div className="h-9 bg-gray-200 rounded-lg mt-2" />
+                  </div>
+                </div>
+              ))}
+            </div>
           ) : data.length === 0 ? (
             <div className="text-center py-20 text-gray-600">
               <div className="text-4xl mb-3">🔍</div>
