@@ -57,6 +57,12 @@ jobs:
               cd $REPO_DIR && git pull origin main
             fi
 
+            echo "Check dist folder exists..."
+            if [ ! -d "$REPO_DIR/dashboard_namiroh/dist" ]; then
+              echo "ERROR: dist/ folder not found in repo!"
+              exit 1
+            fi
+
             echo "Deploy dist to domain..."
             rm -rf $DOMAIN_ROOT/*
             mkdir -p $DOMAIN_ROOT
