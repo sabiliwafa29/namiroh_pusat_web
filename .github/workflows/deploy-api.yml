@@ -185,41 +185,44 @@ jobs:
             composer install --no-dev --optimize-autoloader
 
             echo "=== Verify DB connection ==="
-            php -r '
-              $envPath = __DIR__ . "/.env";
-              $rows = @file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-              if (!$rows) {
+            php <<'PHP'
+            <?php
+            $envPath = __DIR__ . '/.env';
+            $rows = @file($envPath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            if (!$rows) {
                 fwrite(STDERR, "Cannot read .env for DB check\n");
                 exit(1);
-              }
+            }
 
-              $cfg = [];
-              foreach ($rows as $row) {
-                if ($row[0] === "#" || strpos($row, "=") === false) continue;
-                [$k, $v] = explode("=", $row, 2);
+            $cfg = [];
+            foreach ($rows as $row) {
+                if ($row[0] === '#' || strpos($row, '=') === false) {
+                    continue;
+                }
+                [$k, $v] = explode('=', $row, 2);
                 $cfg[$k] = trim($v, "\"'");
-              }
+            }
 
-              $host = $cfg["DB_HOST"] ?? "";
-              $port = $cfg["DB_PORT"] ?? "3306";
-              $db   = $cfg["DB_DATABASE"] ?? "";
-              $user = $cfg["DB_USERNAME"] ?? "";
-              $pass = $cfg["DB_PASSWORD"] ?? "";
+            $host = $cfg['DB_HOST'] ?? '';
+            $port = $cfg['DB_PORT'] ?? '3306';
+            $db   = $cfg['DB_DATABASE'] ?? '';
+            $user = $cfg['DB_USERNAME'] ?? '';
+            $pass = $cfg['DB_PASSWORD'] ?? '';
 
-              echo "DB_HOST={$host}\n";
-              echo "DB_PORT={$port}\n";
-              echo "DB_DATABASE={$db}\n";
-              echo "DB_USERNAME={$user}\n";
+            echo "DB_HOST={$host}\n";
+            echo "DB_PORT={$port}\n";
+            echo "DB_DATABASE={$db}\n";
+            echo "DB_USERNAME={$user}\n";
 
-              try {
+            try {
                 $pdo = new PDO("mysql:host={$host};port={$port};dbname={$db}", $user, $pass, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-                $pdo->query("SELECT 1");
+                $pdo->query('SELECT 1');
                 echo "DB connection OK\n";
-              } catch (Throwable $e) {
+            } catch (Throwable $e) {
                 fwrite(STDERR, "DB connection FAILED: " . $e->getMessage() . "\n");
                 exit(1);
-              }
-            '
+            }
+            PHP
 
             echo "=== Run migrations and cache ==="
             php artisan optimize:clear
