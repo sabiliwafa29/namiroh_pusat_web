@@ -28,31 +28,41 @@ jobs:
         working-directory: dashboard_namiroh
         run: npm run build
 
-      - name: Upload dist to Hostinger via SCP
+      - name: Create tar archive of dist
+        run: |
+          cd dashboard_namiroh
+          tar -czf dist.tar.gz dist/
+
+      - name: Upload dist archive via SCP
         uses: appleboy/scp-action@master
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
           username: ${{ secrets.HOSTINGER_USER }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           port: 65002
-          source: "dashboard_namiroh/dist/*"
-          target: "~/public_html_temp/"
-          rm: true
+          source: "dashboard_namiroh/dist.tar.gz"
+          target: "~/"
 
-      - name: Deploy to Hostinger
+      - name: Extract and Deploy to Hostinger
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
           username: ${{ secrets.HOSTINGER_USER }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           port: 65002
+          script_stop: true
           script: |
             set -e
             
-            echo "🔄 Moving files to public_html..."
+            echo "📥 Extracting built files..."
+            cd ~
+            tar -xzf dist.tar.gz
+            
+            echo "🔄 Moving dist/* to public_html/"
             rm -rf ~/public_html/*
-            mv ~/public_html_temp/* ~/public_html/
-            rmdir ~/public_html_temp/
+            mv ~/dist/* ~/public_html/
+            rmdir ~/dist
+            rm -f ~/dist.tar.gz
             
             echo "🔧 Fixing permissions..."
             chmod -R 755 ~/public_html/
@@ -71,15 +81,12 @@ jobs:
               RewriteRule . /index.html [L]
             </IfModule>
             HTACCESS
-
-      - name: Verify deployment
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOSTINGER_HOST }}
-          username: ${{ secrets.HOSTINGER_USER }}
-          key: ${{ secrets.HOSTINGER_SSH_KEY }}
-          port: 65002
-          script: |
-            echo "✅ Dashboard deployed successfully!"
-            echo "📂 Checking public_html folder..."
-            ls -la ~/public_html/ | head -10
+            
+            echo "✅ Deployment complete!"
+            echo ""
+            echo "📂 Checking public_html..."
+            ls -la ~/public_html/ | head -15
+            
+            echo ""
+            echo "✔️ index.html location:"
+            ls -la ~/public_html/index.html
