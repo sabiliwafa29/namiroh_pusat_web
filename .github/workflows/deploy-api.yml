@@ -75,13 +75,19 @@ jobs:
               exit 1
             fi
 
+            # If production env file exists, use it as active Laravel env.
+            if [ -f "$API_DIR/.env.production" ]; then
+              cp "$API_DIR/.env.production" "$API_DIR/.env"
+              echo "Using $API_DIR/.env.production as active .env"
+            fi
+
             echo "=== Install Laravel dependencies ==="
             cd "$API_DIR"
             composer install --no-dev --optimize-autoloader
 
             echo "=== Run migrations and cache ==="
-            php artisan migrate --force
             php artisan optimize:clear
+            php artisan migrate --force
             php artisan config:cache
             php artisan route:cache
             php artisan view:cache
