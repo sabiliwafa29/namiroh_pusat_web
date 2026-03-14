@@ -33,7 +33,21 @@ jobs:
             REPO_URL="https://github.com/sabiliwafa29/namiroh_pusat_web.git"
             API_DIR="$REPO_DIR/api_namiroh"
             API_DOMAIN="api.annamirohtravelindo.com"
-            API_PUBLIC="$HOME/domains/annamirohtravelindo.com/public_html/api"
+            API_PUBLIC=""
+
+            API_PUBLIC_CANDIDATE_1="$HOME/domains/api.annamirohtravelindo.com/public_html"
+            API_PUBLIC_CANDIDATE_2="$HOME/domains/annamirohtravelindo.com/public_html/api"
+            API_PUBLIC_CANDIDATE_3="$HOME/domains/api.annamirohtravelindo.com"
+
+            if [ -d "$API_PUBLIC_CANDIDATE_1" ]; then
+              API_PUBLIC="$API_PUBLIC_CANDIDATE_1"
+            elif [ -d "$API_PUBLIC_CANDIDATE_2" ]; then
+              API_PUBLIC="$API_PUBLIC_CANDIDATE_2"
+            elif [ -d "$API_PUBLIC_CANDIDATE_3" ]; then
+              API_PUBLIC="$API_PUBLIC_CANDIDATE_3"
+            else
+              API_PUBLIC="$API_PUBLIC_CANDIDATE_1"
+            fi
 
             sync_dir() {
               local src="$1"
@@ -68,6 +82,7 @@ jobs:
             if [ ! -d "$API_PUBLIC" ]; then
               echo "API target directory not found: $API_PUBLIC"
               ls -la "$HOME/domains" || true
+              ls -la "$HOME/domains/api.annamirohtravelindo.com" || true
               ls -la "$HOME/domains/annamirohtravelindo.com/public_html" || true
               exit 1
             fi
