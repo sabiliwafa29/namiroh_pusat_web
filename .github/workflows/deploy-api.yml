@@ -18,7 +18,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy API via SSH
+      - name: Deploy API via SSH (attempt 1)
+        id: deploy_api_attempt_1
+        continue-on-error: true
         uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
@@ -28,7 +30,7 @@ jobs:
           timeout: 300s
           command_timeout: 30m
           script_stop: true
-          script: |
+          script: &deploy_api_script |
             set -euo pipefail
 
             REPO_DIR="$HOME/namiroh_pusat_web"
@@ -154,3 +156,22 @@ jobs:
             echo "=== SUCCESS ==="
             ls -lh "$API_PUBLIC/index.php"
             ls -la "$API_PUBLIC" | head -n 20
+
+      - name: Deploy API via SSH (attempt 2)
+        if: ${{ steps.deploy_api_attempt_1.outcome == 'failure' }}
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: 65002
+          timeout: 300s
+          command_timeout: 30m
+          script_stop: true
+          script: *deploy_api_script
+
+      - name: Fail if SSH unreachable twice
+        if: ${{ steps.deploy_api_attempt_1.outcome == 'failure' && failure() }}
+        run: |
+          echo "SSH deployment failed on both attempts. Check Hostinger SSH availability/firewall for port 65002."
+          exit 1
