@@ -42,7 +42,7 @@ jobs:
             API_PUBLIC_CANDIDATE_2="$HOME/domains/annamirohtravelindo.com/public_html/api"
             API_PUBLIC_CANDIDATE_3="$HOME/domains/api.annamirohtravelindo.com"
 
-            # Only deploy to valid web roots. Never deploy to parent domain directory.
+            # Deploy to all valid web roots that exist.
             for CANDIDATE in "$API_PUBLIC_CANDIDATE_1" "$API_PUBLIC_CANDIDATE_2"; do
               if [ -d "$CANDIDATE" ]; then
                 API_TARGETS="$API_TARGETS $CANDIDATE"
@@ -53,10 +53,19 @@ jobs:
             done
 
             # Some Hostinger setups use the domain folder itself as document root.
-            if [ -d "$API_PUBLIC_CANDIDATE_3" ] && [ ! -d "$API_PUBLIC_CANDIDATE_1" ]; then
+            if [ -d "$API_PUBLIC_CANDIDATE_3" ]; then
               API_TARGETS="$API_TARGETS $API_PUBLIC_CANDIDATE_3"
               if [ -z "$API_PUBLIC" ]; then
                 API_PUBLIC="$API_PUBLIC_CANDIDATE_3"
+              fi
+            fi
+
+            # If only parent domain directory exists, create public_html and deploy there too.
+            if [ -d "$API_PUBLIC_CANDIDATE_3" ] && [ ! -d "$API_PUBLIC_CANDIDATE_1" ]; then
+              mkdir -p "$API_PUBLIC_CANDIDATE_1"
+              API_TARGETS="$API_TARGETS $API_PUBLIC_CANDIDATE_1"
+              if [ -z "$API_PUBLIC" ]; then
+                API_PUBLIC="$API_PUBLIC_CANDIDATE_1"
               fi
             fi
 
@@ -167,8 +176,10 @@ jobs:
             if command -v curl >/dev/null 2>&1; then
               HEALTH_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" "https://$API_DOMAIN/up" || true)
               PAKET_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" "https://$API_DOMAIN/api/paket?page=1&per_page=1&published=1" || true)
+              INDEX_PAKET_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" "https://$API_DOMAIN/index.php/api/paket?page=1&per_page=1&published=1" || true)
               echo "GET /up -> $HEALTH_STATUS"
               echo "GET /api/paket -> $PAKET_STATUS"
+              echo "GET /index.php/api/paket -> $INDEX_PAKET_STATUS"
             else
               echo "curl not found; skipping HTTP checks"
             fi
