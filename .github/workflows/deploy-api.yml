@@ -22,6 +22,15 @@ jobs:
         id: deploy_api_attempt_1
         continue-on-error: true
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          ENV_APP_KEY: ${{ secrets.API_APP_KEY }}
+          ENV_APP_URL: ${{ secrets.API_APP_URL }}
+          ENV_FRONTEND_URL: ${{ secrets.API_FRONTEND_URL }}
+          ENV_DB_HOST: ${{ secrets.API_DB_HOST }}
+          ENV_DB_PORT: ${{ secrets.API_DB_PORT }}
+          ENV_DB_DATABASE: ${{ secrets.API_DB_DATABASE }}
+          ENV_DB_USERNAME: ${{ secrets.API_DB_USERNAME }}
+          ENV_DB_PASSWORD: ${{ secrets.API_DB_PASSWORD }}
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
           username: ${{ secrets.HOSTINGER_USER }}
@@ -72,13 +81,53 @@ jobs:
             mkdir -p "$API_PUBLIC"
             echo "API_PUBLIC=$API_PUBLIC"
 
-            if [ -f "$API_DIR/.env.production" ]; then
-              cp "$API_DIR/.env.production" "$API_DIR/.env"
-              echo "Using $API_DIR/.env.production as active .env"
-            elif [ ! -f "$API_DIR/.env" ]; then
-              echo "Missing both $API_DIR/.env.production and $API_DIR/.env"
-              exit 1
+            if [ ! -f "$API_DIR/.env" ]; then
+              if [ -f "$API_DIR/.env.example" ]; then
+                cp "$API_DIR/.env.example" "$API_DIR/.env"
+                echo "Created $API_DIR/.env from .env.example"
+              else
+                echo "Missing both $API_DIR/.env and $API_DIR/.env.example"
+                exit 1
+              fi
             fi
+
+            escape_sed() {
+              printf '%s' "$1" | sed -e 's/[\\/&]/\\&/g'
+            }
+
+            upsert_env() {
+              local key="$1"
+              local value="$2"
+              local escaped
+              escaped="$(escape_sed "$value")"
+
+              if grep -q "^${key}=" "$API_DIR/.env"; then
+                sed -i "s/^${key}=.*/${key}=${escaped}/" "$API_DIR/.env"
+              else
+                printf '%s=%s\n' "$key" "$value" >> "$API_DIR/.env"
+              fi
+            }
+
+            # Always enforce production-safe defaults.
+            upsert_env APP_ENV production
+            upsert_env APP_DEBUG false
+            upsert_env APP_LOCALE id
+            upsert_env APP_FALLBACK_LOCALE id
+            upsert_env APP_FAKER_LOCALE id_ID
+            upsert_env LOG_LEVEL error
+            upsert_env DB_CONNECTION mysql
+            upsert_env FILESYSTEM_DISK public
+            upsert_env SESSION_DOMAIN .annamirohtravelindo.com
+
+            # Inject secrets if available.
+            [ -n "${ENV_APP_KEY:-}" ] && upsert_env APP_KEY "$ENV_APP_KEY"
+            [ -n "${ENV_APP_URL:-}" ] && upsert_env APP_URL "$ENV_APP_URL"
+            [ -n "${ENV_FRONTEND_URL:-}" ] && upsert_env FRONTEND_URL "$ENV_FRONTEND_URL"
+            [ -n "${ENV_DB_HOST:-}" ] && upsert_env DB_HOST "$ENV_DB_HOST"
+            [ -n "${ENV_DB_PORT:-}" ] && upsert_env DB_PORT "$ENV_DB_PORT"
+            [ -n "${ENV_DB_DATABASE:-}" ] && upsert_env DB_DATABASE "$ENV_DB_DATABASE"
+            [ -n "${ENV_DB_USERNAME:-}" ] && upsert_env DB_USERNAME "$ENV_DB_USERNAME"
+            [ -n "${ENV_DB_PASSWORD:-}" ] && upsert_env DB_PASSWORD "\"$ENV_DB_PASSWORD\""
 
             echo "=== Install Laravel dependencies ==="
             cd "$API_DIR"
@@ -161,6 +210,15 @@ jobs:
         id: deploy_api_attempt_2
         if: ${{ steps.deploy_api_attempt_1.outcome == 'failure' }}
         uses: appleboy/ssh-action@v1.2.0
+        env:
+          ENV_APP_KEY: ${{ secrets.API_APP_KEY }}
+          ENV_APP_URL: ${{ secrets.API_APP_URL }}
+          ENV_FRONTEND_URL: ${{ secrets.API_FRONTEND_URL }}
+          ENV_DB_HOST: ${{ secrets.API_DB_HOST }}
+          ENV_DB_PORT: ${{ secrets.API_DB_PORT }}
+          ENV_DB_DATABASE: ${{ secrets.API_DB_DATABASE }}
+          ENV_DB_USERNAME: ${{ secrets.API_DB_USERNAME }}
+          ENV_DB_PASSWORD: ${{ secrets.API_DB_PASSWORD }}
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
           username: ${{ secrets.HOSTINGER_USER }}
