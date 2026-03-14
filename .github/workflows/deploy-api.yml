@@ -40,8 +40,6 @@ jobs:
           command_timeout: 30m
           script_stop: true
           envs: ENV_APP_KEY,ENV_APP_URL,ENV_FRONTEND_URL,ENV_DB_HOST,ENV_DB_PORT,ENV_DB_DATABASE,ENV_DB_USERNAME,ENV_DB_PASSWORD
-
-          # FIX: script anchor tetap dipakai untuk DRY (reuse di attempt 2)
           script: &deploy_api_script |
             set -euo pipefail
             trap 'echo "ERROR at line $LINENO"' ERR
@@ -94,19 +92,16 @@ jobs:
               fi
             }
 
-            require_secret APP_KEY     "${ENV_APP_KEY:-}"
-            require_secret APP_URL     "${ENV_APP_URL:-}"
+            require_secret APP_KEY      "${ENV_APP_KEY:-}"
+            require_secret APP_URL      "${ENV_APP_URL:-}"
             require_secret FRONTEND_URL "${ENV_FRONTEND_URL:-}"
-            require_secret DB_HOST     "${ENV_DB_HOST:-}"
-            require_secret DB_PORT     "${ENV_DB_PORT:-}"
-            require_secret DB_DATABASE "${ENV_DB_DATABASE:-}"
-            require_secret DB_USERNAME "${ENV_DB_USERNAME:-}"
-            require_secret DB_PASSWORD "${ENV_DB_PASSWORD:-}"
+            require_secret DB_HOST      "${ENV_DB_HOST:-}"
+            require_secret DB_PORT      "${ENV_DB_PORT:-}"
+            require_secret DB_DATABASE  "${ENV_DB_DATABASE:-}"
+            require_secret DB_USERNAME  "${ENV_DB_USERNAME:-}"
+            require_secret DB_PASSWORD  "${ENV_DB_PASSWORD:-}"
 
             echo "=== Inject environment values ==="
-            # FIX: Gunakan printf untuk tulis .env agar tidak ada leading whitespace
-            # dari indentasi heredoc (bug pada versi sebelumnya).
-            # Nilai DB_PASSWORD di-quote untuk handle karakter spesial.
             printf '%s\n' \
               "APP_NAME=AnNamiroh" \
               "APP_ENV=production" \
@@ -174,7 +169,6 @@ jobs:
               > "$API_DIR/.env"
 
             echo "Environment file written successfully"
-            # Verifikasi tidak ada leading whitespace di .env
             if grep -P '^\s+\S' "$API_DIR/.env" >/dev/null 2>&1; then
               echo "ERROR: .env has lines with leading whitespace — aborting"
               exit 1
@@ -185,14 +179,50 @@ jobs:
             composer install --no-dev --optimize-autoloader
 
             echo "=== Verify DB connection ==="
-            echo "DB_HOST=${ENV_DB_HOST}"
-            echo "DB_PORT=${ENV_DB_PORT}"
-            echo "DB_DATABASE=${ENV_DB_DATABASE}"
-            echo "DB_USERNAME=${ENV_DB_USERNAME}"
-            php artisan migrate:status --no-interaction || {
-              echo "DB preflight failed. Check API_DB_HOST/API_DB_PORT/API_DB_DATABASE/API_DB_USERNAME/API_DB_PASSWORD secrets and DB user privileges in Hostinger."
-              exit 1
-            }
+            # FIX: Gunakan mysql client langsung untuk preflight check.
+            # Lebih reliable daripada artisan karena tidak perlu full Laravel boot.
+            echo "  DB_HOST     = ${ENV_DB_HOST}"
+            echo "  DB_PORT     = ${ENV_DB_PORT}"
+            echo "  DB_DATABASE = ${ENV_DB_DATABASE}"
+            echo "  DB_USERNAME = ${ENV_DB_USERNAME}"
+
+            if command -v mysql >/dev/null 2>&1; then
+              DB_CHECK=$(mysql \
+                --host="${ENV_DB_HOST}" \
+                --port="${ENV_DB_PORT}" \
+                --user="${ENV_DB_USERNAME}" \
+                --password="${ENV_DB_PASSWORD}" \
+                --connect-timeout=10 \
+                --execute="SELECT 'DB_OK' AS status;" \
+                "${ENV_DB_DATABASE}" 2>&1) || true
+
+              echo "  mysql result: $DB_CHECK"
+
+              if echo "$DB_CHECK" | grep -q "DB_OK"; then
+                echo "  DB connection: OK"
+              else
+                echo "  DB connection: FAILED"
+                echo ""
+                echo "  Kemungkinan penyebab:"
+                echo "  1. DB_HOST salah — di Hostinger shared hosting gunakan '127.0.0.1'"
+                echo "  2. Nama DB/user harus pakai prefix akun, contoh: u190975834_namadb"
+                echo "  3. User belum di-assign ke database di hPanel"
+                echo "  4. Password mengandung karakter spesial yang perlu di-escape"
+                echo ""
+                # Coba tanpa nama database untuk isolasi masalah credential vs database
+                DB_CHECK2=$(mysql \
+                  --host="${ENV_DB_HOST}" \
+                  --port="${ENV_DB_PORT}" \
+                  --user="${ENV_DB_USERNAME}" \
+                  --password="${ENV_DB_PASSWORD}" \
+                  --connect-timeout=10 \
+                  --execute="SHOW DATABASES;" 2>&1) || true
+                echo "  SHOW DATABASES result: $DB_CHECK2"
+                exit 1
+              fi
+            else
+              echo "  mysql client not found — skipping preflight, akan dicek saat migrate"
+            fi
 
             echo "=== Run migrations and cache ==="
             php artisan optimize:clear
@@ -204,30 +234,28 @@ jobs:
             echo "=== Prepare API runtime in domains directory ==="
             sync_dir "$API_DIR/" "$API_RUNTIME/"
 
-            # Ensure runtime writable paths are valid on hosting
             mkdir -p "$API_RUNTIME/storage" "$API_RUNTIME/bootstrap/cache"
             chmod -R 775 "$API_RUNTIME/storage" "$API_RUNTIME/bootstrap/cache" || true
 
-            # FIX: Jalankan storage:link agar file upload bisa diakses via URL publik
             echo "=== Create storage symlink ==="
-            cd "$API_RUNTIME"
-            if php -r 'exit(function_exists("exec") ? 0 : 1);'; then
-              if [ ! -L "$API_RUNTIME/public/storage" ]; then
-                php artisan storage:link || echo "storage:link failed (non-fatal, may already exist)"
-              else
-                echo "Storage symlink already exists, skipping"
-              fi
+            STORAGE_LINK="$API_RUNTIME/public/storage"
+            STORAGE_TARGET="$API_RUNTIME/storage/app/public"
+            if [ -L "$STORAGE_LINK" ]; then
+              echo "  Symlink already exists, skipping"
+            elif [ -e "$STORAGE_LINK" ]; then
+              echo "  WARNING: $STORAGE_LINK exists but is not a symlink — skipping"
             else
-              echo "Skipping storage:link (exec() disabled on hosting)"
+              # FIX: Gunakan ln -s langsung (tidak butuh exec() PHP)
+              # sehingga tidak terblokir disable_functions Hostinger
+              ln -s "$STORAGE_TARGET" "$STORAGE_LINK"
+              echo "  Symlink created: $STORAGE_LINK -> $STORAGE_TARGET"
             fi
 
             echo "=== Publish API public files to $API_PUBLIC ==="
             sync_dir "$API_RUNTIME/public/" "$API_PUBLIC/"
 
             echo "=== Patch API front controller at $API_PUBLIC ==="
-            # FIX: Gunakan cat dengan single-quote heredoc ('PHP') agar
-            # variabel shell ($maintenance, $app, dll) tidak di-expand oleh bash,
-            # tapi tetap valid sebagai PHP code.
+            # Tidak ada indentasi di dalam heredoc agar index.php bersih tanpa leading whitespace
             cat > "$API_PUBLIC/index.php" <<PHP
             <?php
 
@@ -258,8 +286,6 @@ jobs:
             chmod 755 "$API_PUBLIC"
             find "$API_PUBLIC" -type d -exec chmod 755 {} \;
             find "$API_PUBLIC" -type f -exec chmod 644 {} \;
-            # index.php harus readable oleh PHP-FPM
-            chmod 644 "$API_PUBLIC/index.php"
 
             echo "=== Post-deploy checks ==="
             if command -v curl >/dev/null 2>&1; then
@@ -308,6 +334,7 @@ jobs:
           timeout: 300s
           command_timeout: 30m
           script_stop: true
+          envs: ENV_APP_KEY,ENV_APP_URL,ENV_FRONTEND_URL,ENV_DB_HOST,ENV_DB_PORT,ENV_DB_DATABASE,ENV_DB_USERNAME,ENV_DB_PASSWORD
           script: *deploy_api_script
 
       - name: Fail if both attempts fail
