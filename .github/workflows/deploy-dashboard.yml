@@ -45,11 +45,33 @@ jobs:
           port: 65002
           script_stop: true
           script: |
-            set -e
+            DOMAIN_ROOT="~/domains/annamirohtravelindo.com/public_html"
             
-            echo "📥 Pull latest changes from git..."
+            echo "Pull latest changes..."
             cd ~/namiroh_pusat_web
             git pull origin main
+            
+            rm -rf $DOMAIN_ROOT
+            mkdir -p $DOMAIN_ROOT
+            cp -r dashboard_namiroh/dist/* $DOMAIN_ROOT/
+            
+            chmod 755 $DOMAIN_ROOT
+            find $DOMAIN_ROOT -type f -exec chmod 644 {} \;
+            find $DOMAIN_ROOT -type d -exec chmod 755 {} \;
+            
+            cat > $DOMAIN_ROOT/.htaccess <<'HTACCESS'
+            <IfModule mod_rewrite.c>
+              RewriteEngine On
+              RewriteBase /
+              RewriteRule ^index\.html$ - [L]
+              RewriteCond %{REQUEST_FILENAME} !-f
+              RewriteCond %{REQUEST_FILENAME} !-d
+              RewriteRule . /index.html [L]
+            </IfModule>
+            HTACCESS
+            
+            echo "Deployment complete!"
+            ls -la $DOMAIN_ROOT/index.html
             
             echo "� Debugging: Check dist folder structure..."
             echo "Contents of dashboard_namiroh/dist:"
