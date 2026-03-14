@@ -158,6 +158,7 @@ jobs:
             ls -la "$API_PUBLIC" | head -n 20
 
       - name: Deploy API via SSH (attempt 2)
+        id: deploy_api_attempt_2
         if: ${{ steps.deploy_api_attempt_1.outcome == 'failure' }}
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -170,8 +171,8 @@ jobs:
           script_stop: true
           script: *deploy_api_script
 
-      - name: Fail if SSH unreachable twice
-        if: ${{ steps.deploy_api_attempt_1.outcome == 'failure' && failure() }}
+      - name: Fail if both attempts fail
+        if: ${{ steps.deploy_api_attempt_1.outcome == 'failure' && steps.deploy_api_attempt_2.outcome == 'failure' }}
         run: |
-          echo "SSH deployment failed on both attempts. Check Hostinger SSH availability/firewall for port 65002."
+          echo "Deployment failed on both retry attempts. Check error logs above (network or application failure)."
           exit 1
