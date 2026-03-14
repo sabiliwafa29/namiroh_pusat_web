@@ -25,6 +25,8 @@ jobs:
           username: ${{ secrets.HOSTINGER_USER }}
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           port: 65002
+          timeout: 300s
+          command_timeout: 30m
           script_stop: true
           script: |
             set -euo pipefail
