@@ -1,0 +1,43 @@
+name: Deploy Dashboard to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'dashboard_namiroh/**'
+      - '.github/workflows/deploy-dashboard.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        working-directory: dashboard_namiroh
+        run: npm install
+
+      - name: Build production
+        working-directory: dashboard_namiroh
+        run: npm run build
+
+      - name: Deploy to Hostinger via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          script: |
+            cd ~/namiroh_pusat_web
+            git pull origin main
+            cd dashboard_namiroh
+            npm install
+            npm run build
+            echo "✅ Dashboard deployed successfully!"
