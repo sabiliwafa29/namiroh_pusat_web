@@ -20,8 +20,6 @@ jobs:
     steps:
       - name: Deploy API via SSH
         uses: appleboy/ssh-action@v1.2.0
-        env:
-          HOSTINGER_API_PUBLIC: ${{ secrets.HOSTINGER_API_PUBLIC }}
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
           username: ${{ secrets.HOSTINGER_USER }}
@@ -35,26 +33,7 @@ jobs:
             REPO_URL="https://github.com/sabiliwafa29/namiroh_pusat_web.git"
             API_DIR="$REPO_DIR/api_namiroh"
             API_DOMAIN="api.annamirohtravelindo.com"
-            API_PUBLIC_OVERRIDE="${HOSTINGER_API_PUBLIC:-}"
-            API_PUBLIC_DEFAULT="$HOME/domains/annamirohtravelindo.com/public_html/api"
-            API_PUBLIC_FALLBACK_1="$HOME/domains/$API_DOMAIN/public_html"
-            API_PUBLIC_FALLBACK_2="$HOME/domains/$API_DOMAIN"
-            API_PUBLIC_FALLBACK_3="$HOME/public_html/api"
-            API_PUBLIC=""
-
-            if [ -n "$API_PUBLIC_OVERRIDE" ]; then
-              API_PUBLIC="$API_PUBLIC_OVERRIDE"
-            elif [ -d "$API_PUBLIC_DEFAULT" ]; then
-              API_PUBLIC="$API_PUBLIC_DEFAULT"
-            elif [ -d "$API_PUBLIC_FALLBACK_1" ]; then
-              API_PUBLIC="$API_PUBLIC_FALLBACK_1"
-            elif [ -d "$API_PUBLIC_FALLBACK_2" ]; then
-              API_PUBLIC="$API_PUBLIC_FALLBACK_2"
-            elif [ -d "$API_PUBLIC_FALLBACK_3" ]; then
-              API_PUBLIC="$API_PUBLIC_FALLBACK_3"
-            else
-              API_PUBLIC="$API_PUBLIC_DEFAULT"
-            fi
+            API_PUBLIC="$HOME/domains/annamirohtravelindo.com/public_html/api"
 
             sync_dir() {
               local src="$1"
@@ -86,9 +65,12 @@ jobs:
             command -v composer >/dev/null 2>&1 || { echo "composer is required"; exit 1; }
 
             echo "Selected API_PUBLIC=$API_PUBLIC"
-            echo "Directory snapshot for domain candidates:"
-            ls -la "$HOME/domains" || true
-            ls -la "$HOME/domains/$API_DOMAIN" || true
+            if [ ! -d "$API_PUBLIC" ]; then
+              echo "API target directory not found: $API_PUBLIC"
+              ls -la "$HOME/domains" || true
+              ls -la "$HOME/domains/annamirohtravelindo.com/public_html" || true
+              exit 1
+            fi
 
             if [ ! -f "$API_DIR/.env" ]; then
               echo "Missing $API_DIR/.env"
