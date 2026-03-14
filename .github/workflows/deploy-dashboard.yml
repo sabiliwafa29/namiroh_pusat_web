@@ -26,32 +26,45 @@ jobs:
           port: 65002
           script_stop: true
           script: |
+            set -euo pipefail
+
             DOMAIN_ROOT="/home/u190975834/public_html"
             REPO_DIR="$HOME/namiroh_pusat_web"
+            REPO_URL="https://github.com/sabiliwafa29/namiroh_pusat_web.git"
 
             echo "=== Pull latest code ==="
-            if [ ! -d "$REPO_DIR/.git" ]; then
-              git clone https://github.com/sabiliwafa29/namiroh_pusat_web.git $REPO_DIR
+            echo "HOME=$HOME"
+            echo "REPO_DIR=$REPO_DIR"
+
+            if [ -d "$REPO_DIR/.git" ]; then
+              cd "$REPO_DIR"
+              git remote -v
+              git fetch origin main
+              git reset --hard origin/main
             else
-              cd $REPO_DIR && git pull origin main
+              if [ -d "$REPO_DIR" ]; then
+                # Existing non-git directory breaks git clone; clean and re-clone.
+                rm -rf "$REPO_DIR"
+              fi
+              git clone "$REPO_URL" "$REPO_DIR"
             fi
 
             echo "=== Install & Build React ==="
-            cd $REPO_DIR/dashboard_namiroh
+            cd "$REPO_DIR/dashboard_namiroh"
             npm ci
             npm run build
 
             echo "=== Deploy to public_html ==="
-            mkdir -p $DOMAIN_ROOT
+            mkdir -p "$DOMAIN_ROOT"
             # Keep .well-known if present (SSL/challenge files) and clean the rest.
             find "$DOMAIN_ROOT" -mindepth 1 ! -path "$DOMAIN_ROOT/.well-known*" -exec rm -rf {} +
-            cp -r $REPO_DIR/dashboard_namiroh/dist/. $DOMAIN_ROOT/
+            cp -r "$REPO_DIR/dashboard_namiroh/dist/." "$DOMAIN_ROOT/"
 
-            chmod 755 $DOMAIN_ROOT
-            find $DOMAIN_ROOT -type f -exec chmod 644 {} \;
-            find $DOMAIN_ROOT -type d -exec chmod 755 {} \;
+            chmod 755 "$DOMAIN_ROOT"
+            find "$DOMAIN_ROOT" -type f -exec chmod 644 {} \;
+            find "$DOMAIN_ROOT" -type d -exec chmod 755 {} \;
 
-            cat > $DOMAIN_ROOT/.htaccess <<'HTACCESS'
+            cat > "$DOMAIN_ROOT/.htaccess" <<'HTACCESS'
             <IfModule mod_rewrite.c>
               RewriteEngine On
               RewriteBase /
@@ -63,4 +76,4 @@ jobs:
             HTACCESS
 
             echo "=== SUCCESS ==="
-            ls -lh $DOMAIN_ROOT/index.html
+            ls -lh "$DOMAIN_ROOT/index.html"
