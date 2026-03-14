@@ -49,7 +49,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-2">
                 <span>✉️</span>
-                <span>admin@annamirohtravelindo.com</span>
+                <span>admin2@annamirohtravelindo.com</span>
               </li>
               <li className="flex items-center gap-2">
                 <span>🕐</span>
