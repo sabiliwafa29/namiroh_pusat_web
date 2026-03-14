@@ -70,15 +70,12 @@ jobs:
             mkdir -p "$API_PUBLIC"
             echo "API_PUBLIC=$API_PUBLIC"
 
-            if [ ! -f "$API_DIR/.env" ]; then
-              echo "Missing $API_DIR/.env"
-              exit 1
-            fi
-
-            # If production env file exists, use it as active Laravel env.
             if [ -f "$API_DIR/.env.production" ]; then
               cp "$API_DIR/.env.production" "$API_DIR/.env"
               echo "Using $API_DIR/.env.production as active .env"
+            elif [ ! -f "$API_DIR/.env" ]; then
+              echo "Missing both $API_DIR/.env.production and $API_DIR/.env"
+              exit 1
             fi
 
             echo "=== Install Laravel dependencies ==="
