@@ -39,6 +39,7 @@ jobs:
           timeout: 300s
           command_timeout: 30m
           script_stop: true
+          # FIX: script anchor tetap dipakai untuk DRY (reuse di attempt 2)
           script: &deploy_api_script |
             set -euo pipefail
             trap 'echo "ERROR at line $LINENO"' ERR
@@ -53,7 +54,6 @@ jobs:
             sync_dir() {
               local src="$1"
               local dst="$2"
-
               mkdir -p "$dst"
               if command -v rsync >/dev/null 2>&1; then
                 rsync -a --delete "$src" "$dst"
@@ -81,10 +81,8 @@ jobs:
 
             mkdir -p "$API_PUBLIC"
             echo "API_PUBLIC=$API_PUBLIC"
-            echo "=== Prepare environment file ==="
 
-            echo "=== Inject environment values ==="
-
+            echo "=== Validate required secrets ==="
             require_secret() {
               local key="$1"
               local value="$2"
@@ -94,81 +92,91 @@ jobs:
               fi
             }
 
-            require_secret APP_KEY "${ENV_APP_KEY:-}"
-            require_secret APP_URL "${ENV_APP_URL:-}"
+            require_secret APP_KEY     "${ENV_APP_KEY:-}"
+            require_secret APP_URL     "${ENV_APP_URL:-}"
             require_secret FRONTEND_URL "${ENV_FRONTEND_URL:-}"
-            require_secret DB_HOST "${ENV_DB_HOST:-}"
-            require_secret DB_PORT "${ENV_DB_PORT:-}"
+            require_secret DB_HOST     "${ENV_DB_HOST:-}"
+            require_secret DB_PORT     "${ENV_DB_PORT:-}"
             require_secret DB_DATABASE "${ENV_DB_DATABASE:-}"
             require_secret DB_USERNAME "${ENV_DB_USERNAME:-}"
             require_secret DB_PASSWORD "${ENV_DB_PASSWORD:-}"
 
-            cat > "$API_DIR/.env" <<EOF
-            APP_NAME=AnNamiroh
-            APP_ENV=production
-            APP_KEY=${ENV_APP_KEY}
-            APP_DEBUG=false
-            APP_URL=${ENV_APP_URL}
+            echo "=== Inject environment values ==="
+            # FIX: Gunakan printf untuk tulis .env agar tidak ada leading whitespace
+            # dari indentasi heredoc (bug pada versi sebelumnya).
+            # Nilai DB_PASSWORD di-quote untuk handle karakter spesial.
+            printf '%s\n' \
+              "APP_NAME=AnNamiroh" \
+              "APP_ENV=production" \
+              "APP_KEY=${ENV_APP_KEY}" \
+              "APP_DEBUG=false" \
+              "APP_URL=${ENV_APP_URL}" \
+              "" \
+              "FRONTEND_URL=${ENV_FRONTEND_URL}" \
+              "" \
+              "APP_LOCALE=id" \
+              "APP_FALLBACK_LOCALE=id" \
+              "APP_FAKER_LOCALE=id_ID" \
+              "" \
+              "APP_MAINTENANCE_DRIVER=file" \
+              "" \
+              "BCRYPT_ROUNDS=12" \
+              "" \
+              "LOG_CHANNEL=stack" \
+              "LOG_STACK=single" \
+              "LOG_DEPRECATIONS_CHANNEL=null" \
+              "LOG_LEVEL=error" \
+              "" \
+              "DB_CONNECTION=mysql" \
+              "DB_HOST=${ENV_DB_HOST}" \
+              "DB_PORT=${ENV_DB_PORT}" \
+              "DB_DATABASE=${ENV_DB_DATABASE}" \
+              "DB_USERNAME=${ENV_DB_USERNAME}" \
+              "DB_PASSWORD=${ENV_DB_PASSWORD}" \
+              "" \
+              "SESSION_DRIVER=database" \
+              "SESSION_LIFETIME=120" \
+              "SESSION_ENCRYPT=false" \
+              "SESSION_PATH=/" \
+              "SESSION_DOMAIN=.annamirohtravelindo.com" \
+              "" \
+              "BROADCAST_CONNECTION=log" \
+              "FILESYSTEM_DISK=public" \
+              "QUEUE_CONNECTION=database" \
+              "" \
+              "CACHE_STORE=database" \
+              "" \
+              "MEMCACHED_HOST=127.0.0.1" \
+              "" \
+              "REDIS_CLIENT=phpredis" \
+              "REDIS_HOST=127.0.0.1" \
+              "REDIS_PASSWORD=null" \
+              "REDIS_PORT=6379" \
+              "" \
+              "MAIL_MAILER=log" \
+              "MAIL_SCHEME=null" \
+              "MAIL_HOST=127.0.0.1" \
+              "MAIL_PORT=2525" \
+              "MAIL_USERNAME=null" \
+              "MAIL_PASSWORD=null" \
+              'MAIL_FROM_ADDRESS="hello@annamirohtravelindo.com"' \
+              'MAIL_FROM_NAME="${APP_NAME}"' \
+              "" \
+              "AWS_ACCESS_KEY_ID=" \
+              "AWS_SECRET_ACCESS_KEY=" \
+              "AWS_DEFAULT_REGION=us-east-1" \
+              "AWS_BUCKET=" \
+              "AWS_USE_PATH_STYLE_ENDPOINT=false" \
+              "" \
+              'VITE_APP_NAME="${APP_NAME}"' \
+              > "$API_DIR/.env"
 
-            FRONTEND_URL=${ENV_FRONTEND_URL}
-
-            APP_LOCALE=id
-            APP_FALLBACK_LOCALE=id
-            APP_FAKER_LOCALE=id_ID
-
-            APP_MAINTENANCE_DRIVER=file
-
-            BCRYPT_ROUNDS=12
-
-            LOG_CHANNEL=stack
-            LOG_STACK=single
-            LOG_DEPRECATIONS_CHANNEL=null
-            LOG_LEVEL=error
-
-            DB_CONNECTION=mysql
-            DB_HOST=${ENV_DB_HOST}
-            DB_PORT=${ENV_DB_PORT}
-            DB_DATABASE=${ENV_DB_DATABASE}
-            DB_USERNAME=${ENV_DB_USERNAME}
-            DB_PASSWORD="${ENV_DB_PASSWORD}"
-
-            SESSION_DRIVER=database
-            SESSION_LIFETIME=120
-            SESSION_ENCRYPT=false
-            SESSION_PATH=/
-            SESSION_DOMAIN=.annamirohtravelindo.com
-
-            BROADCAST_CONNECTION=log
-            FILESYSTEM_DISK=public
-            QUEUE_CONNECTION=database
-
-            CACHE_STORE=database
-
-            MEMCACHED_HOST=127.0.0.1
-
-            REDIS_CLIENT=phpredis
-            REDIS_HOST=127.0.0.1
-            REDIS_PASSWORD=null
-            REDIS_PORT=6379
-
-            MAIL_MAILER=log
-            MAIL_SCHEME=null
-            MAIL_HOST=127.0.0.1
-            MAIL_PORT=2525
-            MAIL_USERNAME=null
-            MAIL_PASSWORD=null
-            MAIL_FROM_ADDRESS="hello@annamirohtravelindo.com"
-            MAIL_FROM_NAME="\${APP_NAME}"
-
-            AWS_ACCESS_KEY_ID=
-            AWS_SECRET_ACCESS_KEY=
-            AWS_DEFAULT_REGION=us-east-1
-            AWS_BUCKET=
-            AWS_USE_PATH_STYLE_ENDPOINT=false
-
-            VITE_APP_NAME="\${APP_NAME}"
-            EOF
-            echo "Environment values updated"
+            echo "Environment file written successfully"
+            # Verifikasi tidak ada leading whitespace di .env
+            if grep -P '^\s+\S' "$API_DIR/.env" >/dev/null 2>&1; then
+              echo "ERROR: .env has lines with leading whitespace — aborting"
+              exit 1
+            fi
 
             echo "=== Install Laravel dependencies ==="
             cd "$API_DIR"
@@ -184,14 +192,26 @@ jobs:
             echo "=== Prepare API runtime in domains directory ==="
             sync_dir "$API_DIR/" "$API_RUNTIME/"
 
-            # Ensure runtime writable paths are valid on hosting.
+            # Ensure runtime writable paths are valid on hosting
             mkdir -p "$API_RUNTIME/storage" "$API_RUNTIME/bootstrap/cache"
             chmod -R 775 "$API_RUNTIME/storage" "$API_RUNTIME/bootstrap/cache" || true
+
+            # FIX: Jalankan storage:link agar file upload bisa diakses via URL publik
+            echo "=== Create storage symlink ==="
+            cd "$API_RUNTIME"
+            if [ ! -L "$API_RUNTIME/public/storage" ]; then
+              php artisan storage:link || echo "storage:link failed (non-fatal, may already exist)"
+            else
+              echo "Storage symlink already exists, skipping"
+            fi
 
             echo "=== Publish API public files to $API_PUBLIC ==="
             sync_dir "$API_RUNTIME/public/" "$API_PUBLIC/"
 
             echo "=== Patch API front controller at $API_PUBLIC ==="
+            # FIX: Gunakan cat dengan single-quote heredoc ('PHP') agar
+            # variabel shell ($maintenance, $app, dll) tidak di-expand oleh bash,
+            # tapi tetap valid sebagai PHP code.
             cat > "$API_PUBLIC/index.php" <<PHP
             <?php
 
@@ -201,9 +221,9 @@ jobs:
             define('LARAVEL_START', microtime(true));
 
             if (file_exists(
-              \$maintenance = '${API_RUNTIME}/storage/framework/maintenance.php'
+                \$maintenance = '${API_RUNTIME}/storage/framework/maintenance.php'
             )) {
-              require \$maintenance;
+                require \$maintenance;
             }
 
             require '${API_RUNTIME}/vendor/autoload.php';
@@ -213,7 +233,7 @@ jobs:
             \$kernel = \$app->make(Kernel::class);
 
             \$response = \$kernel->handle(
-              \$request = Request::capture()
+                \$request = Request::capture()
             )->send();
 
             \$kernel->terminate(\$request, \$response);
@@ -222,11 +242,15 @@ jobs:
             chmod 755 "$API_PUBLIC"
             find "$API_PUBLIC" -type d -exec chmod 755 {} \;
             find "$API_PUBLIC" -type f -exec chmod 644 {} \;
+            # index.php harus readable oleh PHP-FPM
+            chmod 644 "$API_PUBLIC/index.php"
 
             echo "=== Post-deploy checks ==="
             if command -v curl >/dev/null 2>&1; then
-              PAKET_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" "https://$MAIN_DOMAIN/api/paket?page=1&per_page=1&published=1" || true)
-              INDEX_PAKET_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" "https://$MAIN_DOMAIN/api/index.php/api/paket?page=1&per_page=1&published=1" || true)
+              PAKET_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" \
+                "https://$MAIN_DOMAIN/api/paket?page=1&per_page=1&published=1" || true)
+              INDEX_PAKET_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" \
+                "https://$MAIN_DOMAIN/api/index.php/api/paket?page=1&per_page=1&published=1" || true)
               echo "GET /api/paket -> $PAKET_STATUS"
               echo "GET /api/index.php/api/paket -> $INDEX_PAKET_STATUS"
 
