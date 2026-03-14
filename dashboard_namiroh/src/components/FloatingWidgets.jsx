@@ -6,7 +6,7 @@ const PROMO_LIST = [
   { id: 1, label: 'Umroh Best Seller', desc: 'Mulai Rp 23.000.000', img: storageUrl('banner/umroh-gus-ferry.webp') },
   { id: 2, label: 'Umroh Spesial Ramadhan', desc: 'Mulai Rp 34.000.000', img: storageUrl('banner/umroh-spesial-ramadhan.webp') },
   { id: 3, label: 'Program Badal Umroh dan Haji', desc: 'Mulai Rp 3.000.000', img: storageUrl('banner/program-badal.webp') },
-  { id: 4, label: 'Haji1 Hanya 500rb', desc: 'Seat Terbatas!', img: storageUrl('banner/haji_500rb.webp') },
+  { id: 4, label: 'Haji Hanya 500rb', desc: 'Seat Terbatas!', img: storageUrl('banner/haji_500rb.webp') },
 ]
 
 export default function FloatingWidgets() {
