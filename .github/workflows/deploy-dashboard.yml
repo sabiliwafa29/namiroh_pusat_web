@@ -47,7 +47,7 @@ jobs:
           port: 65002
           script_stop: true
           script: |
-            DOMAIN_ROOT="$HOME/domains/annamirohtravelindo.com/public_html"
+            DOMAIN_ROOT="/home/u190975834/public_html"
             
             echo "Pull latest changes..."
             cd ~/namiroh_pusat_web
