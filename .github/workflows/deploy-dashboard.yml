@@ -48,20 +48,24 @@ jobs:
           script_stop: true
           script: |
             DOMAIN_ROOT="/home/u190975834/public_html"
-            
-            echo "Pull latest changes..."
-            cd ~/namiroh_pusat_web
-            git pull origin main
-            
+            REPO_DIR="$HOME/namiroh_pusat_web"
+
+            echo "Check & clone repo if not exists..."
+            if [ ! -d "$REPO_DIR/.git" ]; then
+              git clone https://github.com/sabiliwafa29/namiroh_pusat_web.git $REPO_DIR
+            else
+              cd $REPO_DIR && git pull origin main
+            fi
+
             echo "Deploy dist to domain..."
-            rm -rf $DOMAIN_ROOT
+            rm -rf $DOMAIN_ROOT/*
             mkdir -p $DOMAIN_ROOT
-            cp -r dashboard_namiroh/dist/* $DOMAIN_ROOT/
-            
+            cp -r $REPO_DIR/dashboard_namiroh/dist/* $DOMAIN_ROOT/
+
             chmod 755 $DOMAIN_ROOT
             find $DOMAIN_ROOT -type f -exec chmod 644 {} \;
             find $DOMAIN_ROOT -type d -exec chmod 755 {} \;
-            
+
             cat > $DOMAIN_ROOT/.htaccess <<'HTACCESS'
             <IfModule mod_rewrite.c>
               RewriteEngine On
@@ -72,6 +76,6 @@ jobs:
               RewriteRule . /index.html [L]
             </IfModule>
             HTACCESS
-            
+
             echo "SUCCESS: Dashboard deployed!"
             ls -lh $DOMAIN_ROOT/index.html
