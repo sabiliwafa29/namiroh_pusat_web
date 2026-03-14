@@ -1,0 +1,121 @@
+name: Deploy API to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'api_namiroh/**'
+      - '.github/workflows/deploy-api.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-api-hostinger
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy API via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: 65002
+          script_stop: true
+          script: |
+            set -euo pipefail
+
+            REPO_DIR="$HOME/namiroh_pusat_web"
+            REPO_URL="https://github.com/sabiliwafa29/namiroh_pusat_web.git"
+            API_DIR="$REPO_DIR/api_namiroh"
+            API_DOMAIN="api.annamirohtravelindo.com"
+            API_PUBLIC="$HOME/domains/$API_DOMAIN/public_html"
+
+            sync_dir() {
+              local src="$1"
+              local dst="$2"
+
+              mkdir -p "$dst"
+              if command -v rsync >/dev/null 2>&1; then
+                rsync -a --delete "$src" "$dst"
+              else
+                find "$dst" -mindepth 1 -exec rm -rf {} +
+                cp -a "$src". "$dst"/
+              fi
+            }
+
+            echo "=== Update repository ==="
+            if [ -d "$REPO_DIR/.git" ]; then
+              cd "$REPO_DIR"
+              git fetch origin main
+              git reset --hard origin/main
+            else
+              if [ -d "$REPO_DIR" ]; then
+                rm -rf "$REPO_DIR"
+              fi
+              git clone "$REPO_URL" "$REPO_DIR"
+            fi
+
+            echo "=== Validate runtime dependencies ==="
+            command -v php >/dev/null 2>&1 || { echo "php is required"; exit 1; }
+            command -v composer >/dev/null 2>&1 || { echo "composer is required"; exit 1; }
+
+            if [ ! -f "$API_DIR/.env" ]; then
+              echo "Missing $API_DIR/.env"
+              exit 1
+            fi
+
+            echo "=== Install Laravel dependencies ==="
+            cd "$API_DIR"
+            composer install --no-dev --optimize-autoloader
+
+            echo "=== Run migrations and cache ==="
+            php artisan migrate --force
+            php artisan optimize:clear
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+
+            echo "=== Publish API public files ==="
+            sync_dir "$API_DIR/public/" "$API_PUBLIC/"
+
+            echo "=== Patch API front controller ==="
+            cat > "$API_PUBLIC/index.php" <<PHP
+            <?php
+
+            use Illuminate\Contracts\Http\Kernel;
+            use Illuminate\Http\Request;
+
+            define('LARAVEL_START', microtime(true));
+
+            if (file_exists(
+              \$maintenance = '${API_DIR}/storage/framework/maintenance.php'
+            )) {
+              require \$maintenance;
+            }
+
+            require '${API_DIR}/vendor/autoload.php';
+
+            \$app = require_once '${API_DIR}/bootstrap/app.php';
+
+            \$kernel = \$app->make(Kernel::class);
+
+            \$response = \$kernel->handle(
+              \$request = Request::capture()
+            )->send();
+
+            \$kernel->terminate(\$request, \$response);
+            PHP
+
+            echo "=== Set permissions ==="
+            chmod 755 "$API_PUBLIC"
+            find "$API_PUBLIC" -type d -exec chmod 755 {} \;
+            find "$API_PUBLIC" -type f -exec chmod 644 {} \;
+
+            echo "=== SUCCESS ==="
+            ls -lh "$API_PUBLIC/index.php"
+            ls -la "$API_PUBLIC" | head -n 20
