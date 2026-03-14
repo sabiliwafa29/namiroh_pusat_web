@@ -39,6 +39,8 @@ jobs:
           timeout: 300s
           command_timeout: 30m
           script_stop: true
+          envs: ENV_APP_KEY,ENV_APP_URL,ENV_FRONTEND_URL,ENV_DB_HOST,ENV_DB_PORT,ENV_DB_DATABASE,ENV_DB_USERNAME,ENV_DB_PASSWORD
+
           # FIX: script anchor tetap dipakai untuk DRY (reuse di attempt 2)
           script: &deploy_api_script |
             set -euo pipefail
