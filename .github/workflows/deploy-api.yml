@@ -36,6 +36,7 @@ jobs:
             API_DIR="$REPO_DIR/api_namiroh"
             MAIN_DOMAIN="annamirohtravelindo.com"
             API_PUBLIC="$HOME/domains/$MAIN_DOMAIN/public_html/api"
+            API_RUNTIME="$HOME/domains/$MAIN_DOMAIN/api_app"
 
             sync_dir() {
               local src="$1"
@@ -85,8 +86,15 @@ jobs:
             php artisan route:cache
             php artisan view:cache
 
+            echo "=== Prepare API runtime in domains directory ==="
+            sync_dir "$API_DIR/" "$API_RUNTIME/"
+
+            # Ensure runtime writable paths are valid on hosting.
+            mkdir -p "$API_RUNTIME/storage" "$API_RUNTIME/bootstrap/cache"
+            chmod -R 775 "$API_RUNTIME/storage" "$API_RUNTIME/bootstrap/cache" || true
+
             echo "=== Publish API public files to $API_PUBLIC ==="
-            sync_dir "$API_DIR/public/" "$API_PUBLIC/"
+            sync_dir "$API_RUNTIME/public/" "$API_PUBLIC/"
 
             echo "=== Patch API front controller at $API_PUBLIC ==="
             cat > "$API_PUBLIC/index.php" <<PHP
@@ -98,14 +106,14 @@ jobs:
             define('LARAVEL_START', microtime(true));
 
             if (file_exists(
-              \$maintenance = '${API_DIR}/storage/framework/maintenance.php'
+              \$maintenance = '${API_RUNTIME}/storage/framework/maintenance.php'
             )) {
               require \$maintenance;
             }
 
-            require '${API_DIR}/vendor/autoload.php';
+            require '${API_RUNTIME}/vendor/autoload.php';
 
-            \$app = require_once '${API_DIR}/bootstrap/app.php';
+            \$app = require_once '${API_RUNTIME}/bootstrap/app.php';
 
             \$kernel = \$app->make(Kernel::class);
 
