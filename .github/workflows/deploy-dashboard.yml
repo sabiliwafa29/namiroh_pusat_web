@@ -28,7 +28,18 @@ jobs:
         working-directory: dashboard_namiroh
         run: npm run build
 
-      - name: Deploy to Hostinger via SSH
+      - name: Upload dist to Hostinger via SCP
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: 65002
+          source: "dashboard_namiroh/dist/*"
+          target: "~/namiroh_pusat_web/dashboard_namiroh/dist/"
+          rm: true
+
+      - name: Verify deployment
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
@@ -36,18 +47,6 @@ jobs:
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           port: 65002
           script: |
-            set -e
-            echo "📁 Changing to project directory..."
-            cd ~/namiroh_pusat_web || exit 1
-            
-            echo "📥 Pulling latest code..."
-            git pull origin main || exit 1
-            
-            echo "📦 Installing dashboard dependencies..."
-            cd dashboard_namiroh || exit 1
-            npm install --legacy-peer-deps || exit 1
-            
-            echo "🔨 Building dashboard..."
-            npm run build || exit 1
-            
             echo "✅ Dashboard deployed successfully!"
+            echo "📂 Checking dist folder..."
+            ls -la ~/namiroh_pusat_web/dashboard_namiroh/dist/ | head -10
