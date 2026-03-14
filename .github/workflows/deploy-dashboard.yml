@@ -37,6 +37,7 @@ jobs:
 
       - name: Upload dist to Hostinger
         uses: appleboy/scp-action@v0.1.7
+        continue-on-error: true
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
           username: ${{ secrets.HOSTINGER_USER }}
@@ -62,10 +63,34 @@ jobs:
             DOMAIN_ROOT="$DOMAIN_ROOT_DEFAULT"
             UPLOAD_BASE="/home/u190975834/namiroh_dashboard_dist"
             UPLOAD_DIR=""
+            REPO_DIR="$HOME/namiroh_pusat_web"
+            REPO_URL="https://github.com/sabiliwafa29/namiroh_pusat_web.git"
+            NVM_DIR="$HOME/.nvm"
 
             if [ -d "$DOMAIN_ROOT_DOMAIN" ]; then
               DOMAIN_ROOT="$DOMAIN_ROOT_DOMAIN"
             fi
+
+            ensure_node() {
+              if command -v npm >/dev/null 2>&1 && command -v node >/dev/null 2>&1; then
+                node -v
+                npm -v
+                return 0
+              fi
+
+              echo "Node/npm not found, installing Node 20 via nvm"
+              if [ ! -s "$NVM_DIR/nvm.sh" ]; then
+                curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
+              fi
+
+              # shellcheck disable=SC1090
+              . "$NVM_DIR/nvm.sh"
+              nvm install 20
+              nvm use 20
+
+              node -v
+              npm -v
+            }
 
             echo "=== Deploy to public_html ==="
             if [ -d "$UPLOAD_BASE/dashboard_namiroh/dist" ]; then
@@ -77,9 +102,27 @@ jobs:
             fi
 
             if [ ! -f "$UPLOAD_DIR/index.html" ]; then
-              echo "Uploaded build not found in expected locations"
-              ls -la "$UPLOAD_BASE" || true
-              exit 1
+              echo "Uploaded build not found. Fallback to server-side build."
+
+              if [ -d "$REPO_DIR/.git" ]; then
+                cd "$REPO_DIR"
+                git fetch origin main
+                git reset --hard origin/main
+              else
+                if [ -d "$REPO_DIR" ]; then
+                  rm -rf "$REPO_DIR"
+                fi
+                git clone "$REPO_URL" "$REPO_DIR"
+              fi
+
+              ensure_node
+              cd "$REPO_DIR/dashboard_namiroh"
+              export RAYON_NUM_THREADS=1
+              export UV_THREADPOOL_SIZE=1
+              npm ci
+              npm run build
+
+              UPLOAD_DIR="$REPO_DIR/dashboard_namiroh/dist"
             fi
 
             echo "Selected DOMAIN_ROOT=$DOMAIN_ROOT"
