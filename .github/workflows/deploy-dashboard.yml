@@ -57,9 +57,15 @@ jobs:
           script: |
             set -euo pipefail
 
-            DOMAIN_ROOT="/home/u190975834/public_html"
+            DOMAIN_ROOT_DEFAULT="$HOME/public_html"
+            DOMAIN_ROOT_DOMAIN="$HOME/domains/annamirohtravelindo.com/public_html"
+            DOMAIN_ROOT="$DOMAIN_ROOT_DEFAULT"
             UPLOAD_BASE="/home/u190975834/namiroh_dashboard_dist"
             UPLOAD_DIR=""
+
+            if [ -d "$DOMAIN_ROOT_DOMAIN" ]; then
+              DOMAIN_ROOT="$DOMAIN_ROOT_DOMAIN"
+            fi
 
             echo "=== Deploy to public_html ==="
             if [ -d "$UPLOAD_BASE/dashboard_namiroh/dist" ]; then
@@ -76,6 +82,8 @@ jobs:
               exit 1
             fi
 
+            echo "Selected DOMAIN_ROOT=$DOMAIN_ROOT"
+
             mkdir -p "$DOMAIN_ROOT"
             # Keep .well-known if present (SSL/challenge files) and clean the rest.
             find "$DOMAIN_ROOT" -mindepth 1 ! -path "$DOMAIN_ROOT/.well-known*" -exec rm -rf {} +
@@ -90,6 +98,7 @@ jobs:
             <IfModule mod_rewrite.c>
               RewriteEngine On
               RewriteBase /
+              DirectoryIndex index.html
               RewriteRule ^index\.html$ - [L]
               RewriteCond %{REQUEST_FILENAME} !-f
               RewriteCond %{REQUEST_FILENAME} !-d
@@ -99,3 +108,4 @@ jobs:
 
             echo "=== SUCCESS ==="
             ls -lh "$DOMAIN_ROOT/index.html"
+            ls -la "$DOMAIN_ROOT" | head -n 20
