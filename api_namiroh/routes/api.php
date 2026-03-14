@@ -10,6 +10,27 @@ use App\Models\Maskapai;
 use App\Models\JenisLayanan;
 use Illuminate\Http\Request;
 
+Route::options('/{any}', function (Request $request) {
+    $origin = $request->headers->get('Origin');
+    $allowedOrigins = [
+        'https://annamirohtravelindo.com',
+        'https://www.annamirohtravelindo.com',
+    ];
+
+    $headers = [
+        'Access-Control-Allow-Methods' => 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+        'Access-Control-Allow-Headers' => 'Origin, Content-Type, Accept, Authorization, X-Requested-With, X-CSRF-TOKEN, X-XSRF-TOKEN',
+        'Access-Control-Max-Age' => '86400',
+    ];
+
+    if (in_array((string) $origin, $allowedOrigins, true)) {
+        $headers['Access-Control-Allow-Origin'] = $origin;
+        $headers['Vary'] = 'Origin';
+    }
+
+    return response('', 204, $headers);
+})->where('any', '.*');
+
 // ============================================================
 // PUBLIC ROUTES (tidak perlu token)
 // ============================================================

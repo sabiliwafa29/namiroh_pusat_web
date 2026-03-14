@@ -16,10 +16,6 @@
 
     RewriteEngine On
 
-    # Let preflight requests pass through quickly.
-    RewriteCond %{REQUEST_METHOD} =OPTIONS
-    RewriteRule ^ - [R=200,L]
-
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
