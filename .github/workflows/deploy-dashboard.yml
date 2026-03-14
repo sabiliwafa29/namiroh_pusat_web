@@ -36,8 +36,41 @@ jobs:
           key: ${{ secrets.HOSTINGER_SSH_KEY }}
           port: 65002
           source: "dashboard_namiroh/dist/*"
-          target: "~/public_html/"
+          target: "~/public_html_temp/"
           rm: true
+
+      - name: Deploy to Hostinger
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTINGER_HOST }}
+          username: ${{ secrets.HOSTINGER_USER }}
+          key: ${{ secrets.HOSTINGER_SSH_KEY }}
+          port: 65002
+          script: |
+            set -e
+            
+            echo "🔄 Moving files to public_html..."
+            rm -rf ~/public_html/*
+            mv ~/public_html_temp/* ~/public_html/
+            rmdir ~/public_html_temp/
+            
+            echo "🔧 Fixing permissions..."
+            chmod -R 755 ~/public_html/
+            find ~/public_html/ -type f -exec chmod 644 {} \;
+            
+            echo "📝 Creating .htaccess for SPA routing..."
+            cat > ~/public_html/.htaccess <<'HTACCESS'
+            <IfModule mod_rewrite.c>
+              RewriteEngine On
+              RewriteBase /
+            
+              RewriteRule ^index\.html$ - [L]
+            
+              RewriteCond %{REQUEST_FILENAME} !-f
+              RewriteCond %{REQUEST_FILENAME} !-d
+              RewriteRule . /index.html [L]
+            </IfModule>
+            HTACCESS
 
       - name: Verify deployment
         uses: appleboy/ssh-action@master
