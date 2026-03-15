@@ -6,7 +6,6 @@ on:
       - main
     paths:
       - 'api_namiroh/**'
-      - 'scripts/deploy_hostinger_subdomain.sh'
       - '.github/workflows/deploy-api.yml'
   workflow_dispatch:
 
@@ -25,7 +24,7 @@ jobs:
           extensions: mbstring, bcmath, pdo_mysql
 
       - name: Install Composer dependencies
-        working-directory: ./api
+        working-directory: ./api_namiroh  # ← fix
         run: composer install --no-dev --optimize-autoloader --no-interaction
 
       - name: Setup SSH
@@ -43,7 +42,7 @@ jobs:
             --exclude='storage/logs/*' \
             --exclude='storage/framework/cache/*' \
             -e "ssh -i ~/.ssh/deploy_key -p ${{ secrets.SSH_PORT }}" \
-            ./api/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/u190975834/domains/annamirohtravelindo.com/public_html/api/
+            ./api_namiroh/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/home/u190975834/domains/annamirohtravelindo.com/public_html/api/
 
       - name: Run Laravel post-deploy commands
         run: |
