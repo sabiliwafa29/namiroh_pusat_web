@@ -178,6 +178,63 @@ jobs:
             cd "$API_DIR"
             composer install --no-dev --optimize-autoloader --no-interaction
 
+            echo "=== Preflight DB connection ==="
+            echo "DB_HOST=${ENV_DB_HOST}"
+            echo "DB_PORT=${ENV_DB_PORT}"
+            echo "DB_DATABASE=${ENV_DB_DATABASE}"
+            echo "DB_USERNAME=${ENV_DB_USERNAME}"
+
+            if command -v mysql >/dev/null 2>&1; then
+              DB_CHECK=$(mysql \
+                --host="${ENV_DB_HOST}" \
+                --port="${ENV_DB_PORT}" \
+                --user="${ENV_DB_USERNAME}" \
+                --password="${ENV_DB_PASSWORD}" \
+                --connect-timeout=10 \
+                --execute="SELECT 'DB_OK' AS status;" \
+                "${ENV_DB_DATABASE}" 2>&1) || true
+
+              if echo "$DB_CHECK" | grep -q "DB_OK"; then
+                echo "DB preflight OK"
+              else
+                echo "DB preflight FAILED"
+                echo "$DB_CHECK"
+                echo ""
+                echo "Periksa GitHub Secrets API_DB_*:"
+                echo "1) API_DB_HOST biasanya localhost atau 127.0.0.1 (sesuai hPanel)"
+                echo "2) API_DB_DATABASE wajib format prefix akun, contoh u123456789_namiroh"
+                echo "3) API_DB_USERNAME wajib format prefix akun, contoh u123456789_userdb"
+                echo "4) User database sudah di-assign ke database di hPanel"
+                echo "5) API_DB_PASSWORD sesuai user database (bukan password login Hostinger)"
+                exit 1
+              fi
+            else
+              PHP_DB_CHECK=$(php -r '
+                $h = getenv("ENV_DB_HOST");
+                $p = getenv("ENV_DB_PORT") ?: "3306";
+                $d = getenv("ENV_DB_DATABASE");
+                $u = getenv("ENV_DB_USERNAME");
+                $pw = getenv("ENV_DB_PASSWORD");
+                try {
+                  $pdo = new PDO("mysql:host={$h};port={$p};dbname={$d}", $u, $pw, [PDO::ATTR_TIMEOUT => 10]);
+                  echo "DB_OK";
+                } catch (Throwable $e) {
+                  echo "DB_FAIL: " . $e->getMessage();
+                  exit(1);
+                }
+              ' 2>&1) || true
+
+              if echo "$PHP_DB_CHECK" | grep -q "DB_OK"; then
+                echo "DB preflight OK"
+              else
+                echo "DB preflight FAILED"
+                echo "$PHP_DB_CHECK"
+                echo ""
+                echo "Periksa GitHub Secrets API_DB_* dan assignment user database di hPanel"
+                exit 1
+              fi
+            fi
+
             echo "=== Run migrations and cache ==="
             php artisan optimize:clear
             php artisan migrate --force
