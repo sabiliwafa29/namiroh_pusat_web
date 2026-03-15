@@ -187,17 +187,18 @@ jobs:
             DB_PREFLIGHT_OK=0
 
             if command -v mysql >/dev/null 2>&1; then
-              set +e
-              DB_CHECK=$(mysql \
+              if DB_CHECK=$(mysql \
                 --host="${ENV_DB_HOST}" \
                 --port="${ENV_DB_PORT}" \
                 --user="${ENV_DB_USERNAME}" \
                 --password="${ENV_DB_PASSWORD}" \
                 --connect-timeout=10 \
                 --execute="SELECT 'DB_OK' AS status;" \
-                "${ENV_DB_DATABASE}" 2>&1)
-              DB_CHECK_EXIT=$?
-              set -e
+                "${ENV_DB_DATABASE}" 2>&1); then
+                DB_CHECK_EXIT=0
+              else
+                DB_CHECK_EXIT=$?
+              fi
 
               echo "mysql preflight exit_code=$DB_CHECK_EXIT"
               echo "$DB_CHECK"
@@ -210,8 +211,7 @@ jobs:
             fi
 
             if [ "$DB_PREFLIGHT_OK" -ne 1 ]; then
-              set +e
-              PHP_DB_CHECK=$(php -r '
+              if PHP_DB_CHECK=$(php -r '
                 $h = getenv("ENV_DB_HOST");
                 $p = getenv("ENV_DB_PORT") ?: "3306";
                 $d = getenv("ENV_DB_DATABASE");
@@ -225,9 +225,11 @@ jobs:
                   echo "DB_FAIL: " . $e->getMessage();
                   exit(1);
                 }
-              ' 2>&1)
-              PHP_DB_CHECK_EXIT=$?
-              set -e
+              ' 2>&1); then
+                PHP_DB_CHECK_EXIT=0
+              else
+                PHP_DB_CHECK_EXIT=$?
+              fi
 
               echo "php-pdo preflight exit_code=$PHP_DB_CHECK_EXIT"
               echo "$PHP_DB_CHECK"
