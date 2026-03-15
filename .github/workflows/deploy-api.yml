@@ -107,6 +107,16 @@ jobs:
             DB_USERNAME="$(printf '%s' "${ENV_DB_USERNAME}" | tr -d '\r\n')"
             DB_PASSWORD="$(printf '%s' "${ENV_DB_PASSWORD}" | tr -d '\r\n')"
 
+            escape_env_value() {
+              printf '%s' "$1" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g'
+            }
+
+            DB_HOST_ENV="$(escape_env_value "$DB_HOST")"
+            DB_PORT_ENV="$(escape_env_value "$DB_PORT")"
+            DB_DATABASE_ENV="$(escape_env_value "$DB_DATABASE")"
+            DB_USERNAME_ENV="$(escape_env_value "$DB_USERNAME")"
+            DB_PASSWORD_ENV="$(escape_env_value "$DB_PASSWORD")"
+
             test_db_host() {
               local host_candidate="$1"
 
@@ -140,6 +150,8 @@ jobs:
               fi
             fi
 
+            RESOLVED_DB_HOST_ENV="$(escape_env_value "$RESOLVED_DB_HOST")"
+
             echo "=== Inject environment values ==="
             printf '%s\n' \
               "APP_NAME=AnNamiroh" \
@@ -164,11 +176,11 @@ jobs:
               "LOG_LEVEL=error" \
               "" \
               "DB_CONNECTION=mysql" \
-              "DB_HOST=${RESOLVED_DB_HOST}" \
-              "DB_PORT=${DB_PORT}" \
-              "DB_DATABASE=${DB_DATABASE}" \
-              "DB_USERNAME=${DB_USERNAME}" \
-              "DB_PASSWORD=${DB_PASSWORD}" \
+              "DB_HOST=\"${RESOLVED_DB_HOST_ENV}\"" \
+              "DB_PORT=\"${DB_PORT_ENV}\"" \
+              "DB_DATABASE=\"${DB_DATABASE_ENV}\"" \
+              "DB_USERNAME=\"${DB_USERNAME_ENV}\"" \
+              "DB_PASSWORD=\"${DB_PASSWORD_ENV}\"" \
               "" \
               "SESSION_DRIVER=database" \
               "SESSION_LIFETIME=120" \
