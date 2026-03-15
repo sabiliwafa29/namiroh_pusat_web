@@ -1,6 +1,8 @@
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
+const PDF_URL = `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://api.annamirohtravelindo.com'}/storage/Company-Profile-An-Namiroh.pdf`
+
 const MILESTONES = [
   { tahun: '2000', teks: 'An Namiroh Travelindo berdiri di Surabaya sebagai biro perjalanan umroh & haji.' },
   { tahun: '2005', teks: 'Mendapatkan izin resmi PPIU dari Kementerian Agama RI.' },
@@ -58,143 +60,88 @@ export default function Profil() {
                 Dengan semangat <em>"Melayani dengan Hati, Memberangkatkan dengan Amanah"</em>, kami hadir untuk memastikan setiap jamaah dapat menjalani ibadah dengan tenang, khusyuk, dan penuh makna.
               </p>
             </div>
-            <div className="flex flex-col gap-4">
-              {[
-                { value: '24+',    label: 'Tahun Pengalaman',         icon: '🕐' },
-                { value: '60.000+',label: 'Jamaah Diberangkatkan',   icon: '🤲' },
-                { value: 'A',      label: 'Akreditasi Kemenag RI',   icon: '🏆' },
-                { value: '24/7',   label: 'Layanan Customer Service', icon: '📞' },
-              ].map((s, i) => (
-                <div key={i} className="flex items-center gap-4 bg-green-50 border border-green-100 rounded-xl p-4">
-                  <div className="text-3xl">{s.icon}</div>
-                  <div>
-                    <div className="font-heading text-2xl font-bold text-green-900">{s.value}</div>
-                    <div className="text-sm text-gray-600">{s.label}</div>
-                  </div>
-                </div>
-              ))}
+            <div className="rounded-2xl overflow-hidden shadow-lg border border-green-100" style={{ aspectRatio: '16/9' }}>
+              <iframe
+                src="https://www.youtube.com/embed/TB1qIon-ZSQ"
+                title="An Namiroh Travelindo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* VISI MISI */}
-      <section className="py-16 px-4 bg-gray-50 bg-islamic-pattern-dark">
+      {/* COMPANY PROFILE PDF */}
+      <section className="py-16 px-4 bg-gray-50">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-10">
+          {/* Header */}
+          <div className="text-center mb-8">
             <div className="text-orange-400 text-2xl mb-1">✦</div>
-            <h2 className="font-heading text-3xl font-bold text-green-900">Visi & Misi</h2>
-            <div className="flex items-center justify-center gap-3 mt-2">
+            <h2 className="font-heading text-3xl font-bold text-green-900">Company Profile</h2>
+            <div className="flex items-center justify-center gap-3 mt-2 mb-3">
               <div className="h-px w-16 bg-orange-400/40" />
               <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
               <div className="h-px w-16 bg-orange-400/40" />
             </div>
+            <p className="text-gray-600 text-base">Unduh atau baca langsung Company Profile An Namiroh Travelindo</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-green-900 text-white rounded-2xl p-8">
-              <div className="text-orange-400 text-3xl mb-3">🌟</div>
-              <h3 className="font-heading text-2xl font-bold mb-3">Visi</h3>
-              <p className="text-green-100 text-base leading-relaxed">
-                Menjadi penyelenggara perjalanan ibadah umroh dan haji terpercaya, terbaik, dan terdepan di Indonesia yang mengutamakan kepuasan jamaah dan keberkahan dalam setiap langkah perjalanan menuju Tanah Suci.
-              </p>
-            </div>
-            <div className="bg-white border border-gray-200 rounded-2xl p-8 shadow-sm">
-              <div className="text-green-700 text-3xl mb-3">🎯</div>
-              <h3 className="font-heading text-2xl font-bold text-green-900 mb-3">Misi</h3>
-              <ul className="space-y-2 text-gray-700 text-base">
-                <li className="flex gap-2"><span className="text-orange-500 mt-0.5">✓</span> Menyelenggarakan perjalanan ibadah yang aman, nyaman, dan bermakna</li>
-                <li className="flex gap-2"><span className="text-orange-500 mt-0.5">✓</span> Memberikan pelayanan profesional dengan bimbingan mutawif berpengalaman</li>
-                <li className="flex gap-2"><span className="text-orange-500 mt-0.5">✓</span> Memastikan fasilitas terbaik dengan harga yang terjangkau</li>
-                <li className="flex gap-2"><span className="text-orange-500 mt-0.5">✓</span> Membangun kepercayaan jamaah melalui transparansi dan amanah</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
 
-      {/* LEGALITAS */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="text-orange-400 text-2xl mb-1">✦</div>
-            <h2 className="font-heading text-3xl font-bold text-green-900">Legalitas & Izin Resmi</h2>
-            <div className="flex items-center justify-center gap-3 mt-2">
-              <div className="h-px w-16 bg-orange-400/40" />
-              <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
-              <div className="h-px w-16 bg-orange-400/40" />
-            </div>
-            <p className="text-gray-600 mt-3 text-base">Beroperasi secara resmi dan terdaftar di Kementerian Agama RI</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {IZIN.map((iz, i) => (
-              <div key={i} className="flex gap-4 items-start bg-green-50 border border-green-100 rounded-xl p-5">
-                <div className="w-14 h-14 flex-shrink-0 bg-green-700 rounded-xl flex items-center justify-center text-white font-bold text-sm text-center leading-tight px-1">
-                  {iz.kode}
-                </div>
-                <div>
-                  <div className="font-semibold text-green-900 text-base">{iz.nama}</div>
-                  <div className="text-sm text-gray-500 mt-0.5">{iz.nomor}</div>
-                </div>
+          {/* PDF Viewer */}
+          <div className="rounded-2xl overflow-hidden shadow-xl border border-green-100 bg-white">
+            {/* Toolbar */}
+            <div className="flex items-center justify-between px-5 py-3 bg-green-900 border-b border-green-800">
+              <div className="flex items-center gap-2">
+                <span className="text-orange-400 text-lg">📄</span>
+                <span className="text-white font-semibold text-sm">Company-Profile-An-Namiroh.pdf</span>
               </div>
-            ))}
+              <a
+                href={PDF_URL}
+                download="Company-Profile-An-Namiroh.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-all duration-150"
+              >
+                <span>⬇</span>
+                <span>Download PDF</span>
+              </a>
+            </div>
+
+            {/* Iframe Viewer */}
+            <iframe
+              src={`${PDF_URL}#toolbar=0&navpanes=0&view=FitH`}
+              title="Company Profile An Namiroh Travelindo"
+              className="w-full border-0"
+              style={{ height: '780px' }}
+            />
+
+            {/* Footer bar */}
+            <div className="flex items-center justify-center gap-4 px-5 py-4 bg-green-50 border-t border-green-100">
+              <a
+                href={PDF_URL}
+                download="Company-Profile-An-Namiroh.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 bg-green-800 hover:bg-green-700 active:scale-95 text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition-all duration-150 shadow-sm"
+              >
+                <span>⬇</span>
+                <span>Download Company Profile</span>
+              </a>
+              <a
+                href={PDF_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 border border-green-800 text-green-800 hover:bg-green-800 hover:text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition-all duration-150"
+              >
+                <span>↗</span>
+                <span>Buka di Tab Baru</span>
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* SEJARAH */}
-      <section className="py-16 px-4 bg-gray-50 bg-islamic-pattern-dark">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="text-orange-400 text-2xl mb-1">✦</div>
-            <h2 className="font-heading text-3xl font-bold text-green-900">Perjalanan Kami</h2>
-            <div className="flex items-center justify-center gap-3 mt-2">
-              <div className="h-px w-16 bg-orange-400/40" />
-              <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
-              <div className="h-px w-16 bg-orange-400/40" />
-            </div>
-          </div>
-          <div className="relative">
-            <div className="absolute left-[28px] top-0 bottom-0 w-px bg-green-200" />
-            <div className="space-y-8">
-              {MILESTONES.map((m, i) => (
-                <div key={i} className="flex gap-5 items-start">
-                  <div className="w-14 h-14 flex-shrink-0 bg-green-700 rounded-full flex items-center justify-center text-white font-bold text-xs relative z-10">
-                    {m.tahun}
-                  </div>
-                  <div className="bg-white border border-gray-100 rounded-xl p-4 shadow-sm flex-1 mt-2">
-                    <p className="text-gray-700 text-base">{m.teks}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TIM */}
-      <section className="py-16 px-4 bg-white">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="text-orange-400 text-2xl mb-1">✦</div>
-            <h2 className="font-heading text-3xl font-bold text-green-900">Tim Kami</h2>
-            <div className="flex items-center justify-center gap-3 mt-2">
-              <div className="h-px w-16 bg-orange-400/40" />
-              <div className="w-1.5 h-1.5 bg-orange-400 rotate-45" />
-              <div className="h-px w-16 bg-orange-400/40" />
-            </div>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-            {TIM.map((t, i) => (
-              <div key={i} className="bg-gray-50 border border-gray-100 rounded-2xl p-6 text-center">
-                <div className="w-16 h-16 bg-green-700 rounded-full flex items-center justify-center text-white text-2xl mx-auto mb-4">👤</div>
-                <h3 className="font-semibold text-green-900 text-base mb-1">{t.nama}</h3>
-                <div className="text-orange-500 text-sm font-medium mb-2">{t.jabatan}</div>
-                <p className="text-gray-600 text-sm leading-relaxed">{t.deskripsi}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       <Footer />
     </div>
