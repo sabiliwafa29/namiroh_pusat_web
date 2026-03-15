@@ -184,7 +184,10 @@ jobs:
             echo "DB_DATABASE=${ENV_DB_DATABASE}"
             echo "DB_USERNAME=${ENV_DB_USERNAME}"
 
+            DB_PREFLIGHT_OK=0
+
             if command -v mysql >/dev/null 2>&1; then
+              set +e
               DB_CHECK=$(mysql \
                 --host="${ENV_DB_HOST}" \
                 --port="${ENV_DB_PORT}" \
@@ -192,23 +195,22 @@ jobs:
                 --password="${ENV_DB_PASSWORD}" \
                 --connect-timeout=10 \
                 --execute="SELECT 'DB_OK' AS status;" \
-                "${ENV_DB_DATABASE}" 2>&1) || true
+                "${ENV_DB_DATABASE}" 2>&1)
+              DB_CHECK_EXIT=$?
+              set -e
 
-              if echo "$DB_CHECK" | grep -q "DB_OK"; then
-                echo "DB preflight OK"
-              else
-                echo "DB preflight FAILED"
-                echo "$DB_CHECK"
-                echo ""
-                echo "Periksa GitHub Secrets API_DB_*:"
-                echo "1) API_DB_HOST biasanya localhost atau 127.0.0.1 (sesuai hPanel)"
-                echo "2) API_DB_DATABASE wajib format prefix akun, contoh u123456789_namiroh"
-                echo "3) API_DB_USERNAME wajib format prefix akun, contoh u123456789_userdb"
-                echo "4) User database sudah di-assign ke database di hPanel"
-                echo "5) API_DB_PASSWORD sesuai user database (bukan password login Hostinger)"
-                exit 1
+              echo "mysql preflight exit_code=$DB_CHECK_EXIT"
+              echo "$DB_CHECK"
+
+              if [ "$DB_CHECK_EXIT" -eq 0 ] && echo "$DB_CHECK" | grep -q "DB_OK"; then
+                DB_PREFLIGHT_OK=1
               fi
             else
+              echo "mysql client not found on server, skipping mysql preflight"
+            fi
+
+            if [ "$DB_PREFLIGHT_OK" -ne 1 ]; then
+              set +e
               PHP_DB_CHECK=$(php -r '
                 $h = getenv("ENV_DB_HOST");
                 $p = getenv("ENV_DB_PORT") ?: "3306";
@@ -217,22 +219,35 @@ jobs:
                 $pw = getenv("ENV_DB_PASSWORD");
                 try {
                   $pdo = new PDO("mysql:host={$h};port={$p};dbname={$d}", $u, $pw, [PDO::ATTR_TIMEOUT => 10]);
+                  $pdo->query("SELECT 1");
                   echo "DB_OK";
                 } catch (Throwable $e) {
                   echo "DB_FAIL: " . $e->getMessage();
                   exit(1);
                 }
-              ' 2>&1) || true
+              ' 2>&1)
+              PHP_DB_CHECK_EXIT=$?
+              set -e
 
-              if echo "$PHP_DB_CHECK" | grep -q "DB_OK"; then
-                echo "DB preflight OK"
-              else
-                echo "DB preflight FAILED"
-                echo "$PHP_DB_CHECK"
-                echo ""
-                echo "Periksa GitHub Secrets API_DB_* dan assignment user database di hPanel"
-                exit 1
+              echo "php-pdo preflight exit_code=$PHP_DB_CHECK_EXIT"
+              echo "$PHP_DB_CHECK"
+
+              if [ "$PHP_DB_CHECK_EXIT" -eq 0 ] && echo "$PHP_DB_CHECK" | grep -q "DB_OK"; then
+                DB_PREFLIGHT_OK=1
               fi
+            fi
+
+            if [ "$DB_PREFLIGHT_OK" -eq 1 ]; then
+              echo "DB preflight OK"
+            else
+              echo "DB preflight FAILED"
+              echo "Periksa GitHub Secrets API_DB_*:"
+              echo "1) API_DB_HOST sesuai host MySQL di hPanel (sering localhost/127.0.0.1)"
+              echo "2) API_DB_DATABASE pakai prefix akun"
+              echo "3) API_DB_USERNAME pakai prefix akun"
+              echo "4) User database di-assign ke database dengan privilege"
+              echo "5) API_DB_PASSWORD adalah password user database"
+              exit 1
             fi
 
             echo "=== Run migrations and cache ==="
