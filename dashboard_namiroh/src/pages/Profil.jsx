@@ -94,7 +94,7 @@ export default function Profil() {
             <div className="flex items-center justify-between px-5 py-3 bg-green-900 border-b border-green-800">
               <div className="flex items-center gap-2">
                 <span className="text-orange-400 text-lg">📄</span>
-                <span className="text-white font-semibold text-sm">Company-Profile-An-Namiroh.pdf</span>
+                <span className="text-white font-semibold text-sm">Company Profile AnNamiroh Travelindo</span>
               </div>
               <a
                 href={PDF_URL}
