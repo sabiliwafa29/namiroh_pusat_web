@@ -52,5 +52,6 @@ jobs:
             "cd /home/u190975834/domains/annamirohtravelindo.com/public_html/api && \
              php artisan config:cache && \
              php artisan route:cache && \
-             php artisan storage:link && \
-             php artisan migrate --force"
+             php artisan migrate --force && \
+             ln -sfn /home/u190975834/domains/annamirohtravelindo.com/public_html/api/storage/app/public \
+             /home/u190975834/domains/annamirohtravelindo.com/public_html/api/public/storage"
