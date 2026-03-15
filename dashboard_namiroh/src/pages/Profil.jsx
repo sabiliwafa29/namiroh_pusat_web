@@ -1,7 +1,7 @@
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-const PDF_URL = `${import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://api.annamirohtravelindo.com'}/storage/Company-Profile-An-Namiroh.pdf`
+const PDF_URL = `${import.meta.env.VITE_STORAGE_URL || 'https://api.annamirohtravelindo.com/storage'}/Company-Profile-An-Namiroh.pdf`
 
 const MILESTONES = [
   { tahun: '2000', teks: 'An Namiroh Travelindo berdiri di Surabaya sebagai biro perjalanan umroh & haji.' },
