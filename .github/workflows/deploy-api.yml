@@ -100,6 +100,46 @@ jobs:
             require_secret DB_USERNAME  "${ENV_DB_USERNAME:-}"
             require_secret DB_PASSWORD  "${ENV_DB_PASSWORD:-}"
 
+            # Normalize secrets to avoid hidden CR/LF causing auth failures.
+            DB_HOST="$(printf '%s' "${ENV_DB_HOST}" | tr -d '\r\n')"
+            DB_PORT="$(printf '%s' "${ENV_DB_PORT}" | tr -d '\r\n')"
+            DB_DATABASE="$(printf '%s' "${ENV_DB_DATABASE}" | tr -d '\r\n')"
+            DB_USERNAME="$(printf '%s' "${ENV_DB_USERNAME}" | tr -d '\r\n')"
+            DB_PASSWORD="$(printf '%s' "${ENV_DB_PASSWORD}" | tr -d '\r\n')"
+
+            test_db_host() {
+              local host_candidate="$1"
+
+              if ! command -v mysql >/dev/null 2>&1; then
+                return 1
+              fi
+
+              mysql \
+                --host="$host_candidate" \
+                --port="$DB_PORT" \
+                --user="$DB_USERNAME" \
+                --password="$DB_PASSWORD" \
+                --connect-timeout=10 \
+                --execute="SELECT 1;" \
+                "$DB_DATABASE" >/dev/null 2>&1
+            }
+
+            RESOLVED_DB_HOST="$DB_HOST"
+            if ! test_db_host "$RESOLVED_DB_HOST"; then
+              if [ "$RESOLVED_DB_HOST" = "localhost" ]; then
+                ALT_DB_HOST="127.0.0.1"
+              elif [ "$RESOLVED_DB_HOST" = "127.0.0.1" ]; then
+                ALT_DB_HOST="localhost"
+              else
+                ALT_DB_HOST=""
+              fi
+
+              if [ -n "$ALT_DB_HOST" ] && test_db_host "$ALT_DB_HOST"; then
+                RESOLVED_DB_HOST="$ALT_DB_HOST"
+                echo "DB host fallback aktif: menggunakan $RESOLVED_DB_HOST"
+              fi
+            fi
+
             echo "=== Inject environment values ==="
             printf '%s\n' \
               "APP_NAME=AnNamiroh" \
@@ -124,11 +164,11 @@ jobs:
               "LOG_LEVEL=error" \
               "" \
               "DB_CONNECTION=mysql" \
-              "DB_HOST=${ENV_DB_HOST}" \
-              "DB_PORT=${ENV_DB_PORT}" \
-              "DB_DATABASE=${ENV_DB_DATABASE}" \
-              "DB_USERNAME=${ENV_DB_USERNAME}" \
-              "DB_PASSWORD=${ENV_DB_PASSWORD}" \
+              "DB_HOST=${RESOLVED_DB_HOST}" \
+              "DB_PORT=${DB_PORT}" \
+              "DB_DATABASE=${DB_DATABASE}" \
+              "DB_USERNAME=${DB_USERNAME}" \
+              "DB_PASSWORD=${DB_PASSWORD}" \
               "" \
               "SESSION_DRIVER=database" \
               "SESSION_LIFETIME=120" \
@@ -178,23 +218,25 @@ jobs:
             composer install --no-dev --optimize-autoloader --no-interaction
 
             echo "=== Preflight DB connection ==="
-            echo "DB_HOST=${ENV_DB_HOST}"
-            echo "DB_PORT=${ENV_DB_PORT}"
-            echo "DB_DATABASE=${ENV_DB_DATABASE}"
-            echo "DB_USERNAME=${ENV_DB_USERNAME}"
+            echo "DB_HOST_SECRET=${DB_HOST}"
+            echo "DB_HOST_RESOLVED=${RESOLVED_DB_HOST}"
+            echo "DB_PORT=${DB_PORT}"
+            echo "DB_DATABASE=${DB_DATABASE}"
+            echo "DB_USERNAME=${DB_USERNAME}"
+            echo "DB_PASSWORD_LENGTH=${#DB_PASSWORD}"
 
             DB_PREFLIGHT_OK=0
             set +e
 
             if command -v mysql >/dev/null 2>&1; then
               if DB_CHECK=$(mysql \
-                --host="${ENV_DB_HOST}" \
-                --port="${ENV_DB_PORT}" \
-                --user="${ENV_DB_USERNAME}" \
-                --password="${ENV_DB_PASSWORD}" \
+                --host="${RESOLVED_DB_HOST}" \
+                --port="${DB_PORT}" \
+                --user="${DB_USERNAME}" \
+                --password="${DB_PASSWORD}" \
                 --connect-timeout=10 \
                 --execute="SELECT 'DB_OK' AS status;" \
-                "${ENV_DB_DATABASE}" 2>&1); then
+                "${DB_DATABASE}" 2>&1); then
                 DB_CHECK_EXIT=0
               else
                 DB_CHECK_EXIT=$?
@@ -211,12 +253,12 @@ jobs:
             fi
 
             if [ "$DB_PREFLIGHT_OK" -ne 1 ]; then
-              if PHP_DB_CHECK=$(php -r '
-                $h = getenv("ENV_DB_HOST");
-                $p = getenv("ENV_DB_PORT") ?: "3306";
-                $d = getenv("ENV_DB_DATABASE");
-                $u = getenv("ENV_DB_USERNAME");
-                $pw = getenv("ENV_DB_PASSWORD");
+              if PHP_DB_CHECK=$(RESOLVED_DB_HOST="$RESOLVED_DB_HOST" DB_PORT="$DB_PORT" DB_DATABASE="$DB_DATABASE" DB_USERNAME="$DB_USERNAME" DB_PASSWORD="$DB_PASSWORD" php -r '
+                $h = getenv("RESOLVED_DB_HOST");
+                $p = getenv("DB_PORT") ?: "3306";
+                $d = getenv("DB_DATABASE");
+                $u = getenv("DB_USERNAME");
+                $pw = getenv("DB_PASSWORD");
                 try {
                   $pdo = new PDO("mysql:host={$h};port={$p};dbname={$d}", $u, $pw, [PDO::ATTR_TIMEOUT => 10]);
                   $pdo->query("SELECT 1");
