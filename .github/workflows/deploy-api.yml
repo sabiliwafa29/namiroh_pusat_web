@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'api_namiroh/**'
+      - 'scripts/deploy_hostinger_subdomain.sh'
       - '.github/workflows/deploy-api.yml'
   workflow_dispatch:
 
@@ -18,9 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy API via SSH (attempt 1)
-        id: deploy_api_attempt_1
-        continue-on-error: true
+      - name: Deploy API via SSH
         uses: appleboy/ssh-action@v1.2.0
         env:
           ENV_APP_KEY: ${{ secrets.API_APP_KEY }}
@@ -31,6 +30,7 @@ jobs:
           ENV_DB_DATABASE: ${{ secrets.API_DB_DATABASE }}
           ENV_DB_USERNAME: ${{ secrets.API_DB_USERNAME }}
           ENV_DB_PASSWORD: ${{ secrets.API_DB_PASSWORD }}
+          ENV_API_DOMAIN: ${{ secrets.API_DOMAIN }}
         with:
           host: ${{ secrets.HOSTINGER_HOST }}
           username: ${{ secrets.HOSTINGER_USER }}
@@ -39,17 +39,17 @@ jobs:
           timeout: 300s
           command_timeout: 30m
           script_stop: true
-          envs: ENV_APP_KEY,ENV_APP_URL,ENV_FRONTEND_URL,ENV_DB_HOST,ENV_DB_PORT,ENV_DB_DATABASE,ENV_DB_USERNAME,ENV_DB_PASSWORD
-          script: &deploy_api_script |
+          envs: ENV_APP_KEY,ENV_APP_URL,ENV_FRONTEND_URL,ENV_DB_HOST,ENV_DB_PORT,ENV_DB_DATABASE,ENV_DB_USERNAME,ENV_DB_PASSWORD,ENV_API_DOMAIN
+          script: |
             set -euo pipefail
             trap 'echo "ERROR at line $LINENO"' ERR
 
             REPO_DIR="$HOME/namiroh_pusat_web"
             REPO_URL="https://github.com/sabiliwafa29/namiroh_pusat_web.git"
             API_DIR="$REPO_DIR/api_namiroh"
-            MAIN_DOMAIN="annamirohtravelindo.com"
-            API_PUBLIC="$HOME/domains/$MAIN_DOMAIN/public_html/api"
-            API_RUNTIME="$HOME/domains/$MAIN_DOMAIN/api_app"
+            API_DOMAIN="${ENV_API_DOMAIN:-api.annamirohtravelindo.com}"
+            API_PUBLIC="$HOME/domains/$API_DOMAIN/public_html"
+            API_RUNTIME="$HOME/domains/$API_DOMAIN/api_app"
 
             sync_dir() {
               local src="$1"
@@ -176,53 +176,7 @@ jobs:
 
             echo "=== Install Laravel dependencies ==="
             cd "$API_DIR"
-            composer install --no-dev --optimize-autoloader
-
-            echo "=== Verify DB connection ==="
-            # FIX: Gunakan mysql client langsung untuk preflight check.
-            # Lebih reliable daripada artisan karena tidak perlu full Laravel boot.
-            echo "  DB_HOST     = ${ENV_DB_HOST}"
-            echo "  DB_PORT     = ${ENV_DB_PORT}"
-            echo "  DB_DATABASE = ${ENV_DB_DATABASE}"
-            echo "  DB_USERNAME = ${ENV_DB_USERNAME}"
-
-            if command -v mysql >/dev/null 2>&1; then
-              DB_CHECK=$(mysql \
-                --host="${ENV_DB_HOST}" \
-                --port="${ENV_DB_PORT}" \
-                --user="${ENV_DB_USERNAME}" \
-                --password="${ENV_DB_PASSWORD}" \
-                --connect-timeout=10 \
-                --execute="SELECT 'DB_OK' AS status;" \
-                "${ENV_DB_DATABASE}" 2>&1) || true
-
-              echo "  mysql result: $DB_CHECK"
-
-              if echo "$DB_CHECK" | grep -q "DB_OK"; then
-                echo "  DB connection: OK"
-              else
-                echo "  DB connection: FAILED"
-                echo ""
-                echo "  Kemungkinan penyebab:"
-                echo "  1. DB_HOST salah — di Hostinger shared hosting gunakan '127.0.0.1'"
-                echo "  2. Nama DB/user harus pakai prefix akun, contoh: u190975834_namadb"
-                echo "  3. User belum di-assign ke database di hPanel"
-                echo "  4. Password mengandung karakter spesial yang perlu di-escape"
-                echo ""
-                # Coba tanpa nama database untuk isolasi masalah credential vs database
-                DB_CHECK2=$(mysql \
-                  --host="${ENV_DB_HOST}" \
-                  --port="${ENV_DB_PORT}" \
-                  --user="${ENV_DB_USERNAME}" \
-                  --password="${ENV_DB_PASSWORD}" \
-                  --connect-timeout=10 \
-                  --execute="SHOW DATABASES;" 2>&1) || true
-                echo "  SHOW DATABASES result: $DB_CHECK2"
-                exit 1
-              fi
-            else
-              echo "  mysql client not found — skipping preflight, akan dicek saat migrate"
-            fi
+            composer install --no-dev --optimize-autoloader --no-interaction
 
             echo "=== Run migrations and cache ==="
             php artisan optimize:clear
@@ -240,16 +194,11 @@ jobs:
             echo "=== Create storage symlink ==="
             STORAGE_LINK="$API_RUNTIME/public/storage"
             STORAGE_TARGET="$API_RUNTIME/storage/app/public"
-            if [ -L "$STORAGE_LINK" ]; then
-              echo "  Symlink already exists, skipping"
-            elif [ -e "$STORAGE_LINK" ]; then
-              echo "  WARNING: $STORAGE_LINK exists but is not a symlink — skipping"
-            else
-              # FIX: Gunakan ln -s langsung (tidak butuh exec() PHP)
-              # sehingga tidak terblokir disable_functions Hostinger
-              ln -s "$STORAGE_TARGET" "$STORAGE_LINK"
-              echo "  Symlink created: $STORAGE_LINK -> $STORAGE_TARGET"
+            if [ -e "$STORAGE_LINK" ] && [ ! -L "$STORAGE_LINK" ]; then
+              rm -rf "$STORAGE_LINK"
             fi
+            ln -sfn "$STORAGE_TARGET" "$STORAGE_LINK"
+            echo "  Symlink set: $STORAGE_LINK -> $STORAGE_TARGET"
 
             echo "=== Publish API public files to $API_PUBLIC ==="
             sync_dir "$API_RUNTIME/public/" "$API_PUBLIC/"
@@ -289,15 +238,12 @@ jobs:
 
             echo "=== Post-deploy checks ==="
             if command -v curl >/dev/null 2>&1; then
-              PAKET_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" \
-                "https://$MAIN_DOMAIN/api/paket?page=1&per_page=1&published=1" || true)
-              INDEX_PAKET_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" \
-                "https://$MAIN_DOMAIN/api/index.php/api/paket?page=1&per_page=1&published=1" || true)
-              echo "GET /api/paket -> $PAKET_STATUS"
-              echo "GET /api/index.php/api/paket -> $INDEX_PAKET_STATUS"
+              PAKET_URL="https://$API_DOMAIN/api/paket?page=1&per_page=1"
+              PAKET_STATUS=$(curl -sS -o /dev/null -w "%{http_code}" "$PAKET_URL" || true)
+              echo "GET $PAKET_URL -> $PAKET_STATUS"
 
-              if [ "$PAKET_STATUS" != "200" ] && [ "$INDEX_PAKET_STATUS" != "200" ]; then
-                echo "=== API diagnostics (non-200 detected) ==="
+              if [ "$PAKET_STATUS" -ge 500 ] 2>/dev/null; then
+                echo "=== API diagnostics (5xx detected) ==="
                 if [ -f "$API_RUNTIME/storage/logs/laravel.log" ]; then
                   tail -n 120 "$API_RUNTIME/storage/logs/laravel.log" || true
                 else
@@ -312,33 +258,3 @@ jobs:
             echo "=== SUCCESS ==="
             ls -lh "$API_PUBLIC/index.php"
             ls -la "$API_PUBLIC" | head -n 20
-
-      - name: Deploy API via SSH (attempt 2)
-        id: deploy_api_attempt_2
-        if: ${{ steps.deploy_api_attempt_1.outcome == 'failure' }}
-        uses: appleboy/ssh-action@v1.2.0
-        env:
-          ENV_APP_KEY: ${{ secrets.API_APP_KEY }}
-          ENV_APP_URL: ${{ secrets.API_APP_URL }}
-          ENV_FRONTEND_URL: ${{ secrets.API_FRONTEND_URL }}
-          ENV_DB_HOST: ${{ secrets.API_DB_HOST }}
-          ENV_DB_PORT: ${{ secrets.API_DB_PORT }}
-          ENV_DB_DATABASE: ${{ secrets.API_DB_DATABASE }}
-          ENV_DB_USERNAME: ${{ secrets.API_DB_USERNAME }}
-          ENV_DB_PASSWORD: ${{ secrets.API_DB_PASSWORD }}
-        with:
-          host: ${{ secrets.HOSTINGER_HOST_ALT != '' && secrets.HOSTINGER_HOST_ALT || secrets.HOSTINGER_HOST }}
-          username: ${{ secrets.HOSTINGER_USER }}
-          key: ${{ secrets.HOSTINGER_SSH_KEY }}
-          port: 65002
-          timeout: 300s
-          command_timeout: 30m
-          script_stop: true
-          envs: ENV_APP_KEY,ENV_APP_URL,ENV_FRONTEND_URL,ENV_DB_HOST,ENV_DB_PORT,ENV_DB_DATABASE,ENV_DB_USERNAME,ENV_DB_PASSWORD
-          script: *deploy_api_script
-
-      - name: Fail if both attempts fail
-        if: ${{ steps.deploy_api_attempt_1.outcome == 'failure' && steps.deploy_api_attempt_2.outcome == 'failure' }}
-        run: |
-          echo "Deployment failed on both retry attempts. Check error logs above (network or application failure)."
-          exit 1
