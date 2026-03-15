@@ -42,7 +42,6 @@ jobs:
           envs: ENV_APP_KEY,ENV_APP_URL,ENV_FRONTEND_URL,ENV_DB_HOST,ENV_DB_PORT,ENV_DB_DATABASE,ENV_DB_USERNAME,ENV_DB_PASSWORD,ENV_API_DOMAIN
           script: |
             set -euo pipefail
-            trap 'echo "ERROR at line $LINENO"' ERR
 
             REPO_DIR="$HOME/namiroh_pusat_web"
             REPO_URL="https://github.com/sabiliwafa29/namiroh_pusat_web.git"
@@ -185,6 +184,7 @@ jobs:
             echo "DB_USERNAME=${ENV_DB_USERNAME}"
 
             DB_PREFLIGHT_OK=0
+            set +e
 
             if command -v mysql >/dev/null 2>&1; then
               if DB_CHECK=$(mysql \
@@ -238,6 +238,8 @@ jobs:
                 DB_PREFLIGHT_OK=1
               fi
             fi
+
+            set -e
 
             if [ "$DB_PREFLIGHT_OK" -eq 1 ]; then
               echo "DB preflight OK"
