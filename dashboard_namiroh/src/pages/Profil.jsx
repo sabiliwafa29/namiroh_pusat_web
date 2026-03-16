@@ -2,6 +2,7 @@ import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
 const PDF_URL = `${import.meta.env.VITE_STORAGE_URL || 'https://api.annamirohtravelindo.com/storage'}/Company-Profile-An-Namiroh.pdf`
+const PDF_URL_NOCACHE = `${PDF_URL}?v=${Date.now()}`
 
 const MILESTONES = [
   { tahun: '2000', teks: 'An Namiroh Travelindo berdiri di Surabaya sebagai biro perjalanan umroh & haji.' },
@@ -110,7 +111,7 @@ export default function Profil() {
 
             {/* Iframe Viewer */}
             <iframe
-              src={`${PDF_URL}#toolbar=0&navpanes=0&view=FitH`}
+              src={`${PDF_URL_NOCACHE}#toolbar=0&navpanes=0&view=FitH`}
               title="Company Profile An Namiroh Travelindo"
               className="w-full border-0"
               style={{ height: '780px' }}
