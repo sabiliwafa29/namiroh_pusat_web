@@ -65,9 +65,17 @@ function PdfViewer() {
     setWidth(Math.floor(node.getBoundingClientRect().width))
   }, [])
 
-  const prev = () => setPageNumber(p => Math.max(1, p - 1))
-  const next = () => setPageNumber(p => Math.min(numPages, p + 1))
-
+  const handleWheel = useCallback((e) => {
+    if (!numPages) return
+    if (e.deltaY < 0) {
+      // Scroll up - halaman sebelumnya
+      setPageNumber(p => Math.max(1, p - 1))
+    } else {
+      // Scroll down - halaman berikutnya
+      setPageNumber(p => Math.min(numPages, p + 1))
+    }
+    e.preventDefault()
+  }, [numPages])
 
   return (
     <div className="rounded-2xl overflow-hidden shadow-xl border border-green-100 bg-white">
@@ -90,7 +98,11 @@ function PdfViewer() {
       </div>
 
       {/* ── PDF Canvas Area ── */}
-      <div ref={measureRef} className="bg-gray-100 flex flex-col items-center">
+      <div 
+        ref={measureRef} 
+        className="bg-gray-100 flex flex-col items-center"
+        onWheel={handleWheel}
+      >
         {loading && (
           <div className="flex flex-col items-center justify-center py-20 gap-3">
             <div className="w-10 h-10 border-4 border-green-700 border-t-transparent rounded-full animate-spin" />
@@ -130,30 +142,13 @@ function PdfViewer() {
         )}
       </div>
 
-      {/* ── Navigasi Halaman ── */}
+      {/* ── Navigasi Halaman (Scroll Info) ── */}
       {numPages && (
-        <div className="flex items-center justify-between px-4 py-3 bg-green-50 border-t border-green-100 gap-3 flex-wrap">
-          {/* Prev / Next */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={prev}
-              disabled={pageNumber <= 1}
-              className="px-3 py-1.5 rounded-lg border border-green-800 text-green-800 text-sm font-semibold disabled:opacity-30 disabled:cursor-not-allowed hover:bg-green-800 hover:text-white transition-all active:scale-95"
-            >
-              ← Prev
-            </button>
-            <span className="text-sm text-gray-600 font-medium whitespace-nowrap">
-              {pageNumber} / {numPages}
-            </span>
-            <button
-              onClick={next}
-              disabled={pageNumber >= numPages}
-              className="px-3 py-1.5 rounded-lg border border-green-800 text-green-800 text-sm font-semibold disabled:opacity-30 disabled:cursor-not-allowed hover:bg-green-800 hover:text-white transition-all active:scale-95"
-            >
-              Next →
-            </button>
+        <div className="flex items-center justify-center px-4 py-3 bg-green-50 border-t border-green-100">
+          <div className="text-sm text-gray-600 font-medium">
+            Halaman <span className="text-green-700 font-bold">{pageNumber}</span> dari <span className="text-green-700 font-bold">{numPages}</span> 
+            <span className="text-gray-500 ml-3 text-xs">(Scroll untuk navigasi)</span>
           </div>
-
         </div>
       )}
     </div>
@@ -210,7 +205,7 @@ export default function Profil() {
       </section>
 
       {/* COMPANY PROFILE PDF */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="px-4 bg-gray-50">
         <div className="max-w-5xl mx-auto">
           {/* Header */}
           <div className="text-center mb-8">
