@@ -46,10 +46,19 @@ export default function Profil() {
       <section className="py-16 px-4 bg-white">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+            <div className="rounded-2xl overflow-hidden shadow-lg border border-green-100" style={{ aspectRatio: '16/9' }}>
+              <iframe
+                src="https://www.youtube.com/embed/TB1qIon-ZSQ"
+                title="An Namiroh Travelindo"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
             <div>
-              <div className="text-orange-400 text-2xl mb-1">✦</div>
-              <h2 className="font-heading text-3xl font-bold text-green-900 mb-4">Tentang An Namiroh Travelindo</h2>
-              <div className="h-1 w-16 bg-orange-400 rounded mb-5" />
+              <div className="text-orange-400 text-2xl mb-1 text-center">✦</div>
+              <h2 className="font-heading text-3xl font-bold text-green-900 mb-4 text-center">Tentang An Namiroh Travelindo</h2>
+              <div className="h-1 w-16 bg-orange-400 rounded mb-5 mx-auto" />
               <p className="text-gray-700 text-base leading-relaxed mb-4">
                 <strong>An Namiroh Travelindo</strong> adalah biro perjalanan umroh dan haji yang berdiri sejak tahun 2000 di Surabaya, Jawa Timur. Selama lebih dari dua dekade, kami telah menjadi mitra terpercaya lebih dari <strong>60.000 jamaah</strong> dalam mewujudkan impian beribadah di Tanah Suci.
               </p>
@@ -59,15 +68,6 @@ export default function Profil() {
               <p className="text-gray-700 text-base leading-relaxed">
                 Dengan semangat <em>"Melayani dengan Hati, Memberangkatkan dengan Amanah"</em>, kami hadir untuk memastikan setiap jamaah dapat menjalani ibadah dengan tenang, khusyuk, dan penuh makna.
               </p>
-            </div>
-            <div className="rounded-2xl overflow-hidden shadow-lg border border-green-100" style={{ aspectRatio: '16/9' }}>
-              <iframe
-                src="https://www.youtube.com/embed/TB1qIon-ZSQ"
-                title="An Namiroh Travelindo"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              />
             </div>
           </div>
         </div>
