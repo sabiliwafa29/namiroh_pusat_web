@@ -1,31 +1,166 @@
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
+import { Document, Page, pdfjs } from 'react-pdf'
+import 'react-pdf/dist/Page/AnnotationLayer.css'
+import 'react-pdf/dist/Page/TextLayer.css'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 
-const PDF_URL = `${import.meta.env.VITE_STORAGE_URL || 'https://api.annamirohtravelindo.com/storage'}/Company-Profile-An-Namiroh.pdf`
-const PDF_URL_NOCACHE = `${PDF_URL}?v=${Date.now()}`
+// Setup PDF.js worker via CDN
+pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
 
-const MILESTONES = [
-  { tahun: '2000', teks: 'An Namiroh Travelindo berdiri di Surabaya sebagai biro perjalanan umroh & haji.' },
-  { tahun: '2005', teks: 'Mendapatkan izin resmi PPIU dari Kementerian Agama RI.' },
-  { tahun: '2010', teks: 'Memperluas layanan dengan program Haji Plus dan Badal Umroh/Haji.' },
-  { tahun: '2015', teks: 'Mencapai 30.000 jamaah diberangkatkan. Meraih akreditasi KBIH terbaik.' },
-  { tahun: '2019', teks: 'Meluncurkan program Wisata Halal ke Turki, Mesir, dan Palestina.' },
-  { tahun: '2024', teks: 'Lebih dari 60.000 jamaah diberangkatkan. Meraih Akreditasi A dari Kemenag RI.' },
-]
+// Dev: selalu pakai path relatif (/storage) → Vite proxy intercept → no CORS
+// Prod: pakai VITE_STORAGE_URL (full URL ke production server)
+const STORAGE_BASE = import.meta.env.DEV
+  ? '/storage'
+  : (import.meta.env.VITE_STORAGE_URL || 'https://api.annamirohtravelindo.com/storage')
+const PDF_URL    = `${STORAGE_BASE}/Company-Profile-An-Namiroh.pdf`
+const PDF_DL_URL = `${PDF_URL}?v=${Date.now()}`
 
-const TIM = [
-  { nama: 'H. Imam Fauzi, S.Ag', jabatan: 'Direktur Utama', deskripsi: 'Lebih dari 24 tahun memimpin An Namiroh dengan dedikasi melayani jamaah menuju Tanah Suci.' },
-  { nama: 'Hj. Nur Laila, M.Pd', jabatan: 'Direktur Operasional', deskripsi: 'Mengkoordinasi seluruh operasional keberangkatan agar jamaah berangkat dengan aman dan nyaman.' },
-  { nama: 'Ust. Ahmad Faruq, Lc', jabatan: 'Kepala Muthowwif', deskripsi: 'Alumni Universitas Al-Azhar Kairo, berpengalaman membimbing ribuan jamaah di Tanah Suci.' },
-]
+// ─── PDF Viewer Component ────────────────────────────────────────────────────
+function PdfViewer() {
+  const [pdfData, setPdfData]       = useState(null)   // ArrayBuffer dari fetch
+  const [numPages, setNumPages]     = useState(null)
+  const [pageNumber, setPageNumber] = useState(1)
+  const [loading, setLoading]       = useState(true)
+  const [error, setError]           = useState(false)
+  const [width, setWidth]           = useState(null)
 
-const IZIN = [
-  { kode: 'PPIU', nama: 'Penyelenggara Perjalanan Ibadah Umroh', nomor: 'SK Kemenag No. Umroh-001/2005' },
-  { kode: 'PIHK', nama: 'Penyelenggara Ibadah Haji Khusus', nomor: 'SK Kemenag No. Haji-045/2010' },
-  { kode: 'KBIH', nama: 'Kelompok Bimbingan Ibadah Haji & Umroh', nomor: 'SK Kemenag No. KBIH-112/2008' },
-  { kode: 'AKR A', nama: 'Akreditasi A Kementerian Agama RI', nomor: 'Tahun 2024' },
-]
+  const fetchedRef = useRef(false)
 
+  // Fetch PDF sebagai Uint8Array di main thread (lewat Vite proxy → no CORS)
+  // Simpan sebagai Uint8Array bukan ArrayBuffer agar tidak di-transfer/detach oleh PDF.js Worker
+  useEffect(() => {
+    if (fetchedRef.current) return   // cegah double-fetch di React StrictMode
+    fetchedRef.current = true
+    setLoading(true)
+    fetch(PDF_DL_URL)
+      .then(res => {
+        if (!res.ok) throw new Error('Fetch failed')
+        return res.arrayBuffer()
+      })
+      .then(buffer => {
+        setPdfData(new Uint8Array(buffer))  // Uint8Array tidak bisa di-detach
+        setLoading(false)
+      })
+      .catch(() => {
+        setLoading(false)
+        setError(true)
+      })
+  }, [])
+
+  const onDocumentLoadSuccess = useCallback(({ numPages }) => setNumPages(numPages), [])
+  const onDocumentLoadError   = useCallback(() => setError(true), [])
+
+  // Memoize file prop agar Document tidak reload saat re-render
+  const pdfFile = useMemo(() => pdfData ? { data: pdfData } : null, [pdfData])
+
+  // Ukur lebar kontainer agar PDF fit lebar layar
+  const measureRef = useCallback(node => {
+    if (!node) return
+    const ro = new ResizeObserver(entries => {
+      for (const entry of entries)
+        setWidth(Math.floor(entry.contentRect.width))
+    })
+    ro.observe(node)
+    setWidth(Math.floor(node.getBoundingClientRect().width))
+  }, [])
+
+  const prev = () => setPageNumber(p => Math.max(1, p - 1))
+  const next = () => setPageNumber(p => Math.min(numPages, p + 1))
+
+
+  return (
+    <div className="rounded-2xl overflow-hidden shadow-xl border border-green-100 bg-white">
+      {/* ── Toolbar ── */}
+      <div className="flex items-center justify-between px-4 py-3 bg-green-900 border-b border-green-800 gap-3">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className="text-orange-400 text-lg flex-shrink-0">📄</span>
+          <span className="text-white font-semibold text-sm truncate">Company Profile An Namiroh Travelindo</span>
+        </div>
+        <a
+          href={PDF_URL}
+          download="Company-Profile-An-Namiroh.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-shrink-0 flex items-center gap-1.5 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white text-xs font-semibold px-3 py-1.5 rounded-lg transition-all duration-150"
+        >
+          <span>⬇</span>
+          <span className="hidden sm:inline">Download</span>
+        </a>
+      </div>
+
+      {/* ── PDF Canvas Area ── */}
+      <div ref={measureRef} className="bg-gray-100 flex flex-col items-center">
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-20 gap-3">
+            <div className="w-10 h-10 border-4 border-green-700 border-t-transparent rounded-full animate-spin" />
+            <p className="text-gray-500 text-sm">Memuat Company Profile…</p>
+          </div>
+        )}
+
+        {error && (
+          <div className="flex flex-col items-center justify-center py-20 gap-4 px-6 text-center">
+            <span className="text-4xl">📄</span>
+            <p className="text-gray-600 text-sm">Gagal memuat PDF. Silakan download atau buka di tab baru.</p>
+            <a
+              href={PDF_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-green-800 hover:bg-green-700 text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors"
+            >
+              Buka PDF ↗
+            </a>
+          </div>
+        )}
+
+        {!error && pdfFile && width && (
+          <Document
+            file={pdfFile}
+            onLoadSuccess={onDocumentLoadSuccess}
+            onLoadError={onDocumentLoadError}
+            loading=""
+          >
+            <Page
+              pageNumber={pageNumber}
+              width={width}
+              renderAnnotationLayer={true}
+              renderTextLayer={false}
+            />
+          </Document>
+        )}
+      </div>
+
+      {/* ── Navigasi Halaman ── */}
+      {numPages && (
+        <div className="flex items-center justify-between px-4 py-3 bg-green-50 border-t border-green-100 gap-3 flex-wrap">
+          {/* Prev / Next */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={prev}
+              disabled={pageNumber <= 1}
+              className="px-3 py-1.5 rounded-lg border border-green-800 text-green-800 text-sm font-semibold disabled:opacity-30 disabled:cursor-not-allowed hover:bg-green-800 hover:text-white transition-all active:scale-95"
+            >
+              ← Prev
+            </button>
+            <span className="text-sm text-gray-600 font-medium whitespace-nowrap">
+              {pageNumber} / {numPages}
+            </span>
+            <button
+              onClick={next}
+              disabled={pageNumber >= numPages}
+              className="px-3 py-1.5 rounded-lg border border-green-800 text-green-800 text-sm font-semibold disabled:opacity-30 disabled:cursor-not-allowed hover:bg-green-800 hover:text-white transition-all active:scale-95"
+            >
+              Next →
+            </button>
+          </div>
+
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ─── Page ───────────────────────────────────────────────────────────────────
 export default function Profil() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -89,60 +224,9 @@ export default function Profil() {
             <p className="text-gray-600 text-base">Unduh atau baca langsung Company Profile An Namiroh Travelindo</p>
           </div>
 
-          {/* PDF Viewer */}
-          <div className="rounded-2xl overflow-hidden shadow-xl border border-green-100 bg-white">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between px-5 py-3 bg-green-900 border-b border-green-800">
-              <div className="flex items-center gap-2">
-                <span className="text-orange-400 text-lg">📄</span>
-                <span className="text-white font-semibold text-sm">Company Profile AnNamiroh Travelindo</span>
-              </div>
-              <a
-                href={PDF_URL}
-                download="Company-Profile-An-Namiroh.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white text-sm font-semibold px-4 py-1.5 rounded-lg transition-all duration-150"
-              >
-                <span>⬇</span>
-                <span>Download PDF</span>
-              </a>
-            </div>
-
-            {/* Iframe Viewer */}
-            <iframe
-              src={`${PDF_URL_NOCACHE}#toolbar=0&navpanes=0&view=FitH`}
-              title="Company Profile An Namiroh Travelindo"
-              className="w-full border-0"
-              style={{ height: '780px' }}
-            />
-
-            {/* Footer bar */}
-            <div className="flex items-center justify-center gap-4 px-5 py-4 bg-green-50 border-t border-green-100">
-              <a
-                href={PDF_URL}
-                download="Company-Profile-An-Namiroh.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 bg-green-800 hover:bg-green-700 active:scale-95 text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition-all duration-150 shadow-sm"
-              >
-                <span>⬇</span>
-                <span>Download Company Profile</span>
-              </a>
-              <a
-                href={PDF_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 border border-green-800 text-green-800 hover:bg-green-800 hover:text-white text-sm font-semibold px-6 py-2.5 rounded-xl transition-all duration-150"
-              >
-                <span>↗</span>
-                <span>Buka di Tab Baru</span>
-              </a>
-            </div>
-          </div>
+          <PdfViewer />
         </div>
       </section>
-
 
       <Footer />
     </div>

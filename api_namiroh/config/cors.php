@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'paths' => ['api/*', 'sanctum/csrf-cookie'],
+    'paths' => ['api/*', 'sanctum/csrf-cookie', 'storage/*'],
 
     'allowed_methods' => ['*'],
 
@@ -23,6 +23,10 @@ return [
     'allowed_origins' => [
         'https://annamirohtravelindo.com',
         'https://www.annamirohtravelindo.com',
+        // Development
+        'http://localhost:5173',
+        'http://localhost:3000',
+        'http://127.0.0.1:5173',
     ],
 
     // Regex: izinkan domain utama dengan atau tanpa www, http maupun https (fallback)
