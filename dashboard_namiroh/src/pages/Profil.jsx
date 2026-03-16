@@ -26,6 +26,8 @@ function PdfViewer() {
   const [width, setWidth]           = useState(null)
 
   const fetchedRef = useRef(false)
+  const containerRef = useRef(null)
+  const lastScrollRef = useRef(0)
 
   // Fetch PDF sebagai Uint8Array di main thread (lewat Vite proxy → no CORS)
   // Simpan sebagai Uint8Array bukan ArrayBuffer agar tidak di-transfer/detach oleh PDF.js Worker
@@ -65,17 +67,35 @@ function PdfViewer() {
     setWidth(Math.floor(node.getBoundingClientRect().width))
   }, [])
 
-  const handleWheel = useCallback((e) => {
-    if (!numPages) return
-    if (e.deltaY < 0) {
-      // Scroll up - halaman sebelumnya
-      setPageNumber(p => Math.max(1, p - 1))
-    } else {
-      // Scroll down - halaman berikutnya
-      setPageNumber(p => Math.min(numPages, p + 1))
+  // Handle scroll untuk navigate halaman - mobile friendly
+  const handleScroll = useCallback((e) => {
+    if (!containerRef.current || !numPages) return
+    
+    const element = containerRef.current
+    const scrollTop = element.scrollTop
+    const clientHeight = element.clientHeight
+    const scrollHeight = element.scrollHeight
+    
+    // Threshold untuk trigger page change (80% dari container height)
+    const threshold = clientHeight * 0.8
+    
+    // Scroll ke bawah - next page
+    if (scrollTop > lastScrollRef.current + threshold) {
+      if (pageNumber < numPages) {
+        setPageNumber(p => p + 1)
+        element.scrollTop = 0
+        lastScrollRef.current = 0
+      }
     }
-    e.preventDefault()
-  }, [numPages])
+    // Scroll ke atas - prev page
+    else if (scrollTop < lastScrollRef.current - threshold && scrollTop < threshold) {
+      if (pageNumber > 1) {
+        setPageNumber(p => p - 1)
+        element.scrollTop = scrollHeight
+        lastScrollRef.current = scrollHeight
+      }
+    }
+  }, [pageNumber, numPages])
 
   return (
     <div className="rounded-2xl overflow-hidden shadow-xl border border-green-100 bg-white">
@@ -99,9 +119,13 @@ function PdfViewer() {
 
       {/* ── PDF Canvas Area ── */}
       <div 
-        ref={measureRef} 
-        className="bg-gray-100 flex flex-col items-center"
-        onWheel={handleWheel}
+        ref={(node) => {
+          containerRef.current = node
+          measureRef(node)
+        }}
+        onScroll={handleScroll}
+        className="bg-gray-100 flex flex-col items-center overflow-y-auto"
+        style={{ maxHeight: '70vh' }}
       >
         {loading && (
           <div className="flex flex-col items-center justify-center py-20 gap-3">
@@ -142,12 +166,11 @@ function PdfViewer() {
         )}
       </div>
 
-      {/* ── Navigasi Halaman (Scroll Info) ── */}
+      {/* ── Footer ── */}
       {numPages && (
-        <div className="flex items-center justify-center px-4 py-3 bg-green-50 border-t border-green-100">
+        <div className="flex items-center justify-center px-4 py-3 bg-gray-100 border-t border-gray-200">
           <div className="text-sm text-gray-600 font-medium">
-            Halaman <span className="text-green-700 font-bold">{pageNumber}</span> dari <span className="text-green-700 font-bold">{numPages}</span> 
-            <span className="text-gray-500 ml-3 text-xs">(Scroll untuk navigasi)</span>
+            Halaman <span className="text-green-700 font-bold">{pageNumber}</span> dari <span className="text-green-700 font-bold">{numPages}</span>
           </div>
         </div>
       )}
