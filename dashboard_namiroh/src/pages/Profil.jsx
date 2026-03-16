@@ -27,7 +27,7 @@ function PdfViewer() {
 
   const fetchedRef = useRef(false)
   const containerRef = useRef(null)
-  const lastScrollRef = useRef(0)
+  const touchXRef = useRef(0)
 
   // Fetch PDF sebagai Uint8Array di main thread (lewat Vite proxy → no CORS)
   // Simpan sebagai Uint8Array bukan ArrayBuffer agar tidak di-transfer/detach oleh PDF.js Worker
@@ -67,34 +67,35 @@ function PdfViewer() {
     setWidth(Math.floor(node.getBoundingClientRect().width))
   }, [])
 
-  // Handle scroll untuk navigate halaman - mobile friendly
-  const handleScroll = useCallback((e) => {
-    if (!containerRef.current || !numPages) return
-    
-    const element = containerRef.current
-    const scrollTop = element.scrollTop
-    const clientHeight = element.clientHeight
-    const scrollHeight = element.scrollHeight
-    
-    // Threshold untuk trigger page change (80% dari container height)
-    const threshold = clientHeight * 0.8
-    
-    // Scroll ke bawah - next page
-    if (scrollTop > lastScrollRef.current + threshold) {
-      if (pageNumber < numPages) {
-        setPageNumber(p => p + 1)
-        element.scrollTop = 0
-        lastScrollRef.current = 0
-      }
+  // Setup container ref dan measure lebar
+  useEffect(() => {
+    if (containerRef.current) {
+      measureRef(containerRef.current)
     }
-    // Scroll ke atas - prev page
-    else if (scrollTop < lastScrollRef.current - threshold && scrollTop < threshold) {
-      if (pageNumber > 1) {
-        setPageNumber(p => p - 1)
-        element.scrollTop = scrollHeight
-        lastScrollRef.current = scrollHeight
-      }
+  }, [measureRef])
+
+  // Handle swipe untuk navigate halaman - mobile friendly
+  const handleTouchStart = useCallback((e) => {
+    touchXRef.current = e.touches[0].clientX
+  }, [])
+
+  const handleTouchEnd = useCallback((e) => {
+    if (!touchXRef.current || !numPages) return
+    
+    const touchEndX = e.changedTouches[0].clientX
+    const diff = touchXRef.current - touchEndX
+    const minSwipeDistance = 50 // minimum 50px for swipe
+    
+    // Swipe kanan (diff negative) - halaman sebelumnya
+    if (diff < -minSwipeDistance && pageNumber > 1) {
+      setPageNumber(p => p - 1)
     }
+    // Swipe kiri (diff positive) - halaman berikutnya
+    else if (diff > minSwipeDistance && pageNumber < numPages) {
+      setPageNumber(p => p + 1)
+    }
+    
+    touchXRef.current = 0
   }, [pageNumber, numPages])
 
   return (
@@ -119,12 +120,10 @@ function PdfViewer() {
 
       {/* ── PDF Canvas Area ── */}
       <div 
-        ref={(node) => {
-          containerRef.current = node
-          measureRef(node)
-        }}
-        onScroll={handleScroll}
-        className="bg-gray-100 flex flex-col items-center overflow-y-auto"
+        ref={containerRef}
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="bg-gray-100 flex flex-col items-center justify-center"
         style={{ maxHeight: '70vh' }}
       >
         {loading && (
@@ -169,8 +168,11 @@ function PdfViewer() {
       {/* ── Footer ── */}
       {numPages && (
         <div className="flex items-center justify-center px-4 py-3 bg-gray-100 border-t border-gray-200">
-          <div className="text-sm text-gray-600 font-medium">
-            Halaman <span className="text-green-700 font-bold">{pageNumber}</span> dari <span className="text-green-700 font-bold">{numPages}</span>
+          <div className="text-center">
+            <div className="text-sm text-gray-600 font-medium">
+              Halaman <span className="text-green-700 font-bold">{pageNumber}</span> dari <span className="text-green-700 font-bold">{numPages}</span>
+            </div>
+            <div className="text-xs text-gray-500 mt-1">👈 Swipe untuk navigasi 👉</div>
           </div>
         </div>
       )}
